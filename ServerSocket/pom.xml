@@ -6,9 +6,9 @@
         <artifactId>IAJungle</artifactId>
         <version>1.0</version>
     </parent>
-    <artifactId>GameEngine</artifactId>
+    <artifactId>ServerSocket</artifactId>
     <packaging>jar</packaging>
-    <name>GameEngine</name>
+    <name>ServerSocket</name>
     <build>
         <plugins>
             <plugin>
@@ -34,7 +34,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>br.com.mertins.ufpel.fia.gameengine.Execute</mainClass>
+                            <mainClass>br.com.mertins.ufpel.fia.serversocket.Execute</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -53,6 +53,11 @@
             <artifactId>hamcrest-core</artifactId>
             <version>1.3</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>GameEngine</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

@@ -6,7 +6,7 @@ import java.util.Objects;
  *
  * @author mertins
  */
-class Peca {
+public class Peca {
 
     public enum Jogador {
         Jogador1, Jogador2;

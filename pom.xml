@@ -10,8 +10,9 @@
     <description>Projeto para desenvolvimento do jogo simplificado do Jungle.</description>
     <modules>
         <module>GameEngine</module>
-    <module>ViewGame</module>
-  </modules>
+        <module>ServerSocket</module>
+        <module>ViewGame</module>
+    </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
