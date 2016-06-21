@@ -60,9 +60,9 @@ public class Tabuleiro {
         peca = new Peca(Jogador.Jogador2, Peca.Tipo.Elefant);
         tabuleiro[6][1] = peca;
         peca = new Peca(Jogador.Jogador2, Peca.Tipo.Tiger);
-        tabuleiro[1][4] = peca;
+        tabuleiro[5][4] = peca;
         peca = new Peca(Jogador.Jogador2, Peca.Tipo.Dog);
-        tabuleiro[1][2] = peca;
+        tabuleiro[5][2] = peca;
         this.situacao = Situacao.UNDEFINED;
     }
 
@@ -74,6 +74,10 @@ public class Tabuleiro {
             return true;
         }
         return false;
+    }
+
+    public Peca[][] getTabuleiro() {
+        return tabuleiro;
     }
 
     private boolean movimentoValido(Peca peca, Posicao posIni, Posicao PosFim) {

@@ -6,7 +6,7 @@ import java.util.Objects;
  *
  * @author mertins
  */
-class Peca {
+public class Peca {
 
     public enum Tipo {
         Toca, Elefant, Tiger, Dog, Cat, Rat;
@@ -33,14 +33,13 @@ class Peca {
             return this != Toca;
         }
     }
+    private final Jogador jogador;
+    private final Tipo tipo;
 
-    public Peca(Jogador jogador, Tipo tipo) {
+    Peca(Jogador jogador, Tipo tipo) {
         this.jogador = jogador;
         this.tipo = tipo;
     }
-
-    private final Jogador jogador;
-    private final Tipo tipo;
 
     public Jogador getJogador() {
         return jogador;

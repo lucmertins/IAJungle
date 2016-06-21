@@ -5,8 +5,10 @@
  */
 package br.com.mertins.viewgame;
 
+import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
 import br.com.mertins.ufpel.fia.serversocket.Conexao;
 import br.com.mertins.ufpel.fia.serversocket.Mensagem;
+import static br.com.mertins.ufpel.fia.serversocket.Mensagem.TipoMsg.CONEXAOENCERRADA;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,13 +37,34 @@ public class FormClient extends javax.swing.JFrame {
     private void initComponents() {
 
         btConectar = new javax.swing.JButton();
+        jtabuleiro = new br.com.mertins.viewgame.JTabuleiro();
+        btMovimento = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         btConectar.setText("Conectar");
         btConectar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btConectarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jtabuleiroLayout = new javax.swing.GroupLayout(jtabuleiro);
+        jtabuleiro.setLayout(jtabuleiroLayout);
+        jtabuleiroLayout.setHorizontalGroup(
+            jtabuleiroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 423, Short.MAX_VALUE)
+        );
+        jtabuleiroLayout.setVerticalGroup(
+            jtabuleiroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 421, Short.MAX_VALUE)
+        );
+
+        btMovimento.setText("Movimento");
+        btMovimento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btMovimentoActionPerformed(evt);
             }
         });
 
@@ -51,15 +74,26 @@ public class FormClient extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(42, 42, 42)
-                .addComponent(btConectar)
-                .addContainerGap(264, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btMovimento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btConectar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 190, Short.MAX_VALUE)
+                .addComponent(jtabuleiro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(btConectar)
-                .addContainerGap(252, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addComponent(btConectar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btMovimento))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jtabuleiro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(85, Short.MAX_VALUE))
         );
 
         pack();
@@ -75,8 +109,16 @@ public class FormClient extends javax.swing.JFrame {
                     public void run() {
                         try {
                             Logger.getLogger(FormClient.class.getName()).log(Level.INFO, "Escutando servidor");
-                            Mensagem receber = conexao.receber();
-                            System.out.println(receber.getTipo());
+                            boolean conectado = true ;
+                            while (conectado) {
+                                Mensagem receber = conexao.receber();
+                                System.out.println(receber.getTipo());
+                                if (receber.getTipo()==CONEXAOENCERRADA){
+                                    conectado=false;
+                                }
+                                
+                            }
+                            System.out.println("Fim da conexão");
                         } catch (IOException ex) {
                             Logger.getLogger(FormClient.class.getName()).log(Level.SEVERE, "Falha de IO", ex);
                         } catch (ClassNotFoundException ex) {
@@ -90,6 +132,12 @@ public class FormClient extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btConectarActionPerformed
+
+    private void btMovimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btMovimentoActionPerformed
+        Tabuleiro tabuleiro=new Tabuleiro();
+        jtabuleiro.setTabuleiro(tabuleiro);
+        
+    }//GEN-LAST:event_btMovimentoActionPerformed
     private Conexao conexao;
 
     /**
@@ -129,5 +177,7 @@ public class FormClient extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btConectar;
+    private javax.swing.JButton btMovimento;
+    private br.com.mertins.viewgame.JTabuleiro jtabuleiro;
     // End of variables declaration//GEN-END:variables
 }
