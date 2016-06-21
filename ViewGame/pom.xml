@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
     <name>ViewGame</name>
     <properties>
-        <mainClass>br.com.mertins.viewgame.MainApp</mainClass>
+        <mainClass>br.com.mertins.viewgame.FormClient</mainClass>
     </properties>
     <build>
         <plugins>
@@ -97,4 +97,11 @@
             </plugin>
         </plugins>
     </build>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ServerSocket</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>

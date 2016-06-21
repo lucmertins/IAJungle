@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.mertins.ufpel.fia.serversocket;
 
+import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -22,17 +18,29 @@ public class Conexao {
      *
      * @author mertins
      */
+    public enum Status {
 
+        AGUARDANDOJOGADOR, JOGANDO
+    }
     private Socket socket;
-    private ServerSocket serverSocket;
+    private static ServerSocket serverSocket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
+    private Status status=Status.AGUARDANDOJOGADOR;
+
+    private Jogador jogadorCliente;
 
     public Conexao() {
     }
 
+    private void preparaClient() throws IOException {
+        if (serverSocket == null) {
+            serverSocket = new ServerSocket(8888);
+        }
+    }
+
     public void aguardarCliente() throws IOException {
-        serverSocket = new ServerSocket(8888);
+        this.preparaClient();
         socket = serverSocket.accept();
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
@@ -50,6 +58,23 @@ public class Conexao {
 
     public Mensagem receber() throws IOException, ClassNotFoundException {
         return (Mensagem) in.readObject();
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public Jogador getJogadorCliente() {
+        return jogadorCliente;
+    }
+
+    public void setJogadorCliente(Jogador jogadorCliente) {
+        this.jogadorCliente = jogadorCliente;
+        if (jogadorCliente != null) {
+            this.status = Status.JOGANDO;
+        } else {
+            this.status = Status.AGUARDANDOJOGADOR;
+        }
     }
 
     public void close() {

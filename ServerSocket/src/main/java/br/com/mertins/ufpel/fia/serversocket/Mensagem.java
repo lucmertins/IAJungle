@@ -1,11 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.mertins.ufpel.fia.serversocket;
 
-import br.com.mertins.ufpel.fia.gameengine.elements.Peca;
+import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
 import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
 import java.io.Serializable;
 import java.util.Date;
@@ -16,18 +11,17 @@ import java.util.Date;
  */
 public class Mensagem implements Serializable {
 
+    public enum TipoMsg {
+        CANDIDATOJOGO, AGUARDANDOADVERSARIO,JOGOESTABELECIDO
+    }
     private int id;
     private Date data;
-    private Peca.Jogador jogador;
+    private TipoMsg tipo;
+    private Jogador jogador;
     private Tabuleiro.Posicao posicaoAtual;
     private Tabuleiro.Posicao posicaoNova;
 
     public Mensagem() {
-    }
-
-    public Mensagem(int id, Date data) {
-        this.id = id;
-        this.data = data;
     }
 
     public Date getData() {
@@ -44,6 +38,38 @@ public class Mensagem implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public TipoMsg getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoMsg tipo) {
+        this.tipo = tipo;
+    }
+
+    public Jogador getJogador() {
+        return jogador;
+    }
+
+    public void setJogador(Jogador jogador) {
+        this.jogador = jogador;
+    }
+
+    public Tabuleiro.Posicao getPosicaoAtual() {
+        return posicaoAtual;
+    }
+
+    public void setPosicaoAtual(Tabuleiro.Posicao posicaoAtual) {
+        this.posicaoAtual = posicaoAtual;
+    }
+
+    public Tabuleiro.Posicao getPosicaoNova() {
+        return posicaoNova;
+    }
+
+    public void setPosicaoNova(Tabuleiro.Posicao posicaoNova) {
+        this.posicaoNova = posicaoNova;
     }
 
     @Override

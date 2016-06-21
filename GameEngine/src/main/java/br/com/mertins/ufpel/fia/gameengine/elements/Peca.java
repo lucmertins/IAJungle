@@ -6,11 +6,7 @@ import java.util.Objects;
  *
  * @author mertins
  */
-public class Peca {
-
-    public enum Jogador {
-        Jogador1, Jogador2;
-    }
+class Peca {
 
     public enum Tipo {
         Toca, Elefant, Tiger, Dog, Cat, Rat;

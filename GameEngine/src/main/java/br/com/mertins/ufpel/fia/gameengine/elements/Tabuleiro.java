@@ -42,26 +42,26 @@ public class Tabuleiro {
 
     private void init() {
         tabuleiro = new Peca[tamanho][tamanho];
-        Peca peca = new Peca(Peca.Jogador.Jogador1, Peca.Tipo.Toca);
+        Peca peca = new Peca(Jogador.Jogador1, Peca.Tipo.Toca);
         tabuleiro[0][3] = peca;
-        peca = new Peca(Peca.Jogador.Jogador1, Peca.Tipo.Rat);
+        peca = new Peca(Jogador.Jogador1, Peca.Tipo.Rat);
         tabuleiro[0][1] = peca;
-        peca = new Peca(Peca.Jogador.Jogador1, Peca.Tipo.Elefant);
+        peca = new Peca(Jogador.Jogador1, Peca.Tipo.Elefant);
         tabuleiro[0][5] = peca;
-        peca = new Peca(Peca.Jogador.Jogador1, Peca.Tipo.Tiger);
+        peca = new Peca(Jogador.Jogador1, Peca.Tipo.Tiger);
         tabuleiro[1][2] = peca;
-        peca = new Peca(Peca.Jogador.Jogador1, Peca.Tipo.Dog);
+        peca = new Peca(Jogador.Jogador1, Peca.Tipo.Dog);
         tabuleiro[1][4] = peca;
 
-        peca = new Peca(Peca.Jogador.Jogador2, Peca.Tipo.Toca);
+        peca = new Peca(Jogador.Jogador2, Peca.Tipo.Toca);
         tabuleiro[6][3] = peca;
-        peca = new Peca(Peca.Jogador.Jogador2, Peca.Tipo.Rat);
+        peca = new Peca(Jogador.Jogador2, Peca.Tipo.Rat);
         tabuleiro[6][5] = peca;
-        peca = new Peca(Peca.Jogador.Jogador2, Peca.Tipo.Elefant);
+        peca = new Peca(Jogador.Jogador2, Peca.Tipo.Elefant);
         tabuleiro[6][1] = peca;
-        peca = new Peca(Peca.Jogador.Jogador2, Peca.Tipo.Tiger);
+        peca = new Peca(Jogador.Jogador2, Peca.Tipo.Tiger);
         tabuleiro[1][4] = peca;
-        peca = new Peca(Peca.Jogador.Jogador2, Peca.Tipo.Dog);
+        peca = new Peca(Jogador.Jogador2, Peca.Tipo.Dog);
         tabuleiro[1][2] = peca;
         this.situacao = Situacao.UNDEFINED;
     }
@@ -83,7 +83,7 @@ public class Tabuleiro {
                 return true;
             } else if (newPos.getJogador() != peca.getJogador()) {                  // não é sobreposição de peças do mesmo jogador?
                 if (newPos.getTipo() == Peca.Tipo.Toca) {                           // ganhou o jogo?
-                    this.situacao = peca.getJogador() == Peca.Jogador.Jogador1 ? Situacao.WINJOG1 : Situacao.WINJOG2;
+                    this.situacao = peca.getJogador() == Jogador.Jogador1 ? Situacao.WINJOG1 : Situacao.WINJOG2;
                     return true;
                 } else if (peca.getTipo() == Peca.Tipo.Rat && newPos.getTipo() == Peca.Tipo.Elefant // rato comendo elefante?
                         || ((peca.getTipo().peso() >= newPos.getTipo().peso()       // ou peça de peso >= e não é elefante comendo rato?
