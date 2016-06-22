@@ -9,7 +9,7 @@ import java.util.Objects;
 public class Peca {
 
     public enum Tipo {
-        Toca, Elefant, Tiger, Dog, Cat, Rat;
+        Toca, Elefant, Tiger, Dog, Rat;
 
         public int peso() {
             switch (this) {
@@ -21,11 +21,9 @@ public class Peca {
                     return 8;
                 case Dog:
                     return 6;
-                case Cat:
-                    return 4;
                 case Rat:
                 default:
-                    return 2;
+                    return 4;
             }
         }
 

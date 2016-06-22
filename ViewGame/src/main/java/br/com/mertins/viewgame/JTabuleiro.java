@@ -1,13 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.mertins.viewgame;
 
+import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
 import br.com.mertins.ufpel.fia.gameengine.elements.Peca;
 import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -24,8 +21,10 @@ public class JTabuleiro extends javax.swing.JPanel {
     public JTabuleiro() {
         initComponents();
     }
-    private int sizeBloco = 60;
-    private int size = 420;
+    private final int sizeBloco = 60;
+    private final int size = 420;
+    private final int ajustey = 40;
+    private final int ajustex = 20;
     private Tabuleiro tabuleiro;
 
     public void setTabuleiro(Tabuleiro tabuleiro) {
@@ -41,7 +40,7 @@ public class JTabuleiro extends javax.swing.JPanel {
 
         g2d.setColor(Color.black);
         g2d.fillRect(0, 0, size, size);
-        g2d.setColor(Color.green);
+        g2d.setColor(Color.blue);
         g2d.drawRect(0, 0, size, size);
         for (int i = 0; i < 7; i++) {
             g2d.drawLine(0, i * sizeBloco, size, i * sizeBloco);
@@ -49,29 +48,35 @@ public class JTabuleiro extends javax.swing.JPanel {
         for (int i = 0; i < 7; i++) {
             g2d.drawLine(i * sizeBloco, 0, i * sizeBloco, size);
         }
-
+        g2d.setColor(Color.green);
         g2d.fillOval(184, 10, 50, 30); // Toca encima
+        g2d.setColor(Color.yellow);
         g2d.fillOval(184, 380, 50, 30); // Toca embaixo
 
         if (tabuleiro != null) {
+            Font font = new Font("Serif", Font.PLAIN, 38);
+            g2d.setFont(font);
             Peca[][] pecas = tabuleiro.getTabuleiro();
-            int ajuste = 20;
+
             for (int y = 0; y < pecas.length; y++) {
                 for (int x = 0; x < pecas.length; x++) {
                     if (pecas[y][x] != null) {
+                        g2d.setColor(pecas[y][x].getJogador() == Jogador.Jogador1 ? Color.green : Color.yellow);
                         switch (pecas[y][x].getTipo()) {
                             case Toca:
                                 break;
                             case Tiger:
-                                g2d.drawString("T", x * sizeBloco + ajuste, y * sizeBloco + ajuste);
-                            case Cat:
-                                g2d.drawString("C", x * sizeBloco + ajuste, y * sizeBloco + ajuste);
+                                g2d.drawString("T", x * sizeBloco + ajustex, y * sizeBloco + ajustey);
+                                break;
                             case Dog:
-                                g2d.drawString("D", x * sizeBloco + ajuste, y * sizeBloco + ajuste);
+                                g2d.drawString("C", x * sizeBloco + ajustex, y * sizeBloco + ajustey);
+                                break;
                             case Rat:
-                                g2d.drawString("R", x * sizeBloco + ajuste, y * sizeBloco + ajuste);
+                                g2d.drawString("R", x * sizeBloco + ajustex, y * sizeBloco + ajustey);
+                                break;
                             case Elefant:
-                                g2d.drawString("E", x * sizeBloco + ajuste, y * sizeBloco + ajuste);
+                                g2d.drawString("E", x * sizeBloco + ajustex, y * sizeBloco + ajustey);
+                                break;
                         }
                     }
                 }
