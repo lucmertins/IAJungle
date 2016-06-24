@@ -1,6 +1,7 @@
 package br.com.mertins.ufpel.fia.serversocket;
 
 import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
+import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -26,7 +27,8 @@ public class Conexao {
     private static ServerSocket serverSocket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
-    private Status status=Status.AGUARDANDOJOGADOR;
+    private Status status = Status.AGUARDANDOJOGADOR;
+    private Tabuleiro tabuleiro;
 
     private Jogador jogadorCliente;
 
@@ -77,6 +79,14 @@ public class Conexao {
         }
     }
 
+    public Tabuleiro getTabuleiro() {
+        return tabuleiro;
+    }
+
+    public void setTabuleiro(Tabuleiro tabuleiro) {
+        this.tabuleiro = tabuleiro;
+    }
+    
     public void close() {
         try {
             in.close();
@@ -90,6 +100,10 @@ public class Conexao {
             socket.close();
         } catch (Exception ex) {
         }
+    }
+
+    public void endServer() {
+        this.close();
         try {
             serverSocket.close();
         } catch (Exception ex) {

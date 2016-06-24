@@ -1,6 +1,7 @@
 package br.com.mertins.ufpel.fia.serversocket;
 
 import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
+import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -23,7 +24,7 @@ public class ExecuteServer {
 
                     while (true) {
                         Conexao conexao = new Conexao();
-                        Logger.getLogger(ExecuteServer.class.getName()).log(Level.INFO, "Aguardando cliente");
+//                        Logger.getLogger(ExecuteServer.class.getName()).log(Level.INFO, "Aguardando cliente");
                         conexao.aguardarCliente();
                         synchronized (clientesConectados) {
                             clientesConectados.add(conexao);
@@ -43,10 +44,10 @@ public class ExecuteServer {
                 try {
                     while (true) {
                         Thread.sleep(1000);
-                        Logger.getLogger(ExecuteServer.class.getName()).log(Level.INFO, "Acordou");
+//                        Logger.getLogger(ExecuteServer.class.getName()).log(Level.INFO, "Acordou");
                         synchronized (clientesConectados) {
                             if (!clientesConectados.isEmpty()) {
-                                Logger.getLogger(ExecuteServer.class.getName()).log(Level.INFO, "Lista não esta vazia");
+//                                Logger.getLogger(ExecuteServer.class.getName()).log(Level.INFO, "Lista não esta vazia");
                                 Conexao temp = null;
                                 for (Conexao conexao : clientesConectados) {
                                     if (conexao.getStatus() == Conexao.Status.AGUARDANDOJOGADOR) {
@@ -65,7 +66,7 @@ public class ExecuteServer {
                                     msg.setTipo(Mensagem.TipoMsg.AGUARDANDOADVERSARIO);
                                     try {
                                         temp.enviar(msg);
-                                    } catch (IOException ex) {
+                                    } catch (Exception ex) {
                                         Logger.getLogger(ExecuteServer.class.getName()).log(Level.SEVERE, "Jogador em espera saiu fora", ex);
                                         temp.close();
                                         clientesConectados.remove(temp);
@@ -88,16 +89,18 @@ public class ExecuteServer {
             public void run() {
                 jog1.setJogadorCliente(Jogador.Jogador1);
                 jog2.setJogadorCliente(Jogador.Jogador2);
-                Logger.getLogger(ExecuteServer.class.getName()).log(Level.INFO, "Formando dupla");
+                Tabuleiro tabuleiro=new Tabuleiro();
+                jog1.setTabuleiro(tabuleiro);
+                jog2.setTabuleiro(tabuleiro);
                 Mensagem msg = new Mensagem();
                 msg.setTipo(Mensagem.TipoMsg.JOGOESTABELECIDO);
                 msg.setJogador(Jogador.Jogador1);
+                msg.setTabuleiro(tabuleiro.getTabuleiro());
                 boolean ativo = enviaMsg(jog1, msg);
                 if (ativo == true) {
                     msg.setJogador(Jogador.Jogador2);
                 }
                 ativo = enviaMsg(jog2, msg);
-
             }
         }.start();
     }

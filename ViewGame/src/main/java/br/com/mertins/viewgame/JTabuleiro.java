@@ -23,8 +23,8 @@ public class JTabuleiro extends javax.swing.JPanel {
     }
     private final int sizeBloco = 60;
     private final int size = 420;
-    private final int ajustey = 40;
-    private final int ajustex = 20;
+    private final int ajustey = 44;
+    private final int ajustex = 12;
     private Tabuleiro tabuleiro;
 
     public void setTabuleiro(Tabuleiro tabuleiro) {
@@ -42,40 +42,68 @@ public class JTabuleiro extends javax.swing.JPanel {
         g2d.fillRect(0, 0, size, size);
         g2d.setColor(Color.blue);
         g2d.drawRect(0, 0, size, size);
+
         for (int i = 0; i < 7; i++) {
             g2d.drawLine(0, i * sizeBloco, size, i * sizeBloco);
         }
         for (int i = 0; i < 7; i++) {
             g2d.drawLine(i * sizeBloco, 0, i * sizeBloco, size);
         }
+        g2d.setColor(Color.red);
+        Font font = new Font("Serif", Font.PLAIN, 14);
+        g2d.setFont(font);
+        for (int j = 6; j > -1; j--) {
+            int count=1;
+            for (int i = 7; i > -1; i--) {
+                g2d.drawString(String.format("%s%s", (char)(j+'A'),count++), j * sizeBloco+2, i * sizeBloco-2);
+            }
+        }
+
         g2d.setColor(Color.green);
-        g2d.fillOval(184, 10, 50, 30); // Toca encima
+        g2d.fillOval(184, 12, 50, 30); // Toca encima
         g2d.setColor(Color.yellow);
-        g2d.fillOval(184, 380, 50, 30); // Toca embaixo
+        g2d.fillOval(184, 378, 50, 30); // Toca embaixo
 
         if (tabuleiro != null) {
-            Font font = new Font("Serif", Font.PLAIN, 38);
-            g2d.setFont(font);
+
             Peca[][] pecas = tabuleiro.getTabuleiro();
 
             for (int y = 0; y < pecas.length; y++) {
                 for (int x = 0; x < pecas.length; x++) {
                     if (pecas[y][x] != null) {
                         g2d.setColor(pecas[y][x].getJogador() == Jogador.Jogador1 ? Color.green : Color.yellow);
+                        font = new Font("Serif", Font.PLAIN, 38);
+                        g2d.setFont(font);
                         switch (pecas[y][x].getTipo()) {
                             case Toca:
                                 break;
                             case Tiger:
                                 g2d.drawString("T", x * sizeBloco + ajustex, y * sizeBloco + ajustey);
+                                font = new Font("Serif", Font.PLAIN, 16);
+                                g2d.setFont(font);
+                                g2d.drawString(String.valueOf(pecas[y][x].getTipo().peso()),
+                                        x * sizeBloco + ajustex + 28, y * sizeBloco + ajustey);
                                 break;
                             case Dog:
                                 g2d.drawString("C", x * sizeBloco + ajustex, y * sizeBloco + ajustey);
+                                font = new Font("Serif", Font.PLAIN, 16);
+                                g2d.setFont(font);
+                                g2d.drawString(String.valueOf(pecas[y][x].getTipo().peso()),
+                                        x * sizeBloco + ajustex + 28, y * sizeBloco + ajustey);
                                 break;
                             case Rat:
                                 g2d.drawString("R", x * sizeBloco + ajustex, y * sizeBloco + ajustey);
+                                font = new Font("Serif", Font.PLAIN, 16);
+                                g2d.setFont(font);
+                                g2d.drawString(String.valueOf(pecas[y][x].getTipo().peso()),
+                                        x * sizeBloco + ajustex + 28, y * sizeBloco + ajustey);
                                 break;
                             case Elefant:
                                 g2d.drawString("E", x * sizeBloco + ajustex, y * sizeBloco + ajustey);
+                                font = new Font("Serif", Font.PLAIN, 16);
+                                g2d.setFont(font);
+                                g2d.drawString(String.valueOf(pecas[y][x].getTipo().peso()),
+                                        x * sizeBloco + ajustex + 28, y * sizeBloco + ajustey);
                                 break;
                         }
                     }

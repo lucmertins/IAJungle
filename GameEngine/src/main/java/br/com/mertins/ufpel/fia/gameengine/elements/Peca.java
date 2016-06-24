@@ -1,12 +1,13 @@
 package br.com.mertins.ufpel.fia.gameengine.elements;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  *
  * @author mertins
  */
-public class Peca {
+public class Peca implements Serializable{
 
     public enum Tipo {
         Toca, Elefant, Tiger, Dog, Rat;

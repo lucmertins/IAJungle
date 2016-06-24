@@ -5,6 +5,7 @@
  */
 package br.com.mertins.viewgame;
 
+import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
 import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
 import br.com.mertins.ufpel.fia.serversocket.Conexao;
 import br.com.mertins.ufpel.fia.serversocket.Mensagem;
@@ -39,6 +40,10 @@ public class FormClient extends javax.swing.JFrame {
         btConectar = new javax.swing.JButton();
         jtabuleiro = new br.com.mertins.viewgame.JTabuleiro();
         btMovimento = new javax.swing.JButton();
+        lbMensagem = new javax.swing.JLabel();
+        lbJogador = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -62,11 +67,20 @@ public class FormClient extends javax.swing.JFrame {
         );
 
         btMovimento.setText("Movimento");
+        btMovimento.setEnabled(false);
         btMovimento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btMovimentoActionPerformed(evt);
             }
         });
+
+        lbMensagem.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        lbJogador.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jLabel1.setText("Mensagem");
+
+        jLabel2.setText("Jogador");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -74,10 +88,23 @@ public class FormClient extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(42, 42, 42)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btMovimento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btConectar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 190, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbMensagem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lbJogador, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(btMovimento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btConectar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(jLabel1))
+                                .addGap(0, 172, Short.MAX_VALUE)))
+                        .addGap(18, 18, 18))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jtabuleiro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -89,7 +116,15 @@ public class FormClient extends javax.swing.JFrame {
                         .addGap(17, 17, 17)
                         .addComponent(btConectar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btMovimento))
+                        .addComponent(btMovimento)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel1)
+                        .addGap(3, 3, 3)
+                        .addComponent(lbMensagem, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbJogador, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jtabuleiro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -101,6 +136,7 @@ public class FormClient extends javax.swing.JFrame {
 
     private void btConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btConectarActionPerformed
         if (conexao == null) {
+            btConectar.setEnabled(false);
             conexao = new Conexao();
             try {
                 conexao.conectarServidor("localhost");
@@ -108,25 +144,24 @@ public class FormClient extends javax.swing.JFrame {
                     @Override
                     public void run() {
                         try {
-                            Logger.getLogger(FormClient.class.getName()).log(Level.INFO, "Escutando servidor");
-                            boolean conectado = true ;
-                            while (conectado) {
-                                Mensagem receber = conexao.receber();
-                                System.out.println(receber.getTipo());
-                                if (receber.getTipo()==CONEXAOENCERRADA){
-                                    conectado=false;
-                                }
-                                
-                            }
-                            System.out.println("Fim da conexão");
+                            jogar();
                         } catch (IOException ex) {
                             Logger.getLogger(FormClient.class.getName()).log(Level.SEVERE, "Falha de IO", ex);
                         } catch (ClassNotFoundException ex) {
                             Logger.getLogger(FormClient.class.getName()).log(Level.SEVERE, "Classe não foi encontrada", ex);
+                        } finally {
+                            if (conexao != null) {
+                                conexao.close();
+                                conexao = null;
+                            }
+                            btConectar.setEnabled(true);
                         }
                     }
                 }.start();
             } catch (IOException ex) {
+                conexao.close();
+                conexao = null;
+                btConectar.setEnabled(true);
                 Logger.getLogger(FormClient.class.getName()).log(Level.SEVERE, "Falha ao conectar", ex);
                 JOptionPane.showMessageDialog(this, "Servidor não responde a conexão");
             }
@@ -134,11 +169,37 @@ public class FormClient extends javax.swing.JFrame {
     }//GEN-LAST:event_btConectarActionPerformed
 
     private void btMovimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btMovimentoActionPerformed
-        Tabuleiro tabuleiro=new Tabuleiro();
+        Tabuleiro tabuleiro = new Tabuleiro();
         jtabuleiro.setTabuleiro(tabuleiro);
-        
     }//GEN-LAST:event_btMovimentoActionPerformed
+
+    private void jogar() throws IOException, ClassNotFoundException {
+        Logger.getLogger(FormClient.class.getName()).log(Level.INFO, "Escutando servidor");
+        boolean conectado = true;
+        while (conectado) {
+            Mensagem receber = conexao.receber();
+            lbMensagem.setText(receber.getTipo().toString());
+            switch (receber.getTipo()) {
+                case JOGOESTABELECIDO:
+                    jogador=receber.getJogador();
+                    lbJogador.setText(jogador.toString());
+                    Tabuleiro tabuleiro = new Tabuleiro();
+                    tabuleiro.setTabuleiro(receber.getTabuleiro());
+                    jtabuleiro.setTabuleiro(tabuleiro);
+                    break;
+                case CONEXAOENCERRADA:
+                    conectado = false;
+                    btConectar.setEnabled(true);
+                    lbJogador.setText(null);
+                    conexao.close();
+                    conexao = null;
+                    break;
+            }
+        }
+
+    }
     private Conexao conexao;
+    private Jogador jogador;
 
     /**
      * @param args the command line arguments
@@ -178,6 +239,10 @@ public class FormClient extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btConectar;
     private javax.swing.JButton btMovimento;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private br.com.mertins.viewgame.JTabuleiro jtabuleiro;
+    private javax.swing.JLabel lbJogador;
+    private javax.swing.JLabel lbMensagem;
     // End of variables declaration//GEN-END:variables
 }

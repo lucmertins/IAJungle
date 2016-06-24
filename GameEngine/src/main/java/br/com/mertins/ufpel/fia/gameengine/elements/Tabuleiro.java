@@ -80,6 +80,10 @@ public class Tabuleiro {
         return tabuleiro;
     }
 
+    public void setTabuleiro(Peca[][] tabuleiro) {
+        this.tabuleiro = tabuleiro;
+    }
+
     private boolean movimentoValido(Peca peca, Posicao posIni, Posicao PosFim) {
         if (this.situacao == Situacao.UNDEFINED && peca.getTipo().movel()) {        // jogo em aberto e peça é movivel?
             Peca newPos = tabuleiro[Posicao.posY(PosFim)][Posicao.posX(PosFim)];
