@@ -29,8 +29,18 @@ public class Conexao {
     private ObjectInputStream in;
     private Status status = Status.AGUARDANDOJOGADOR;
     private Tabuleiro tabuleiro;
+    private Conexao adversario;
+    private Jogador jogador;
+    private boolean vezdajogada=false;
 
-    private Jogador jogadorCliente;
+    public Conexao(Socket socket, ObjectOutputStream out, ObjectInputStream in, Tabuleiro tabuleiro, Conexao adversario, Jogador jogador) {
+        this.socket = socket;
+        this.out = out;
+        this.in = in;
+        this.tabuleiro = tabuleiro;
+        this.adversario = adversario;
+        this.jogador = jogador;
+    }
 
     public Conexao() {
     }
@@ -66,13 +76,13 @@ public class Conexao {
         return status;
     }
 
-    public Jogador getJogadorCliente() {
-        return jogadorCliente;
+    public Jogador getJogador() {
+        return jogador;
     }
 
-    public void setJogadorCliente(Jogador jogadorCliente) {
-        this.jogadorCliente = jogadorCliente;
-        if (jogadorCliente != null) {
+    public void setJogador(Jogador jogador) {
+        this.jogador = jogador;
+        if (jogador != null) {
             this.status = Status.JOGANDO;
         } else {
             this.status = Status.AGUARDANDOJOGADOR;
@@ -86,7 +96,22 @@ public class Conexao {
     public void setTabuleiro(Tabuleiro tabuleiro) {
         this.tabuleiro = tabuleiro;
     }
-    
+
+    public Conexao getAdversario() {
+        return adversario;
+    }
+
+    public void setAdversario(Conexao adversario) {
+        this.adversario = adversario;
+    }
+
+    public void vezDoJogo() {
+        this.vezdajogada=true;
+        if(this.adversario!=null){
+            this.adversario.vezdajogada=false;
+        }
+    }
+
     public void close() {
         try {
             in.close();

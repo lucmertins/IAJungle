@@ -87,8 +87,8 @@ public class ExecuteServer {
         new Thread() {
             @Override
             public void run() {
-                jog1.setJogadorCliente(Jogador.Jogador1);
-                jog2.setJogadorCliente(Jogador.Jogador2);
+                jog1.setJogador(Jogador.Jogador1);
+                jog2.setJogador(Jogador.Jogador2);
                 Tabuleiro tabuleiro=new Tabuleiro();
                 jog1.setTabuleiro(tabuleiro);
                 jog2.setTabuleiro(tabuleiro);
@@ -101,13 +101,18 @@ public class ExecuteServer {
                     msg.setJogador(Jogador.Jogador2);
                 }
                 ativo = enviaMsg(jog2, msg);
+                if(ativo){
+                    jog1.setAdversario(jog2);
+                    jog2.setAdversario(jog1);
+                    jog1.vezDoJogo();
+                }
             }
         }.start();
     }
 
     private boolean enviaMsg(Conexao conexao, Mensagem msg) {
         try {
-            Logger.getLogger(ExecuteServer.class.getName()).log(Level.INFO, String.format("Enviando msg [%s]", conexao.getJogadorCliente()));
+            Logger.getLogger(ExecuteServer.class.getName()).log(Level.INFO, String.format("Enviando msg [%s]", conexao.getJogador()));
             conexao.enviar(msg);
             return true;
         } catch (IOException ex) {
