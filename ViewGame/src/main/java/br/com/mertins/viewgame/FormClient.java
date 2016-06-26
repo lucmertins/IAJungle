@@ -7,6 +7,7 @@ import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro.Posicao;
 import br.com.mertins.ufpel.fia.serversocket.Conexao;
 import br.com.mertins.ufpel.fia.serversocket.Mensagem;
 import static br.com.mertins.ufpel.fia.serversocket.Mensagem.TipoMsg.CONEXAOENCERRADA;
+import java.awt.Color;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -93,23 +94,20 @@ public class FormClient extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(42, 42, 42)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbMensagem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lbJogador, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btMovimento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btConectar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel1)
+                            .addComponent(txtMovimento))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cmbPeca, 0, 160, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lbMensagem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lbJogador, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(btMovimento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btConectar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel1)
-                                    .addComponent(txtMovimento))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cmbPeca, 0, 160, Short.MAX_VALUE)))
-                        .addGap(18, 18, 18)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(18, 18, 18)
                 .addComponent(jtabuleiro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -212,8 +210,11 @@ public class FormClient extends javax.swing.JFrame {
             lbMensagem.setText(receber.getTipo().toString());
             switch (receber.getTipo()) {
                 case JOGOESTABELECIDO:
+                    conexao.setJogador(receber.getJogador());
                     jogador = receber.getJogador();
                     lbJogador.setText(jogador.toString());
+                    lbJogador.setBackground(jogador == Jogador.Jogador1 ? Color.green : Color.yellow);
+                    lbJogador.setOpaque(true);
                     Tabuleiro tabuleiro = new Tabuleiro();
                     tabuleiro.setTabuleiro(receber.getTabuleiro());
                     jtabuleiro.setTabuleiro(tabuleiro);
@@ -224,13 +225,19 @@ public class FormClient extends javax.swing.JFrame {
                     }
                     break;
                 case JOGADA:
-                    enableCompontes(true);
-//                    enableCompontes(receber.getJogador()==conexao.getJogador());
+                    enableCompontes(receber.getJogador() == conexao.getJogador());
+                    txtMovimento.setText(null);
+                    Tabuleiro tab = new Tabuleiro();
+                    tab.setTabuleiro(receber.getTabuleiro());
+                    jtabuleiro.setTabuleiro(tab);
+                    //recarregar combo  com os animais ainda disponível no tabuleiro
+
                     break;
                 case CONEXAOENCERRADA:
                     conectado = false;
                     btConectar.setEnabled(true);
                     lbJogador.setText(null);
+                    lbJogador.setOpaque(false);
                     conexao.close();
                     conexao = null;
                     enableCompontes(false);

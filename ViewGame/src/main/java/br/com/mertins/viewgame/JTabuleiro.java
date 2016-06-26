@@ -53,9 +53,9 @@ public class JTabuleiro extends javax.swing.JPanel {
         Font font = new Font("Serif", Font.PLAIN, 14);
         g2d.setFont(font);
         for (int j = 6; j > -1; j--) {
-            int count=1;
+            int count = 1;
             for (int i = 7; i > -1; i--) {
-                g2d.drawString(String.format("%s%s", (char)(j+'A'),count++), j * sizeBloco+2, i * sizeBloco-2);
+                g2d.drawString(String.format("%s%s", (char) (j + 'A'), count++), j * sizeBloco + 2, i * sizeBloco - 2);
             }
         }
 
@@ -63,7 +63,11 @@ public class JTabuleiro extends javax.swing.JPanel {
         g2d.fillOval(184, 12, 50, 30); // Toca encima
         g2d.setColor(Color.yellow);
         g2d.fillOval(184, 378, 50, 30); // Toca embaixo
-
+        g2d.setColor(Color.black);
+        font = new Font("Serif", Font.PLAIN, 16);
+        g2d.setFont(font);
+        g2d.drawString("Jog1", 194, 30);
+        g2d.drawString("Jog2", 194, 396);
         if (tabuleiro != null) {
 
             Peca[][] pecas = tabuleiro.getTabuleiro();

@@ -1,6 +1,7 @@
 package br.com.mertins.ufpel.fia.serversocket;
 
 import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
+import br.com.mertins.ufpel.fia.gameengine.elements.Peca;
 import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -111,6 +112,11 @@ public class ExecuteServer {
                     try {
                         receber = conexao.receber();
                         msg = new Mensagem();
+                        Peca[][] tab = tabuleiro.getTabuleiro();
+                        for (int x = 0; x < 7; x++) {
+                            tab[0][x] = null;
+                        }
+                        msg.setTabuleiro(tab);
                         if (receber.getJogador() == Jogador.Jogador1) {
                             conexao = jog2;
                             msg.setJogador(Jogador.Jogador2);
@@ -123,6 +129,19 @@ public class ExecuteServer {
                         msg.setTipo(Mensagem.TipoMsg.JOGADA);
                         conexao.enviar(msg);
                     } catch (Exception ex) {
+                        msg = new Mensagem();
+                        msg.setTipo(Mensagem.TipoMsg.CONEXAOENCERRADA);
+                        try {
+                            jog1.enviar(msg);
+                        } catch (Exception ex2) {
+                        }
+                        try {
+                            jog2.enviar(msg);
+                        } catch (Exception ex2) {
+                        }
+                        clientesConectados.remove(jog1);
+                        clientesConectados.remove(jog2);
+                        jogando = false;
                         Logger.getLogger(ExecuteServer.class.getName()).log(Level.SEVERE, "Falha em receber conexao", ex);
                     }
 
