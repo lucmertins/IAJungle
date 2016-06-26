@@ -89,22 +89,43 @@ public class ExecuteServer {
             public void run() {
                 jog1.setJogador(Jogador.Jogador1);
                 jog2.setJogador(Jogador.Jogador2);
-                Tabuleiro tabuleiro=new Tabuleiro();
+                Tabuleiro tabuleiro = new Tabuleiro();
                 jog1.setTabuleiro(tabuleiro);
                 jog2.setTabuleiro(tabuleiro);
                 Mensagem msg = new Mensagem();
                 msg.setTipo(Mensagem.TipoMsg.JOGOESTABELECIDO);
                 msg.setJogador(Jogador.Jogador1);
                 msg.setTabuleiro(tabuleiro.getTabuleiro());
-                boolean ativo = enviaMsg(jog1, msg);
-                if (ativo == true) {
-                    msg.setJogador(Jogador.Jogador2);
-                }
-                ativo = enviaMsg(jog2, msg);
-                if(ativo){
-                    jog1.setAdversario(jog2);
-                    jog2.setAdversario(jog1);
-                    jog1.vezDoJogo();
+                enviaMsg(jog1, msg);
+                msg.setJogador(Jogador.Jogador2);
+                enviaMsg(jog2, msg);
+
+                jog1.setAdversario(jog2);
+                jog2.setAdversario(jog1);
+                jog1.vezDoJogo();
+
+                boolean jogando = true;
+                Conexao conexao = jog1;
+                while (jogando) {
+                    Mensagem receber;
+                    try {
+                        receber = conexao.receber();
+                        msg = new Mensagem();
+                        if (receber.getJogador() == Jogador.Jogador1) {
+                            conexao = jog2;
+                            msg.setJogador(Jogador.Jogador2);
+
+                        } else {
+                            conexao = jog1;
+                            msg.setJogador(Jogador.Jogador1);
+
+                        }
+                        msg.setTipo(Mensagem.TipoMsg.JOGADA);
+                        conexao.enviar(msg);
+                    } catch (Exception ex) {
+                        Logger.getLogger(ExecuteServer.class.getName()).log(Level.SEVERE, "Falha em receber conexao", ex);
+                    }
+
                 }
             }
         }.start();

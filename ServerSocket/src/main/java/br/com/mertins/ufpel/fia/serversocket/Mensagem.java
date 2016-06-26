@@ -13,7 +13,7 @@ import java.util.Date;
 public class Mensagem implements Serializable {
 
     public enum TipoMsg {
-        CANDIDATOJOGO, AGUARDANDOADVERSARIO,JOGOESTABELECIDO,CONEXAOENCERRADA,AUTORIZADOJOGADA
+        CANDIDATOJOGO, AGUARDANDOADVERSARIO,JOGOESTABELECIDO,CONEXAOENCERRADA,JOGADA
     }
     private int id;
     private Date data;
@@ -21,6 +21,7 @@ public class Mensagem implements Serializable {
     private Jogador jogador;
     private Tabuleiro.Posicao posicaoAtual;
     private Tabuleiro.Posicao posicaoNova;
+    private Peca.Tipo tipoPeca;
     private Peca[][] tabuleiro;
 
     public Mensagem() {
@@ -81,6 +82,16 @@ public class Mensagem implements Serializable {
     public void setTabuleiro(Peca[][] tabuleiro) {
         this.tabuleiro = tabuleiro;
     }
+
+    public Peca.Tipo getTipoPeca() {
+        return tipoPeca;
+    }
+
+    public void setTipoPeca(Peca.Tipo tipoPeca) {
+        this.tipoPeca = tipoPeca;
+    }
+
+    
 
     @Override
     public boolean equals(Object obj) {

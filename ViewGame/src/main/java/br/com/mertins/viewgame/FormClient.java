@@ -1,7 +1,9 @@
 package br.com.mertins.viewgame;
 
 import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
+import br.com.mertins.ufpel.fia.gameengine.elements.Peca;
 import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
+import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro.Posicao;
 import br.com.mertins.ufpel.fia.serversocket.Conexao;
 import br.com.mertins.ufpel.fia.serversocket.Mensagem;
 import static br.com.mertins.ufpel.fia.serversocket.Mensagem.TipoMsg.CONEXAOENCERRADA;
@@ -40,6 +42,7 @@ public class FormClient extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtMovimento = new javax.swing.JTextField();
+        cmbPeca = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -80,6 +83,9 @@ public class FormClient extends javax.swing.JFrame {
 
         txtMovimento.setEnabled(false);
 
+        cmbPeca.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Elefante", "Tigre", "Cachorro", "Rato" }));
+        cmbPeca.setEnabled(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -101,7 +107,8 @@ public class FormClient extends javax.swing.JFrame {
                                     .addComponent(btConectar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel1)
                                     .addComponent(txtMovimento))
-                                .addGap(0, 172, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cmbPeca, 0, 160, Short.MAX_VALUE)))
                         .addGap(18, 18, 18)))
                 .addComponent(jtabuleiro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -122,7 +129,9 @@ public class FormClient extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lbJogador, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btMovimento)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btMovimento)
+                            .addComponent(cmbPeca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtMovimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -170,9 +179,30 @@ public class FormClient extends javax.swing.JFrame {
     }//GEN-LAST:event_btConectarActionPerformed
 
     private void btMovimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btMovimentoActionPerformed
-        Tabuleiro tabuleiro = new Tabuleiro();
-        jtabuleiro.setTabuleiro(tabuleiro);
+        enableCompontes(false);
+        Mensagem msg = new Mensagem();
+        msg.setJogador(this.jogador);
+        msg.setPosicaoAtual(Posicao.B1);
+        msg.setPosicaoNova(Posicao.B2);
+        msg.setTipoPeca(Peca.Tipo.Elefant);
+        msg.setTipo(Mensagem.TipoMsg.JOGADA);
+        try {
+            conexao.enviar(msg);
+        } catch (IOException ex) {
+            conexao.close();
+            conexao = null;
+            btConectar.setEnabled(true);
+            Logger.getLogger(FormClient.class.getName()).log(Level.SEVERE, "Falha ao excrever", ex);
+            JOptionPane.showMessageDialog(this, "Não foi possível escrever no servidor");
+        }
+
     }//GEN-LAST:event_btMovimentoActionPerformed
+
+    private void enableCompontes(boolean enable) {
+        btMovimento.setEnabled(enable);
+        txtMovimento.setEnabled(enable);
+        cmbPeca.setEnabled(enable);
+    }
 
     private void jogar() throws IOException, ClassNotFoundException {
         Logger.getLogger(FormClient.class.getName()).log(Level.INFO, "Escutando servidor");
@@ -188,9 +218,14 @@ public class FormClient extends javax.swing.JFrame {
                     tabuleiro.setTabuleiro(receber.getTabuleiro());
                     jtabuleiro.setTabuleiro(tabuleiro);
                     if (jogador == Jogador.Jogador1) {
-                        btMovimento.setEnabled(true);
-                        txtMovimento.setEnabled(true);
+                        enableCompontes(true);
+                    } else {
+                        enableCompontes(false);
                     }
+                    break;
+                case JOGADA:
+                    enableCompontes(true);
+//                    enableCompontes(receber.getJogador()==conexao.getJogador());
                     break;
                 case CONEXAOENCERRADA:
                     conectado = false;
@@ -198,8 +233,7 @@ public class FormClient extends javax.swing.JFrame {
                     lbJogador.setText(null);
                     conexao.close();
                     conexao = null;
-                    btMovimento.setEnabled(false);
-                    txtMovimento.setEnabled(false);
+                    enableCompontes(false);
                     break;
             }
         }
@@ -246,6 +280,7 @@ public class FormClient extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btConectar;
     private javax.swing.JButton btMovimento;
+    private javax.swing.JComboBox<String> cmbPeca;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private br.com.mertins.viewgame.JTabuleiro jtabuleiro;
