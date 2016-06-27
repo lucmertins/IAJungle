@@ -9,8 +9,13 @@ import br.com.mertins.ufpel.fia.serversocket.Mensagem;
 import static br.com.mertins.ufpel.fia.serversocket.Mensagem.TipoMsg.CONEXAOENCERRADA;
 import java.awt.Color;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 /**
@@ -44,6 +49,8 @@ public class FormClient extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         txtMovimento = new javax.swing.JTextField();
         cmbPeca = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
+        txtHelp = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -84,8 +91,20 @@ public class FormClient extends javax.swing.JFrame {
 
         txtMovimento.setEnabled(false);
 
-        cmbPeca.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Elefante", "Tigre", "Cachorro", "Rato" }));
         cmbPeca.setEnabled(false);
+
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        txtHelp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtHelpActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -101,11 +120,14 @@ public class FormClient extends javax.swing.JFrame {
                             .addComponent(btMovimento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btConectar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel1)
-                            .addComponent(txtMovimento))
+                            .addComponent(txtMovimento)
+                            .addComponent(jButton1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(cmbPeca, 0, 160, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(txtHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
                 .addComponent(jtabuleiro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -131,7 +153,11 @@ public class FormClient extends javax.swing.JFrame {
                             .addComponent(btMovimento)
                             .addComponent(cmbPeca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtMovimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtMovimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(77, 77, 77)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtHelp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jtabuleiro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -177,62 +203,89 @@ public class FormClient extends javax.swing.JFrame {
     }//GEN-LAST:event_btConectarActionPerformed
 
     private void btMovimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btMovimentoActionPerformed
-        enableCompontes(false);
-        Mensagem msg = new Mensagem();
-        msg.setJogador(this.jogador);
-        msg.setPosicaoAtual(Posicao.B1);
-        msg.setPosicaoNova(Posicao.B2);
-        msg.setTipoPeca(Peca.Tipo.Elefant);
-        msg.setTipo(Mensagem.TipoMsg.JOGADA);
-        try {
-            conexao.enviar(msg);
-        } catch (IOException ex) {
-            conexao.close();
-            conexao = null;
-            btConectar.setEnabled(true);
-            Logger.getLogger(FormClient.class.getName()).log(Level.SEVERE, "Falha ao excrever", ex);
-            JOptionPane.showMessageDialog(this, "Não foi possível escrever no servidor");
+        if (valida()) {
+            enableCompontes(false);
+            Mensagem msg = new Mensagem();
+            msg.setJogador(this.conexao.getJogador());
+            msg.setPosicaoAtual(Posicao.B1);
+            msg.setPosicaoNova(Posicao.B2);
+            msg.setTipoPeca(Peca.Tipo.Elefant);
+            msg.setTipo(Mensagem.TipoMsg.JOGADA);
+            try {
+                conexao.enviar(msg);
+            } catch (IOException ex) {
+                conexao.close();
+                conexao = null;
+                btConectar.setEnabled(true);
+                Logger.getLogger(FormClient.class.getName()).log(Level.SEVERE, "Falha ao excrever", ex);
+                JOptionPane.showMessageDialog(this, "Não foi possível escrever no servidor");
+            }
         }
-
     }//GEN-LAST:event_btMovimentoActionPerformed
 
+    private void txtHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHelpActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtHelpActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Peca peca = (Peca) this.cmbPeca.getModel().getSelectedItem();
+        Posicao posicao = conexao.getTabuleiro().posicao(this.conexao.getJogador(), peca);
+        txtHelp.setText(String.format("%s esta na posição %s", peca.getTipo().descricao(), posicao));
+    }//GEN-LAST:event_jButton1ActionPerformed
+    
+    private boolean valida() {
+        if (txtMovimento.getText().trim().length() == 0) {
+            lbMensagem.setText("Movimento precisa ser informado");
+            return false;
+        }
+        Peca peca = (Peca) this.cmbPeca.getModel().getSelectedItem();
+        Posicao posicao = conexao.getTabuleiro().posicao(this.conexao.getJogador(), peca);
+        System.out.printf("%s esta na posição %s", peca.getTipo().descricao(), posicao);
+        //lbMensagem.setText(String.format("%s esta na posição %s", peca.getTipo().descricao(), posicao));
+        return true;
+    }
+    
     private void enableCompontes(boolean enable) {
         btMovimento.setEnabled(enable);
         txtMovimento.setEnabled(enable);
         cmbPeca.setEnabled(enable);
     }
-
+    
+    private void atualizaCmb(Tabuleiro tabuleiro) {
+        this.cmbPeca.setModel(new DefaultComboBoxModel(tabuleiro.pecasNoTabuleiro(conexao.getJogador()).toArray()));
+    }
+    
     private void jogar() throws IOException, ClassNotFoundException {
         Logger.getLogger(FormClient.class.getName()).log(Level.INFO, "Escutando servidor");
         boolean conectado = true;
         while (conectado) {
             Mensagem receber = conexao.receber();
-            lbMensagem.setText(receber.getTipo().toString()+"  "+receber.getJogador());
+            lbMensagem.setText(receber.getTipo().toString() + "  " + receber.getJogador());
             switch (receber.getTipo()) {
                 case JOGOESTABELECIDO:
-                    conexao.setJogador(receber.getJogador());
-                    jogador = receber.getJogador();
-                    lbJogador.setText(jogador.toString());
-                    lbJogador.setBackground(jogador == Jogador.Jogador1 ? Color.green : Color.yellow);
-                    lbJogador.setOpaque(true);
-                    
                     Tabuleiro tabuleiro = new Tabuleiro(receber.getTabuleiro());
+                    conexao.setJogador(receber.getJogador());
+                    conexao.setTabuleiro(tabuleiro);
+                    lbJogador.setText(conexao.getJogador().toString());
+                    lbJogador.setBackground(conexao.getJogador() == Jogador.Jogador1 ? Color.green : Color.yellow);
+                    lbJogador.setOpaque(true);
                     jtabuleiro.setTabuleiro(tabuleiro);
-                    if (jogador == Jogador.Jogador1) {
+                    if (conexao.getJogador() == Jogador.Jogador1) {
                         enableCompontes(true);
                     } else {
                         enableCompontes(false);
                     }
+                    this.atualizaCmb(tabuleiro);
                     break;
                 case JOGADA:
+                    Tabuleiro tab = new Tabuleiro(receber.getTabuleiro());
+                    jtabuleiro.setTabuleiro(tab);
+                    conexao.setTabuleiro(tab);
                     if (receber.getJogador() == conexao.getJogador()) {
+                        this.atualizaCmb(tab);
                         enableCompontes(true);
                         txtMovimento.setText(null);
                     }
-                    Tabuleiro tab = new Tabuleiro(receber.getTabuleiro());
-                    jtabuleiro.setTabuleiro(tab);
-                    //recarregar combo  com os animais ainda disponível no tabuleiro
-
                     break;
                 case CONEXAOENCERRADA:
                     conectado = false;
@@ -245,10 +298,9 @@ public class FormClient extends javax.swing.JFrame {
                     break;
             }
         }
-
+        
     }
     private Conexao conexao;
-    private Jogador jogador;
 
     /**
      * @param args the command line arguments
@@ -289,11 +341,13 @@ public class FormClient extends javax.swing.JFrame {
     private javax.swing.JButton btConectar;
     private javax.swing.JButton btMovimento;
     private javax.swing.JComboBox<String> cmbPeca;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private br.com.mertins.viewgame.JTabuleiro jtabuleiro;
     private javax.swing.JLabel lbJogador;
     private javax.swing.JLabel lbMensagem;
+    private javax.swing.JTextField txtHelp;
     private javax.swing.JTextField txtMovimento;
     // End of variables declaration//GEN-END:variables
 }

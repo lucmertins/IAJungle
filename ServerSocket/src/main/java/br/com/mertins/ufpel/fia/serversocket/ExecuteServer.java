@@ -113,13 +113,12 @@ public class ExecuteServer {
                     try {
                         receber = conexao.receber();
                         msg = new Mensagem();
+                          // avaliar jogada, decidir se é válida e enviar para os jogadores ou enviar que deu problema. 
+                          // Enviar sempre o tabuleiro e a movimentação efetuada
+                        
                         Peca[][] tab = tabuleiro.getTabuleiro();
-                        for (int y = 0; y < 7; y++) {
-                            for (int x = 0; x < 7; x++) {
-                                tab[y][x] = null;
-                            }
-                        }
                         msg.setTabuleiro(tab);
+
                         msg.setJogador(receber.getJogador() == Jogador.Jogador1 ? Jogador.Jogador2 : Jogador.Jogador1);
                         msg.setTipo(Mensagem.TipoMsg.JOGADA);
                         if (jog1.isVezdajogada()) {

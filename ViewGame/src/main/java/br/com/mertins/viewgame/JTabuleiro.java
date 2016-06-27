@@ -66,7 +66,7 @@ public class JTabuleiro extends javax.swing.JPanel {
         g2d.setColor(Color.green);
         g2d.fillOval(184, 12, 50, 30); // Toca encima
         g2d.setColor(Color.yellow);
-        g2d.fillOval(184, 378, 50, 30); // Toca embaixo
+        g2d.fillOval(184, 376, 50, 30); // Toca embaixo
         g2d.setColor(Color.black);
         font = new Font("Serif", Font.PLAIN, 16);
         g2d.setFont(font);

@@ -7,7 +7,7 @@ import java.util.Objects;
  *
  * @author mertins
  */
-public class Peca implements Serializable{
+public class Peca implements Serializable, Comparable<Object> {
 
     public enum Tipo {
         Toca, Elefant, Tiger, Dog, Rat;
@@ -31,6 +31,23 @@ public class Peca implements Serializable{
         public boolean movel() {
             return this != Toca;
         }
+
+        public String descricao() {
+            switch (this) {
+                case Toca:
+                    return "Toca";
+                case Elefant:
+                    return "Elefante";
+                case Tiger:
+                    return "Tigre";
+                case Dog:
+                    return "Cachorro";
+                case Rat:
+                    return "Rato";
+                default:
+                    return "Sem descrição";
+            }
+        }
     }
     private final Jogador jogador;
     private final Tipo tipo;
@@ -46,6 +63,11 @@ public class Peca implements Serializable{
 
     public Tipo getTipo() {
         return tipo;
+    }
+
+    @Override
+    public String toString() {
+        return tipo.toString();
     }
 
     @Override
@@ -77,4 +99,12 @@ public class Peca implements Serializable{
         return true;
     }
 
+    @Override
+    public int compareTo(Object o) {
+        if (o instanceof Peca) {
+            Peca outra = (Peca) o;
+            return this.tipo.peso() > outra.tipo.peso() ? 1 : this.tipo.peso() < outra.tipo.peso() ? -1 : 0;
+        }
+        return 0;
+    }
 }

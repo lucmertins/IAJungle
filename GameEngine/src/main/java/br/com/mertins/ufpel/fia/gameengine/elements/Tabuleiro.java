@@ -1,5 +1,9 @@
 package br.com.mertins.ufpel.fia.gameengine.elements;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  *
  * @author mertins
@@ -77,6 +81,33 @@ public class Tabuleiro {
             return true;
         }
         return false;
+    }
+
+    public Posicao posicao(Jogador jogador, Peca peca) {
+        for (int y = 0; y < tabuleiro.length; y++) {
+            for (int x = 0; x < tabuleiro.length; x++) {
+                if (tabuleiro[y][x] != null && tabuleiro[y][x].getJogador() == jogador && tabuleiro[y][x].getTipo() == peca.getTipo()) {
+                    return Tabuleiro.Posicao.posicao(x, y);
+                }
+            }
+        }
+        return null;
+    }
+
+    public List<Peca> pecasNoTabuleiro(Jogador jogador) {
+        List<Peca> lista = new ArrayList();
+        try {
+            for (Peca[] tab : tabuleiro) {
+                for (int x = 0; x < tabuleiro.length; x++) {
+                    if (tab[x] != null && tab[x].getJogador() == jogador && tab[x].getTipo() != Peca.Tipo.Toca) {
+                        lista.add(tab[x]);
+                    }
+                }
+            }
+        } catch (Exception ex) {
+        }
+        Collections.sort(lista);
+        return lista;
     }
 
     public Peca[][] getTabuleiro() {

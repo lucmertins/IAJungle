@@ -1,6 +1,7 @@
 package br.com.mertins.ufpel.fia.serversocket;
 
 import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
+import br.com.mertins.ufpel.fia.gameengine.elements.Peca;
 import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -31,7 +32,7 @@ public class Conexao {
     private Tabuleiro tabuleiro;
     private Conexao adversario;
     private Jogador jogador;
-    private boolean vezdajogada=false;
+    private boolean vezdajogada = false;
 
     public Conexao(Socket socket, ObjectOutputStream out, ObjectInputStream in, Tabuleiro tabuleiro, Conexao adversario, Jogador jogador) {
         this.socket = socket;
@@ -64,8 +65,9 @@ public class Conexao {
         in = new ObjectInputStream(socket.getInputStream());
     }
 
-    public void enviar(Mensagem x) throws IOException {
-        out.writeObject(x);
+    public void enviar(Mensagem msg) throws IOException {
+        out.reset();
+        out.writeObject(msg);
     }
 
     public Mensagem receber() throws IOException, ClassNotFoundException {
@@ -106,9 +108,9 @@ public class Conexao {
     }
 
     public void vezDoJogo() {
-        this.vezdajogada=true;
-        if(this.adversario!=null){
-            this.adversario.vezdajogada=false;
+        this.vezdajogada = true;
+        if (this.adversario != null) {
+            this.adversario.vezdajogada = false;
         }
     }
 
