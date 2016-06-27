@@ -207,7 +207,7 @@ public class FormClient extends javax.swing.JFrame {
         boolean conectado = true;
         while (conectado) {
             Mensagem receber = conexao.receber();
-            lbMensagem.setText(receber.getTipo().toString());
+            lbMensagem.setText(receber.getTipo().toString()+"  "+receber.getJogador());
             switch (receber.getTipo()) {
                 case JOGOESTABELECIDO:
                     conexao.setJogador(receber.getJogador());
@@ -215,8 +215,8 @@ public class FormClient extends javax.swing.JFrame {
                     lbJogador.setText(jogador.toString());
                     lbJogador.setBackground(jogador == Jogador.Jogador1 ? Color.green : Color.yellow);
                     lbJogador.setOpaque(true);
-                    Tabuleiro tabuleiro = new Tabuleiro();
-                    tabuleiro.setTabuleiro(receber.getTabuleiro());
+                    
+                    Tabuleiro tabuleiro = new Tabuleiro(receber.getTabuleiro());
                     jtabuleiro.setTabuleiro(tabuleiro);
                     if (jogador == Jogador.Jogador1) {
                         enableCompontes(true);
@@ -225,10 +225,11 @@ public class FormClient extends javax.swing.JFrame {
                     }
                     break;
                 case JOGADA:
-                    enableCompontes(receber.getJogador() == conexao.getJogador());
-                    txtMovimento.setText(null);
-                    Tabuleiro tab = new Tabuleiro();
-                    tab.setTabuleiro(receber.getTabuleiro());
+                    if (receber.getJogador() == conexao.getJogador()) {
+                        enableCompontes(true);
+                        txtMovimento.setText(null);
+                    }
+                    Tabuleiro tab = new Tabuleiro(receber.getTabuleiro());
                     jtabuleiro.setTabuleiro(tab);
                     //recarregar combo  com os animais ainda disponível no tabuleiro
 

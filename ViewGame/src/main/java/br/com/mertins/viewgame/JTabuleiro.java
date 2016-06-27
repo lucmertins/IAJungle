@@ -27,6 +27,10 @@ public class JTabuleiro extends javax.swing.JPanel {
     private final int ajustex = 12;
     private Tabuleiro tabuleiro;
 
+    public void setTabuleiro(Peca[][] tabuleiro) {
+        this.setTabuleiro(new Tabuleiro(tabuleiro));
+    }
+
     public void setTabuleiro(Tabuleiro tabuleiro) {
         this.tabuleiro = tabuleiro;
         this.repaint();
@@ -68,10 +72,8 @@ public class JTabuleiro extends javax.swing.JPanel {
         g2d.setFont(font);
         g2d.drawString("Jog1", 194, 30);
         g2d.drawString("Jog2", 194, 396);
-        if (tabuleiro != null) {
-
+        if (tabuleiro != null && tabuleiro.getTabuleiro()!=null) {
             Peca[][] pecas = tabuleiro.getTabuleiro();
-
             for (int y = 0; y < pecas.length; y++) {
                 for (int x = 0; x < pecas.length; x++) {
                     if (pecas[y][x] != null) {

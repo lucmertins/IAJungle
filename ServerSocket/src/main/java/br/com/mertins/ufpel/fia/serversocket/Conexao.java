@@ -112,6 +112,10 @@ public class Conexao {
         }
     }
 
+    public boolean isVezdajogada() {
+        return vezdajogada;
+    }
+
     public void close() {
         try {
             in.close();

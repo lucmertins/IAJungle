@@ -37,10 +37,13 @@ public class Tabuleiro {
     private Situacao situacao;
 
     public Tabuleiro() {
-        init();
     }
 
-    private void init() {
+    public Tabuleiro(Peca[][] tabuleiro) {
+        this.tabuleiro = tabuleiro;
+    }
+
+    public void init() {
         tabuleiro = new Peca[tamanho][tamanho];
         Peca peca = new Peca(Jogador.Jogador1, Peca.Tipo.Toca);
         tabuleiro[0][3] = peca;
@@ -68,7 +71,7 @@ public class Tabuleiro {
 
     public boolean move(Peca peca, Posicao posIni, Posicao posFim) {
         if (movimentoValido(peca, posIni, posFim)) {
-            System.out.printf("[%s] [%s] [%s] [%s]\n",peca.getJogador(),peca.getTipo(),posIni,posFim);
+            System.out.printf("[%s] [%s] [%s] [%s]\n", peca.getJogador(), peca.getTipo(), posIni, posFim);
             tabuleiro[Posicao.posY(posIni)][Posicao.posX(posIni)] = null;
             tabuleiro[Posicao.posY(posFim)][Posicao.posX(posFim)] = peca;
             return true;
@@ -94,7 +97,7 @@ public class Tabuleiro {
                     this.situacao = peca.getJogador() == Jogador.Jogador1 ? Situacao.WINJOG1 : Situacao.WINJOG2;
                     return true;
                 } else if (peca.getTipo() == Peca.Tipo.Rat && newPos.getTipo() == Peca.Tipo.Elefant // rato comendo elefante?
-                        || ((peca.getTipo().peso() >= newPos.getTipo().peso()       // ou peça de peso >= e não é elefante comendo rato?
+                        || ((peca.getTipo().peso() >= newPos.getTipo().peso() // ou peça de peso >= e não é elefante comendo rato?
                         && !(peca.getTipo() == Peca.Tipo.Elefant && newPos.getTipo() == Peca.Tipo.Rat)))) {
                     return true;
                 }

@@ -91,6 +91,7 @@ public class ExecuteServer {
                 jog1.setJogador(Jogador.Jogador1);
                 jog2.setJogador(Jogador.Jogador2);
                 Tabuleiro tabuleiro = new Tabuleiro();
+                tabuleiro.init();
                 jog1.setTabuleiro(tabuleiro);
                 jog2.setTabuleiro(tabuleiro);
                 Mensagem msg = new Mensagem();
@@ -113,21 +114,23 @@ public class ExecuteServer {
                         receber = conexao.receber();
                         msg = new Mensagem();
                         Peca[][] tab = tabuleiro.getTabuleiro();
-                        for (int x = 0; x < 7; x++) {
-                            tab[0][x] = null;
+                        for (int y = 0; y < 7; y++) {
+                            for (int x = 0; x < 7; x++) {
+                                tab[y][x] = null;
+                            }
                         }
                         msg.setTabuleiro(tab);
-                        if (receber.getJogador() == Jogador.Jogador1) {
-                            conexao = jog2;
-                            msg.setJogador(Jogador.Jogador2);
-
-                        } else {
-                            conexao = jog1;
-                            msg.setJogador(Jogador.Jogador1);
-
-                        }
+                        msg.setJogador(receber.getJogador() == Jogador.Jogador1 ? Jogador.Jogador2 : Jogador.Jogador1);
                         msg.setTipo(Mensagem.TipoMsg.JOGADA);
-                        conexao.enviar(msg);
+                        if (jog1.isVezdajogada()) {
+                            jog2.vezDoJogo();
+                            conexao = jog2;
+                        } else {
+                            jog1.vezDoJogo();
+                            conexao = jog1;
+                        }
+                        jog1.enviar(msg);
+                        jog2.enviar(msg);
                     } catch (Exception ex) {
                         msg = new Mensagem();
                         msg.setTipo(Mensagem.TipoMsg.CONEXAOENCERRADA);
