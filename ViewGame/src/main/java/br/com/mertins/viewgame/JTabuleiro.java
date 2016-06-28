@@ -70,14 +70,14 @@ public class JTabuleiro extends javax.swing.JPanel {
         g2d.setColor(Color.black);
         font = new Font("Serif", Font.PLAIN, 16);
         g2d.setFont(font);
-        g2d.drawString("Jog1", 194, 30);
-        g2d.drawString("Jog2", 194, 396);
+        g2d.drawString("Jog2", 194, 30);
+        g2d.drawString("Jog1", 194, 396);
         if (tabuleiro != null && tabuleiro.getTabuleiro()!=null) {
             Peca[][] pecas = tabuleiro.getTabuleiro();
             for (int y = 0; y < pecas.length; y++) {
                 for (int x = 0; x < pecas.length; x++) {
                     if (pecas[y][x] != null) {
-                        g2d.setColor(pecas[y][x].getJogador() == Jogador.Jogador1 ? Color.green : Color.yellow);
+                        g2d.setColor(pecas[y][x].getJogador() == Jogador.Jogador1 ? Color.yellow : Color.green);
                         font = new Font("Serif", Font.PLAIN, 38);
                         g2d.setFont(font);
                         switch (pecas[y][x].getTipo()) {

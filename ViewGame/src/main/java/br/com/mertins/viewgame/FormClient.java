@@ -10,11 +10,9 @@ import static br.com.mertins.ufpel.fia.serversocket.Mensagem.TipoMsg.CONEXAOENCE
 import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
@@ -228,46 +226,44 @@ public class FormClient extends javax.swing.JFrame {
     }//GEN-LAST:event_txtHelpActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Peca peca = (Peca) this.cmbPeca.getModel().getSelectedItem();
+        Peca peca = (Peca) ((ComboItem) this.cmbPeca.getModel().getSelectedItem()).value;
         Posicao posicao = conexao.getTabuleiro().posicao(this.conexao.getJogador(), peca);
         txtHelp.setText(String.format("%s esta na posição %s", peca.getTipo().descricao(), posicao));
     }//GEN-LAST:event_jButton1ActionPerformed
-    
+
     private boolean valida() {
         if (txtMovimento.getText().trim().length() == 0) {
             lbMensagem.setText("Movimento precisa ser informado");
             return false;
         }
-        Peca peca = (Peca) this.cmbPeca.getModel().getSelectedItem();
+        Peca peca = (Peca) ((ComboItem) this.cmbPeca.getModel().getSelectedItem()).value;
         Posicao posicao = conexao.getTabuleiro().posicao(this.conexao.getJogador(), peca);
-        System.out.printf("%s esta na posição %s", peca.getTipo().descricao(), posicao);
-        //lbMensagem.setText(String.format("%s esta na posição %s", peca.getTipo().descricao(), posicao));
+
         return true;
     }
-    
+
     private void enableCompontes(boolean enable) {
         btMovimento.setEnabled(enable);
         txtMovimento.setEnabled(enable);
         cmbPeca.setEnabled(enable);
     }
-    
+
     private void atualizaCmb(Tabuleiro tabuleiro) {
-        this.cmbPeca.setModel(new DefaultComboBoxModel(tabuleiro.pecasNoTabuleiro(conexao.getJogador()).toArray()));
+        this.cmbPeca.setModel(new DefaultComboBoxModel(gera(tabuleiro.pecasNoTabuleiro(conexao.getJogador())).toArray()));
     }
-    
+
     private void jogar() throws IOException, ClassNotFoundException {
-        Logger.getLogger(FormClient.class.getName()).log(Level.INFO, "Escutando servidor");
         boolean conectado = true;
         while (conectado) {
             Mensagem receber = conexao.receber();
-            lbMensagem.setText(receber.getTipo().toString() + "  " + receber.getJogador());
+            lbMensagem.setText(String.format("%s %s", receber.getTipo().toString(), receber.getJogador() == null ? "" : receber.getJogador()));
             switch (receber.getTipo()) {
                 case JOGOESTABELECIDO:
                     Tabuleiro tabuleiro = new Tabuleiro(receber.getTabuleiro());
                     conexao.setJogador(receber.getJogador());
                     conexao.setTabuleiro(tabuleiro);
                     lbJogador.setText(conexao.getJogador().toString());
-                    lbJogador.setBackground(conexao.getJogador() == Jogador.Jogador1 ? Color.green : Color.yellow);
+                    lbJogador.setBackground(conexao.getJogador() == Jogador.Jogador1 ? Color.yellow : Color.green);
                     lbJogador.setOpaque(true);
                     jtabuleiro.setTabuleiro(tabuleiro);
                     if (conexao.getJogador() == Jogador.Jogador1) {
@@ -298,8 +294,33 @@ public class FormClient extends javax.swing.JFrame {
                     break;
             }
         }
-        
     }
+
+    private List<ComboItem> gera(List<Peca> pecas) {
+        List<ComboItem> result = new ArrayList<>();
+        for (Peca peca : pecas) {
+            result.add(new ComboItem(peca, peca.getTipo().descricao()));
+        }
+        return result;
+    }
+
+    private class ComboItem {
+
+        private Peca value;
+        private final String label;
+
+        public ComboItem(Peca value, String label) {
+            this.value = value;
+            this.label = label;
+        }
+
+        @Override
+        public String toString() {
+            return label;
+        }
+
+    }
+
     private Conexao conexao;
 
     /**
