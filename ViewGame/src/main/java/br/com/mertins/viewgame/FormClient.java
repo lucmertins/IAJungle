@@ -43,11 +43,9 @@ public class FormClient extends javax.swing.JFrame {
         btMovimento = new javax.swing.JButton();
         lbMensagem = new javax.swing.JLabel();
         lbJogador = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtMovimento = new javax.swing.JTextField();
         cmbPeca = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
         txtHelp = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -71,7 +69,7 @@ public class FormClient extends javax.swing.JFrame {
             .addGap(0, 421, Short.MAX_VALUE)
         );
 
-        btMovimento.setText("Movimento");
+        btMovimento.setText("Realizar Jogada");
         btMovimento.setEnabled(false);
         btMovimento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -83,51 +81,42 @@ public class FormClient extends javax.swing.JFrame {
 
         lbJogador.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel1.setText("Mensagem");
-
         jLabel2.setText("Jogador");
 
         txtMovimento.setEnabled(false);
 
         cmbPeca.setEnabled(false);
-
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        cmbPeca.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                cmbPecaActionPerformed(evt);
             }
         });
 
-        txtHelp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtHelpActionPerformed(evt);
-            }
-        });
+        txtHelp.setEditable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(42, 42, 42)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lbMensagem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lbJogador, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btMovimento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btConectar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel1)
-                            .addComponent(txtMovimento)
-                            .addComponent(jButton1))
+                        .addComponent(cmbPeca, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cmbPeca, 0, 160, Short.MAX_VALUE))
+                        .addComponent(txtHelp))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btConectar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2)
-                            .addComponent(txtHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btMovimento, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtMovimento, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jtabuleiro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -138,24 +127,20 @@ public class FormClient extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(17, 17, 17)
                         .addComponent(btConectar)
-                        .addGap(49, 49, 49)
-                        .addComponent(jLabel1)
-                        .addGap(3, 3, 3)
-                        .addComponent(lbMensagem, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(37, 37, 37)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lbJogador, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cmbPeca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtHelp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btMovimento)
-                            .addComponent(cmbPeca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtMovimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(77, 77, 77)
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtHelp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtMovimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbMensagem, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jtabuleiro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -209,6 +194,14 @@ public class FormClient extends javax.swing.JFrame {
             msg.setPosicaoNova(Posicao.B2);
             msg.setTipoPeca(Peca.Tipo.Elefant);
             msg.setTipo(Mensagem.TipoMsg.JOGADA);
+
+            Peca peca = (Peca) ((ComboItem) this.cmbPeca.getModel().getSelectedItem()).value;
+            msg.setTipoPeca(peca.getTipo());
+            Posicao posicaoOri = conexao.getTabuleiro().posicao(this.conexao.getJogador(), peca);
+            msg.setPosicaoAtual(posicaoOri);
+            Posicao posicaoDest = Tabuleiro.Posicao.valueOf(txtMovimento.getText().trim().toUpperCase());
+            msg.setPosicaoNova(posicaoDest);
+
             try {
                 conexao.enviar(msg);
             } catch (IOException ex) {
@@ -221,24 +214,26 @@ public class FormClient extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btMovimentoActionPerformed
 
-    private void txtHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHelpActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtHelpActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void cmbPecaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbPecaActionPerformed
         Peca peca = (Peca) ((ComboItem) this.cmbPeca.getModel().getSelectedItem()).value;
         Posicao posicao = conexao.getTabuleiro().posicao(this.conexao.getJogador(), peca);
-        txtHelp.setText(String.format("%s esta na posição %s", peca.getTipo().descricao(), posicao));
-    }//GEN-LAST:event_jButton1ActionPerformed
+        txtHelp.setText(String.format("Esta na %s", posicao));
+    }//GEN-LAST:event_cmbPecaActionPerformed
 
     private boolean valida() {
         if (txtMovimento.getText().trim().length() == 0) {
             lbMensagem.setText("Movimento precisa ser informado");
             return false;
         }
-        Peca peca = (Peca) ((ComboItem) this.cmbPeca.getModel().getSelectedItem()).value;
-        Posicao posicao = conexao.getTabuleiro().posicao(this.conexao.getJogador(), peca);
+        try {
+            Tabuleiro.Posicao.valueOf(txtMovimento.getText().trim().toUpperCase());
+        } catch (Exception ex) {
+            lbMensagem.setText("Posicao inválida");
+            return false;
+        }
 
+        // Peca peca = (Peca) ((ComboItem) this.cmbPeca.getModel().getSelectedItem()).value;
+        //Posicao posicaoOri = conexao.getTabuleiro().posicao(this.conexao.getJogador(), peca);
         return true;
     }
 
@@ -250,6 +245,7 @@ public class FormClient extends javax.swing.JFrame {
 
     private void atualizaCmb(Tabuleiro tabuleiro) {
         this.cmbPeca.setModel(new DefaultComboBoxModel(gera(tabuleiro.pecasNoTabuleiro(conexao.getJogador())).toArray()));
+        this.cmbPecaActionPerformed(null);
     }
 
     private void jogar() throws IOException, ClassNotFoundException {
@@ -281,6 +277,7 @@ public class FormClient extends javax.swing.JFrame {
                         this.atualizaCmb(tab);
                         enableCompontes(true);
                         txtMovimento.setText(null);
+                        txtMovimento.requestFocus();
                     }
                     break;
                 case CONEXAOENCERRADA:
@@ -362,8 +359,6 @@ public class FormClient extends javax.swing.JFrame {
     private javax.swing.JButton btConectar;
     private javax.swing.JButton btMovimento;
     private javax.swing.JComboBox<String> cmbPeca;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private br.com.mertins.viewgame.JTabuleiro jtabuleiro;
     private javax.swing.JLabel lbJogador;

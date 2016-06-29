@@ -116,6 +116,13 @@ public class ExecuteServer {
                           // avaliar jogada, decidir se é válida e enviar para os jogadores ou enviar que deu problema. 
                           // Enviar sempre o tabuleiro e a movimentação efetuada
                         
+                          System.out.println("%s %s");
+                          msg.getJogador();
+                        msg.getPosicaoAtual();
+                        msg.getPosicaoAtual();
+                        msg.getTipoPeca();
+                          
+                          
                         Peca[][] tab = tabuleiro.getTabuleiro();
                         msg.setTabuleiro(tab);
 
