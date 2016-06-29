@@ -112,17 +112,11 @@ public class ExecuteServer {
                     Mensagem receber;
                     try {
                         receber = conexao.receber();
+                        // avaliar jogada, decidir se é válida e enviar para os jogadores ou enviar que deu problema. 
+                        // Enviar sempre o tabuleiro e a movimentação efetuada
+                        System.out.printf("%s move peça %s de %s para %s\n", receber.getJogador(), receber.getTipoPeca(), receber.getPosicaoAtual(), receber.getPosicaoNova());
+
                         msg = new Mensagem();
-                          // avaliar jogada, decidir se é válida e enviar para os jogadores ou enviar que deu problema. 
-                          // Enviar sempre o tabuleiro e a movimentação efetuada
-                        
-                          System.out.println("%s %s");
-                          msg.getJogador();
-                        msg.getPosicaoAtual();
-                        msg.getPosicaoAtual();
-                        msg.getTipoPeca();
-                          
-                          
                         Peca[][] tab = tabuleiro.getTabuleiro();
                         msg.setTabuleiro(tab);
 
