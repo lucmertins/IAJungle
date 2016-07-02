@@ -82,7 +82,6 @@ public class Tabuleiro {
         Movimento mov = movimentoValido(peca, posIni, posFim);
         switch (mov) {
             case VALIDO:
-                System.out.printf("[%s] [%s] [%s] [%s]\n", peca.getJogador(), peca.getTipo(), posIni, posFim);
                 tabuleiro[Posicao.posY(posIni)][Posicao.posX(posIni)] = null;
                 tabuleiro[Posicao.posY(posFim)][Posicao.posX(posFim)] = peca;
                 Jogador adversario = peca.getJogador() == Jogador.Jogador1 ? Jogador.Jogador2 : Jogador.Jogador1;

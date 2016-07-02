@@ -262,6 +262,7 @@ public class FormClient extends javax.swing.JFrame {
                     lbJogador.setBackground(conexao.getJogador() == Jogador.Jogador1 ? Color.yellow : Color.green);
                     lbJogador.setOpaque(true);
                     jtabuleiro.setTabuleiro(tabuleiro);
+                    this.txtMovimento.setText(null);
                     if (conexao.getJogador() == Jogador.Jogador1) {
                         enableCompontes(true);
                     } else {
@@ -279,8 +280,22 @@ public class FormClient extends javax.swing.JFrame {
                         enableCompontes(true);
                         txtMovimento.setText(null);
                         txtMovimento.requestFocus();
+                        if (receber.getPosicaoNova() != null) {  // se não for a primeira jogada
+                            lbMensagem.setText(String.format("%s moveu Peça %s para %s",
+                                    conexao.getJogador() == Jogador.Jogador1 ? Jogador.Jogador2 : Jogador.Jogador1,
+                                    receber.getTipoPeca().descricao(), receber.getPosicaoNova()));
+                        }
                     }
                     break;
+                case CHEGOUTOCA:
+                case COMEUTODASPECAS:
+                    if (receber.getJogador() == conexao.getJogador()) {
+                        enableCompontes(false);
+                        JOptionPane.showMessageDialog(this, "Voce ganhou!");
+                    } else {
+                        enableCompontes(false);
+                        JOptionPane.showMessageDialog(this, "Voce perdeu!");
+                    }
                 case CONEXAOENCERRADA:
                     conectado = false;
                     btConectar.setEnabled(true);
@@ -289,9 +304,6 @@ public class FormClient extends javax.swing.JFrame {
                     conexao.close();
                     conexao = null;
                     enableCompontes(false);
-                    break;
-                case CHEGOUTOCA:
-                case COMEUTODASPECAS:
                     break;
             }
         }

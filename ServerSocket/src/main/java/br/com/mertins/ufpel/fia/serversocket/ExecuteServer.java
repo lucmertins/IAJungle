@@ -112,16 +112,19 @@ public class ExecuteServer {
                             msg.setJogador(receber.getJogador());
                             msg.setTipo(Mensagem.TipoMsg.JOGADAINVALIDA);
                         } else {
-                            System.out.printf("peca na posição [%s]\n", peca.getTipo().descricao());
                             Tabuleiro.Movimento move = tabuleiro.move(peca, receber.getPosicaoAtual(), receber.getPosicaoNova());
                             switch (move) {
                                 case INVALIDO:
                                     msg.setJogador(receber.getJogador());
                                     msg.setTipo(Mensagem.TipoMsg.JOGADAINVALIDA);
+                                   // System.out.printf("[INV][%s][%s][%s]\n", receber.getJogador(),peca.getTipo().descricao(),receber.getPosicaoNova());
                                     break;
                                 case VALIDO:
                                     msg.setJogador(receber.getJogador() == Jogador.Jogador1 ? Jogador.Jogador2 : Jogador.Jogador1);
                                     msg.setTipo(Mensagem.TipoMsg.JOGADA);
+                                    msg.setPosicaoNova(receber.getPosicaoNova());
+                                    msg.setTipoPeca(receber.getTipoPeca());
+                                    System.out.printf("[MOV][%s][%s][%s]\n", receber.getJogador(),peca.getTipo().descricao(),receber.getPosicaoNova());
                                     if (jog1.isVezdajogada()) {
                                         jog2.vezDoJogo();
                                         conexao = jog2;
@@ -133,10 +136,16 @@ public class ExecuteServer {
                                 case WINALLPECAS:
                                     msg.setJogador(receber.getJogador());
                                     msg.setTipo(Mensagem.TipoMsg.COMEUTODASPECAS);
+                                    msg.setPosicaoNova(receber.getPosicaoNova());
+                                    msg.setTipoPeca(receber.getTipoPeca());
+                                    System.out.printf("[ALL][%s][%s][%s]\n", receber.getJogador(),peca.getTipo().descricao(),receber.getPosicaoNova());
                                     break;
                                 case WINTOCA:
                                     msg.setJogador(receber.getJogador());
                                     msg.setTipo(Mensagem.TipoMsg.CHEGOUTOCA);
+                                    msg.setPosicaoNova(receber.getPosicaoNova());
+                                    msg.setTipoPeca(receber.getTipoPeca());
+                                    System.out.printf("[TOC][%s][%s][%s]\n", receber.getJogador(),peca.getTipo().descricao(),receber.getPosicaoNova());
                                     break;
                             }
                         }
