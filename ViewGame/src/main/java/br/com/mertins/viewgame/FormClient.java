@@ -290,6 +290,9 @@ public class FormClient extends javax.swing.JFrame {
                     conexao = null;
                     enableCompontes(false);
                     break;
+                case CHEGOUTOCA:
+                case COMEUTODASPECAS:
+                    break;
             }
         }
     }

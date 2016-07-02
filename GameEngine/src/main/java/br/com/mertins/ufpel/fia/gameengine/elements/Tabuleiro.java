@@ -14,6 +14,10 @@ public class Tabuleiro {
         WINJOG1, WINJOG2, DRAW, UNDEFINED
     }
 
+    public enum Movimento {
+        VALIDO, INVALIDO, WINTOCA, WINALLPECAS
+    }
+
     public enum Posicao {
 
         A7, B7, C7, D7, E7, F7, G7,
@@ -74,14 +78,28 @@ public class Tabuleiro {
         this.situacao = Situacao.UNDEFINED;
     }
 
-    public boolean move(Peca peca, Posicao posIni, Posicao posFim) {
-        if (movimentoValido(peca, posIni, posFim)) {
-            System.out.printf("[%s] [%s] [%s] [%s]\n", peca.getJogador(), peca.getTipo(), posIni, posFim);
-            tabuleiro[Posicao.posY(posIni)][Posicao.posX(posIni)] = null;
-            tabuleiro[Posicao.posY(posFim)][Posicao.posX(posFim)] = peca;
-            return true;
+    public Movimento move(Peca peca, Posicao posIni, Posicao posFim) {
+        Movimento mov = movimentoValido(peca, posIni, posFim);
+        switch (mov) {
+            case VALIDO:
+                System.out.printf("[%s] [%s] [%s] [%s]\n", peca.getJogador(), peca.getTipo(), posIni, posFim);
+                tabuleiro[Posicao.posY(posIni)][Posicao.posX(posIni)] = null;
+                tabuleiro[Posicao.posY(posFim)][Posicao.posX(posFim)] = peca;
+                Jogador adversario = peca.getJogador() == Jogador.Jogador1 ? Jogador.Jogador2 : Jogador.Jogador1;
+                if (numeroPecas(adversario) > 0) {
+                    return Movimento.VALIDO;
+                } else {
+                    this.situacao = peca.getJogador() == Jogador.Jogador1 ? Situacao.WINJOG1 : Situacao.WINJOG2;
+                    return Movimento.WINALLPECAS;
+                }
+            case WINTOCA:
+                this.situacao = peca.getJogador() == Jogador.Jogador1 ? Situacao.WINJOG1 : Situacao.WINJOG2;
+                return Movimento.WINTOCA;
+            case INVALIDO:
+            default:
+                return Movimento.INVALIDO;
+
         }
-        return false;
     }
 
     public Posicao posicao(Jogador jogador, Peca peca) {
@@ -124,23 +142,23 @@ public class Tabuleiro {
         this.tabuleiro = tabuleiro;
     }
 
-    private boolean movimentoValido(Peca peca, Posicao posIni, Posicao posFim) {
+    private Movimento movimentoValido(Peca peca, Posicao posIni, Posicao posFim) {
         if (this.situacao == Situacao.UNDEFINED && peca.getTipo().movel() && alcancavel(posIni, posFim)) {        // jogo em aberto e peça é movivel?
             Peca newPos = tabuleiro[Posicao.posY(posFim)][Posicao.posX(posFim)];
             if (newPos == null) {                                                   // local futuro esta vazio?
-                return true;
+                return Movimento.VALIDO;
             } else if (newPos.getJogador() != peca.getJogador()) {                  // não é sobreposição de peças do mesmo jogador?
-                if (newPos.getTipo() == Peca.Tipo.Toca) {                           // ganhou o jogo?
+                if (newPos.getTipo() == Peca.Tipo.Toca) {                           //chegou na toca?
                     this.situacao = peca.getJogador() == Jogador.Jogador1 ? Situacao.WINJOG1 : Situacao.WINJOG2;
-                    return true;
+                    return Movimento.WINTOCA;
                 } else if (peca.getTipo() == Peca.Tipo.Rat && newPos.getTipo() == Peca.Tipo.Elefant // rato comendo elefante?
                         || ((peca.getTipo().peso() >= newPos.getTipo().peso() // ou peça de peso >= e não é elefante comendo rato?
                         && !(peca.getTipo() == Peca.Tipo.Elefant && newPos.getTipo() == Peca.Tipo.Rat)))) {
-                    return true;
+                    return Movimento.VALIDO;
                 }
             }
         }
-        return false;
+        return Movimento.INVALIDO;
     }
 
     private boolean alcancavel(Posicao posIni, Posicao posFim) {
@@ -149,9 +167,25 @@ public class Tabuleiro {
         int posYFim = Posicao.posY(posFim);
         int posXFim = Posicao.posX(posFim);
 
-        boolean movx = posXIni + 1 == posXFim || posXIni - 1 == posXFim;
-        boolean movy = posYIni + 1 == posYFim || posYIni - 1 == posYFim;
-        return movx ^ movy;
+        boolean nMovX = posXIni == posXFim;
+        boolean movxL = posXIni - 1 == posXFim;
+        boolean movxR = posXIni + 1 == posXFim;
 
+        boolean nMovY = posYIni == posYFim;
+        boolean movyT = posYIni - 1 == posYFim;
+        boolean movyF = posYIni + 1 == posYFim;
+
+        return (nMovX && (movyT || movyF)) ^ (nMovY && (movxL || movxR));
+    }
+
+    private int numeroPecas(Jogador jogador) {
+        int total = 0;
+        List<Peca> pecasNoTabuleiro = pecasNoTabuleiro(jogador);
+        for (Peca peca : pecasNoTabuleiro) {
+            if (peca.getJogador() == jogador) {
+                total++;
+            }
+        }
+        return total;
     }
 }

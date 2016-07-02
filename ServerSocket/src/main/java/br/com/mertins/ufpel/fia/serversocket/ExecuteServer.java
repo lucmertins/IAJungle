@@ -103,10 +103,7 @@ public class ExecuteServer {
                 while (jogando) {
                     Mensagem receber;
                     try {
-                        receber = conexao.receber();
-                        // avaliar jogada, decidir se é válida e enviar para os jogadores ou enviar que deu problema. 
-                        // Enviar sempre o tabuleiro e a movimentação efetuada
-
+                        receber = conexao.receber();     // Enviar sempre o tabuleiro e a movimentação efetuada
                         Peca peca = tabuleiro.peca(receber.getJogador(), receber.getPosicaoAtual());
                         msg = new Mensagem();
                         Peca[][] tab = tabuleiro.getTabuleiro();
@@ -115,22 +112,32 @@ public class ExecuteServer {
                             msg.setJogador(receber.getJogador());
                             msg.setTipo(Mensagem.TipoMsg.JOGADAINVALIDA);
                         } else {
-                            System.out.printf("peca na posição [%s]\n", peca == null ? "nao achou" : peca.getTipo().descricao());
-                            boolean move = tabuleiro.move(peca, receber.getPosicaoAtual(), receber.getPosicaoNova());
-                            if (!move) {
-                                msg.setJogador(receber.getJogador());
-                                msg.setTipo(Mensagem.TipoMsg.JOGADAINVALIDA);
-                            } else {
-                                System.out.printf("%s move peça %s de %s para %s\n", receber.getJogador(), receber.getTipoPeca(), receber.getPosicaoAtual(), receber.getPosicaoNova());
-                                msg.setJogador(receber.getJogador() == Jogador.Jogador1 ? Jogador.Jogador2 : Jogador.Jogador1);
-                                msg.setTipo(Mensagem.TipoMsg.JOGADA);
-                                if (jog1.isVezdajogada()) {
-                                    jog2.vezDoJogo();
-                                    conexao = jog2;
-                                } else {
-                                    jog1.vezDoJogo();
-                                    conexao = jog1;
-                                }
+                            System.out.printf("peca na posição [%s]\n", peca.getTipo().descricao());
+                            Tabuleiro.Movimento move = tabuleiro.move(peca, receber.getPosicaoAtual(), receber.getPosicaoNova());
+                            switch (move) {
+                                case INVALIDO:
+                                    msg.setJogador(receber.getJogador());
+                                    msg.setTipo(Mensagem.TipoMsg.JOGADAINVALIDA);
+                                    break;
+                                case VALIDO:
+                                    msg.setJogador(receber.getJogador() == Jogador.Jogador1 ? Jogador.Jogador2 : Jogador.Jogador1);
+                                    msg.setTipo(Mensagem.TipoMsg.JOGADA);
+                                    if (jog1.isVezdajogada()) {
+                                        jog2.vezDoJogo();
+                                        conexao = jog2;
+                                    } else {
+                                        jog1.vezDoJogo();
+                                        conexao = jog1;
+                                    }
+                                    break;
+                                case WINALLPECAS:
+                                    msg.setJogador(receber.getJogador());
+                                    msg.setTipo(Mensagem.TipoMsg.COMEUTODASPECAS);
+                                    break;
+                                case WINTOCA:
+                                    msg.setJogador(receber.getJogador());
+                                    msg.setTipo(Mensagem.TipoMsg.CHEGOUTOCA);
+                                    break;
                             }
                         }
                         jog1.enviar(msg);
