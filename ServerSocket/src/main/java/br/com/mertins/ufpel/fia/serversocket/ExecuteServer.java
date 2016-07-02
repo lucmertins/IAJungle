@@ -22,21 +22,17 @@ public class ExecuteServer {
             @Override
             public void run() {
                 try {
-
                     while (true) {
                         Conexao conexao = new Conexao();
-//                        Logger.getLogger(ExecuteServer.class.getName()).log(Level.INFO, "Aguardando cliente");
-                        conexao.aguardarCliente();
+                        conexao.aguardarCliente();   //aguardar cliente
                         synchronized (clientesConectados) {
                             clientesConectados.add(conexao);
                         }
-
                     }
                 } catch (IOException ex) {
                     Logger.getLogger(ExecuteServer.class.getName()).log(Level.SEVERE, "Falha aguardando cliente", ex);
                 }
             }
-
         }.start();
 
         new Thread() {
@@ -44,20 +40,16 @@ public class ExecuteServer {
             public void run() {
                 try {
                     while (true) {
-                        Thread.sleep(1000);
-//                        Logger.getLogger(ExecuteServer.class.getName()).log(Level.INFO, "Acordou");
+                        Thread.sleep(1000);      // a cada segundo verifica se não tem duplas para jogar 
                         synchronized (clientesConectados) {
                             if (!clientesConectados.isEmpty()) {
-//                                Logger.getLogger(ExecuteServer.class.getName()).log(Level.INFO, "Lista não esta vazia");
                                 Conexao temp = null;
                                 for (Conexao conexao : clientesConectados) {
                                     if (conexao.getStatus() == Conexao.Status.AGUARDANDOJOGADOR) {
                                         if (temp == null) {
                                             temp = conexao;
-
                                         } else {
-                                            //ligar jogadores
-                                            duplas(temp, conexao);
+                                            duplas(temp, conexao);    //junta dois jogadores que estavam aguardando
                                             temp = null;
                                         }
                                     }
