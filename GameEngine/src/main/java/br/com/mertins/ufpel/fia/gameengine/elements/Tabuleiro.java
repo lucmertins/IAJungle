@@ -33,7 +33,7 @@ public class Tabuleiro {
         }
 
         public static int posY(Posicao posicao) {
-            return '7' - posicao.toString().charAt(1) ;
+            return '7' - posicao.toString().charAt(1);
         }
 
     }
@@ -95,6 +95,11 @@ public class Tabuleiro {
         return null;
     }
 
+    public Peca peca(Jogador jogador, Posicao posicao) {
+        Peca peca = tabuleiro[Posicao.posY(posicao)][Posicao.posX(posicao)];
+        return peca.getJogador() == jogador ? peca : null;
+    }
+
     public List<Peca> pecasNoTabuleiro(Jogador jogador) {
         List<Peca> lista = new ArrayList();
         try {
@@ -119,9 +124,9 @@ public class Tabuleiro {
         this.tabuleiro = tabuleiro;
     }
 
-    private boolean movimentoValido(Peca peca, Posicao posIni, Posicao PosFim) {
-        if (this.situacao == Situacao.UNDEFINED && peca.getTipo().movel()) {        // jogo em aberto e peça é movivel?
-            Peca newPos = tabuleiro[Posicao.posY(PosFim)][Posicao.posX(PosFim)];
+    private boolean movimentoValido(Peca peca, Posicao posIni, Posicao posFim) {
+        if (this.situacao == Situacao.UNDEFINED && peca.getTipo().movel() && alcancavel(posIni, posFim)) {        // jogo em aberto e peça é movivel?
+            Peca newPos = tabuleiro[Posicao.posY(posFim)][Posicao.posX(posFim)];
             if (newPos == null) {                                                   // local futuro esta vazio?
                 return true;
             } else if (newPos.getJogador() != peca.getJogador()) {                  // não é sobreposição de peças do mesmo jogador?
@@ -138,4 +143,15 @@ public class Tabuleiro {
         return false;
     }
 
+    private boolean alcancavel(Posicao posIni, Posicao posFim) {
+        int posYIni = Posicao.posY(posIni);
+        int posXIni = Posicao.posX(posIni);
+        int posYFim = Posicao.posY(posFim);
+        int posXFim = Posicao.posX(posFim);
+
+        boolean movx = posXIni + 1 == posXFim || posXIni - 1 == posXFim;
+        boolean movy = posYIni + 1 == posYFim || posYIni - 1 == posYFim;
+        return movx ^ movy;
+
+    }
 }
