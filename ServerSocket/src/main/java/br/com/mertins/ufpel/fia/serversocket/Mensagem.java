@@ -13,7 +13,7 @@ import java.util.Date;
 public class Mensagem implements Serializable {
 
     public enum TipoMsg {
-        CANDIDATOJOGO, AGUARDANDOADVERSARIO,JOGOESTABELECIDO,CONEXAOENCERRADA,JOGADA
+        CANDIDATOJOGO, AGUARDANDOADVERSARIO,JOGOESTABELECIDO,CONEXAOENCERRADA,JOGADA,JOGADAINVALIDA
     }
     private int id;
     private Date data;

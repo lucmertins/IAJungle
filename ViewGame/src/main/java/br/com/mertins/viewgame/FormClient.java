@@ -269,6 +269,7 @@ public class FormClient extends javax.swing.JFrame {
                     }
                     this.atualizaCmb(tabuleiro);
                     break;
+                case JOGADAINVALIDA:
                 case JOGADA:
                     Tabuleiro tab = new Tabuleiro(receber.getTabuleiro());
                     jtabuleiro.setTabuleiro(tab);
