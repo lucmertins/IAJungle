@@ -140,4 +140,18 @@ public class Conexao {
         } catch (Exception ex) {
         }
     }
+
+    public String getIp() {
+        if (this.socket != null && !this.socket.isClosed()) {
+            return this.socket.getInetAddress().getHostAddress();
+        }
+        return null;
+    }
+
+    public int getPort() {
+        if (this.socket != null && !this.socket.isClosed()) {
+            return this.socket.getPort();
+        }
+        return 0;
+    }
 }

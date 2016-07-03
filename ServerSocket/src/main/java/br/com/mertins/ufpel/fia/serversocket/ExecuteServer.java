@@ -3,7 +3,12 @@ package br.com.mertins.ufpel.fia.serversocket;
 import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
 import br.com.mertins.ufpel.fia.gameengine.elements.Peca;
 import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.logging.Level;
@@ -97,7 +102,7 @@ public class ExecuteServer {
                 jog1.setAdversario(jog2);
                 jog2.setAdversario(jog1);
                 jog1.vezDoJogo();
-
+                FileWriter arquivo = arquivo(jog1, jog2);
                 boolean jogando = true;
                 Conexao conexao = jog1;
                 while (jogando) {
@@ -117,14 +122,15 @@ public class ExecuteServer {
                                 case INVALIDO:
                                     msg.setJogador(receber.getJogador());
                                     msg.setTipo(Mensagem.TipoMsg.JOGADAINVALIDA);
-                                   // System.out.printf("[INV][%s][%s][%s]\n", receber.getJogador(),peca.getTipo().descricao(),receber.getPosicaoNova());
+                                    // System.out.printf("[INV][%s][%s][%s]\n", receber.getJogador(),peca.getTipo().descricao(),receber.getPosicaoNova());
                                     break;
                                 case VALIDO:
                                     msg.setJogador(receber.getJogador() == Jogador.Jogador1 ? Jogador.Jogador2 : Jogador.Jogador1);
                                     msg.setTipo(Mensagem.TipoMsg.JOGADA);
                                     msg.setPosicaoNova(receber.getPosicaoNova());
                                     msg.setTipoPeca(receber.getTipoPeca());
-                                    System.out.printf("[MOV][%s][%s][%s]\n", receber.getJogador(),peca.getTipo().descricao(),receber.getPosicaoNova());
+                                    arquivo.write(String.format("[MOV][%s][%s][%s]\n", receber.getJogador(), peca.getTipo().descricao(), receber.getPosicaoNova()));
+//                                    System.out.printf("[MOV][%s][%s][%s]\n", receber.getJogador(), peca.getTipo().descricao(), receber.getPosicaoNova());
                                     if (jog1.isVezdajogada()) {
                                         jog2.vezDoJogo();
                                         conexao = jog2;
@@ -138,14 +144,18 @@ public class ExecuteServer {
                                     msg.setTipo(Mensagem.TipoMsg.COMEUTODASPECAS);
                                     msg.setPosicaoNova(receber.getPosicaoNova());
                                     msg.setTipoPeca(receber.getTipoPeca());
-                                    System.out.printf("[ALL][%s][%s][%s]\n", receber.getJogador(),peca.getTipo().descricao(),receber.getPosicaoNova());
+                                    arquivo.write(String.format("[ALL][%s][%s][%s]\n", receber.getJogador(), peca.getTipo().descricao(), receber.getPosicaoNova()));
+                                    jogando = false;
+//                                    System.out.printf("[ALL][%s][%s][%s]\n", receber.getJogador(), peca.getTipo().descricao(), receber.getPosicaoNova());
                                     break;
                                 case WINTOCA:
                                     msg.setJogador(receber.getJogador());
                                     msg.setTipo(Mensagem.TipoMsg.CHEGOUTOCA);
                                     msg.setPosicaoNova(receber.getPosicaoNova());
                                     msg.setTipoPeca(receber.getTipoPeca());
-                                    System.out.printf("[TOC][%s][%s][%s]\n", receber.getJogador(),peca.getTipo().descricao(),receber.getPosicaoNova());
+                                    arquivo.write(String.format("[TOC][%s][%s][%s]\n", receber.getJogador(), peca.getTipo().descricao(), receber.getPosicaoNova()));
+                                    jogando = false;
+//                                    System.out.printf("[TOC][%s][%s][%s]\n", receber.getJogador(), peca.getTipo().descricao(), receber.getPosicaoNova());
                                     break;
                             }
                         }
@@ -154,6 +164,7 @@ public class ExecuteServer {
                     } catch (Exception ex) {
                         msg = new Mensagem();
                         msg.setTipo(Mensagem.TipoMsg.CONEXAOENCERRADA);
+                        jogando = false;
                         try {
                             jog1.enviar(msg);
                         } catch (Exception ex2) {
@@ -162,13 +173,21 @@ public class ExecuteServer {
                             jog2.enviar(msg);
                         } catch (Exception ex2) {
                         }
-                        clientesConectados.remove(jog1);
-                        clientesConectados.remove(jog2);
-                        jogando = false;
+
                         Logger.getLogger(ExecuteServer.class.getName()).log(Level.SEVERE, "Falha em receber conexao", ex);
+                    } finally {
+                        if (!jogando) {
+                            clientesConectados.remove(jog1);
+                            clientesConectados.remove(jog2);
+                            try {
+                                arquivo.close();
+                            } catch (Exception ex2) {
+                            }
+                        }
                     }
 
                 }
+
             }
         }.start();
     }
@@ -181,6 +200,22 @@ public class ExecuteServer {
         } catch (IOException ex) {
             Logger.getLogger(ExecuteServer.class.getName()).log(Level.SEVERE, "Jogador não esta mais conectado", ex);
             return false;
+        }
+    }
+
+    private FileWriter arquivo(Conexao jog1, Conexao jog2) {
+        String property = System.getProperty("user.home");
+        File folder = new File(String.format("%s%sIAJungleWork", property, File.separator));
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        String nome = String.format("%s%s%s%d%d.log",folder.getAbsolutePath(),File.separator, sdf.format(new Date()), jog1.getPort(), jog2.getPort());
+        try {
+            return new FileWriter(nome);
+        } catch (IOException ex) {
+            Logger.getLogger(ExecuteServer.class.getName()).log(Level.SEVERE, "Não criou o arquivo", ex);
+            return null;
         }
     }
 
