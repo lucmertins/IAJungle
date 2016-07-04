@@ -1,4 +1,4 @@
-package br.com.mertins.ufpel.fia.serversocket.ia;
+package br.com.mertins.ufpel.fia.ia;
 
 import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
 import br.com.mertins.ufpel.fia.ia.util.Board;
