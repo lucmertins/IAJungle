@@ -6,7 +6,6 @@ import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
@@ -122,7 +121,6 @@ public class ExecuteServer {
                                 case INVALIDO:
                                     msg.setJogador(receber.getJogador());
                                     msg.setTipo(Mensagem.TipoMsg.JOGADAINVALIDA);
-                                    // System.out.printf("[INV][%s][%s][%s]\n", receber.getJogador(),peca.getTipo().descricao(),receber.getPosicaoNova());
                                     break;
                                 case VALIDO:
                                     msg.setJogador(receber.getJogador() == Jogador.Jogador1 ? Jogador.Jogador2 : Jogador.Jogador1);
@@ -130,7 +128,7 @@ public class ExecuteServer {
                                     msg.setPosicaoNova(receber.getPosicaoNova());
                                     msg.setTipoPeca(receber.getTipoPeca());
                                     arquivo.write(String.format("[MOV][%s][%s][%s]\n", receber.getJogador(), peca.getTipo().descricao(), receber.getPosicaoNova()));
-//                                    System.out.printf("[MOV][%s][%s][%s]\n", receber.getJogador(), peca.getTipo().descricao(), receber.getPosicaoNova());
+                                    arquivo.flush();
                                     if (jog1.isVezdajogada()) {
                                         jog2.vezDoJogo();
                                         conexao = jog2;
@@ -145,8 +143,8 @@ public class ExecuteServer {
                                     msg.setPosicaoNova(receber.getPosicaoNova());
                                     msg.setTipoPeca(receber.getTipoPeca());
                                     arquivo.write(String.format("[ALL][%s][%s][%s]\n", receber.getJogador(), peca.getTipo().descricao(), receber.getPosicaoNova()));
+                                    arquivo.flush();
                                     jogando = false;
-//                                    System.out.printf("[ALL][%s][%s][%s]\n", receber.getJogador(), peca.getTipo().descricao(), receber.getPosicaoNova());
                                     break;
                                 case WINTOCA:
                                     msg.setJogador(receber.getJogador());
@@ -154,8 +152,8 @@ public class ExecuteServer {
                                     msg.setPosicaoNova(receber.getPosicaoNova());
                                     msg.setTipoPeca(receber.getTipoPeca());
                                     arquivo.write(String.format("[TOC][%s][%s][%s]\n", receber.getJogador(), peca.getTipo().descricao(), receber.getPosicaoNova()));
+                                    arquivo.flush();
                                     jogando = false;
-//                                    System.out.printf("[TOC][%s][%s][%s]\n", receber.getJogador(), peca.getTipo().descricao(), receber.getPosicaoNova());
                                     break;
                             }
                         }
@@ -210,7 +208,7 @@ public class ExecuteServer {
             folder.mkdir();
         }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-        String nome = String.format("%s%s%s%d%d.log",folder.getAbsolutePath(),File.separator, sdf.format(new Date()), jog1.getPort(), jog2.getPort());
+        String nome = String.format("%s%s%s%d%d.log", folder.getAbsolutePath(), File.separator, sdf.format(new Date()), jog1.getPort(), jog2.getPort());
         try {
             return new FileWriter(nome);
         } catch (IOException ex) {

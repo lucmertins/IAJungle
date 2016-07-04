@@ -1,5 +1,6 @@
 package br.com.mertins.ufpel.fia.gameengine.elements;
 
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 public class Tabuleiro {
 
     public enum Situacao {
-        WINJOG1, WINJOG2, DRAW, UNDEFINED
+        WINJOG1, WINJOG2, UNDEFINED
     }
 
     public enum Movimento {
@@ -187,4 +188,5 @@ public class Tabuleiro {
         }
         return total;
     }
+    
 }

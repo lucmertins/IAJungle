@@ -281,7 +281,7 @@ public class FormClient extends javax.swing.JFrame {
                         txtMovimento.setText(null);
                         txtMovimento.requestFocus();
                         if (receber.getPosicaoNova() != null) {  // se não for a primeira jogada
-                            lbMensagem.setText(String.format("%s moveu Peça %s para %s",
+                            lbMensagem.setText(String.format("%s moveu %s para %s",
                                     conexao.getJogador() == Jogador.Jogador1 ? Jogador.Jogador2 : Jogador.Jogador1,
                                     receber.getTipoPeca().descricao(), receber.getPosicaoNova()));
                         }

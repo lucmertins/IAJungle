@@ -1,4 +1,4 @@
-package br.com.mertins.ufpel.fia.gameengine.competitiva.util;
+package br.com.mertins.ufpel.fia.jogadoria.util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,66 +7,25 @@ import java.util.List;
  *
  * @author mertins
  */
-public class Node {
+public class Move {
 
     public enum Infinite {
         POSITIVE, NEGATIVE, NONE
     }
 
-    public enum Marker {
-        X, O, B;
-
-        public Marker invert() {
-            switch (this) {
-                case X:
-                    return O;
-                case O:
-                    return X;
-                default:
-                    return B;
-            }
-        }
-
-        public char toChar() {
-            switch (this) {
-                case X:
-                    return 'X';
-                case O:
-                    return '0';
-                default:
-                    return ' ';
-            }
-        }
-
-        public char toByte() {
-            switch (this) {
-                case X:
-                    return 1;
-                case O:
-                    return 2;
-                default:
-                    return 0;
-            }
-        }
-    }
     private int value;
-    private Marker marker;
     private final Infinite infinite;
-    private final List<Node> children = new ArrayList<>();
-    private Node parent = null;
-    private byte posX;
-    private byte posY;
-
-    public Node(int value, Marker marker) {
+    private final List<Move> children = new ArrayList<>();
+    private Move parent = null;
+    
+    public Move(int value) {
         this.value = value;
         this.infinite = Infinite.NONE;
-        this.marker = marker;
     }
 
-    public Node(Infinite infinite, Marker marker) {
+    public Move(Infinite infinite) {
         this.infinite = infinite;
         this.value = 0;
-        this.marker = marker;
     }
 
     public int getValue() {
@@ -75,7 +34,7 @@ public class Node {
 
     public void setValue(int value) {
         this.value = value;
-        Node temp = this.parent;
+        Move temp = this.parent;
         while (temp != null) {
             if (temp.value < this.value) {
                 temp.value = this.value;
@@ -90,35 +49,12 @@ public class Node {
         return infinite;
     }
 
-    public Marker getMarker() {
-        return marker;
-    }
-
-    public void setMarker(Marker marker) {
-        this.marker = marker;
-    }
-
-    public List<Node> getChildren() {
+    public List<Move> getChildren() {
         return children;
     }
 
-    public byte getPosX() {
-        return posX;
-    }
-
-    public void setPosX(byte posX) {
-        this.posX = posX;
-    }
-
-    public byte getPosY() {
-        return posY;
-    }
-
-    public void setPosY(byte posY) {
-        this.posY = posY;
-    }
-
-    public Node max(Node other) {
+   
+   public Move max(Move other) {
         if (other == null) {
             return this;
         }
@@ -133,7 +69,7 @@ public class Node {
         }
     }
 
-    public Node min(Node other) {
+    public Move min(Move other) {
         if (other == null) {
             return this;
         }
@@ -148,12 +84,12 @@ public class Node {
         }
     }
 
-    public void addChild(Node node) {
+    public void addChild(Move node) {
         node.parent = this;
         children.add(node);
     }
 
-    public Node getParent() {
+    public Move getParent() {
         return parent;
     }
 

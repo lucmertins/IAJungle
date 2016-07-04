@@ -1,5 +1,6 @@
-package br.com.mertins.ufpel.fia.gameengine.competitiva.util;
+package br.com.mertins.ufpel.fia.jogadoria.monitor;
 
+import br.com.mertins.ufpel.fia.jogadoria.util.Move;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -84,37 +85,6 @@ public class Observator {
     public void okSolution() {
         this.eventos.add(new Event("Sucess"));
         this.run = false;
-    }
-
-    public void gameOver(Node node) {
-        String id;
-        if (node.getValue() > 0) {
-            id = "Vitória";
-            vitorias++;
-        } else if (node.getValue() < 0) {
-            id = "Derrota";
-            derrotas++;
-        } else {
-            id = "Empate";
-            empates++;
-        }
-
-        Node temp = node;
-        while (temp.getParent() != null) {
-            temp = temp.getParent();
-        }
-        switch (temp.getValue()) {
-            case 1:
-                valorHeadPositivo++;
-                break;
-            case -1:
-                valorHeadNegativo++;
-                break;
-            case 0:
-                valorHeadZero++;
-                break;
-        }
-        this.eventos.add(new Event(id, node));
     }
 
     public Duration difference() {

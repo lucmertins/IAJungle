@@ -1,5 +1,6 @@
-package br.com.mertins.ufpel.fia.gameengine.competitiva.util;
+package br.com.mertins.ufpel.fia.jogadoria.monitor;
 
+import br.com.mertins.ufpel.fia.jogadoria.util.Move;
 import java.time.Instant;
 import java.util.Objects;
 
@@ -10,7 +11,7 @@ import java.util.Objects;
 public class Event {
 
     private final String id;
-    private final Node node;
+    private final Move node;
     private final int processors;
     private final long totalMemory;
     private final long freeMemory;
@@ -21,7 +22,7 @@ public class Event {
         this(identificador, null);
     }
 
-    public Event(String identificador, Node node) {
+    public Event(String identificador, Move node) {
         this.id = identificador;
         this.node = node;
         processors = Runtime.getRuntime().availableProcessors();
@@ -56,7 +57,7 @@ public class Event {
         return instant;
     }
 
-    public Node getNode() {
+    public Move getNode() {
         return node;
     }
 

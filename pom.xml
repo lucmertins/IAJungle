@@ -10,6 +10,7 @@
     <description>Projeto para desenvolvimento do jogo simplificado do Jungle.</description>
     <modules>
         <module>GameEngine</module>
+        <module>JogadorIA</module>
         <module>ServerSocket</module>
         <module>ViewGame</module>
     </modules>
