@@ -1,4 +1,4 @@
-package br.com.mertins.ufpel.fia.jogadoria.util;
+package br.com.mertins.ufpel.fia.ia.util;
 
 import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
 import java.util.ArrayList;

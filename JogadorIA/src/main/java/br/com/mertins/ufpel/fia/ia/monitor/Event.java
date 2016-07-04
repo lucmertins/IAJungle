@@ -1,6 +1,6 @@
-package br.com.mertins.ufpel.fia.jogadoria.monitor;
+package br.com.mertins.ufpel.fia.ia.monitor;
 
-import br.com.mertins.ufpel.fia.jogadoria.util.Move;
+import br.com.mertins.ufpel.fia.ia.util.Move;
 import java.time.Instant;
 import java.util.Objects;
 

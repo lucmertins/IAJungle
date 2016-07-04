@@ -1,6 +1,6 @@
-package br.com.mertins.ufpel.fia.jogadoria.util;
+package br.com.mertins.ufpel.fia.ia.util;
 
-import br.com.mertins.ufpel.fia.jogadoria.util.Move;
+import br.com.mertins.ufpel.fia.ia.util.Move;
 
 /**
  *

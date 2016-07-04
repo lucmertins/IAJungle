@@ -1,11 +1,11 @@
-package br.com.mertins.ufpel.fia.jogadoria;
+package br.com.mertins.ufpel.fia.ia;
 
-import br.com.mertins.ufpel.fia.jogadoria.util.Move;
-import br.com.mertins.ufpel.fia.jogadoria.monitor.Observator;
-import br.com.mertins.ufpel.fia.jogadoria.util.Heuristica;
+import br.com.mertins.ufpel.fia.ia.util.Move;
+import br.com.mertins.ufpel.fia.ia.monitor.Observator;
+import br.com.mertins.ufpel.fia.ia.util.Heuristica;
 import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
 import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
-import br.com.mertins.ufpel.fia.jogadoria.util.Board;
+import br.com.mertins.ufpel.fia.ia.util.Board;
 
 /**
  *

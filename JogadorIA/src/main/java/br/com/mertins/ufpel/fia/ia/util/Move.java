@@ -1,4 +1,4 @@
-package br.com.mertins.ufpel.fia.jogadoria.util;
+package br.com.mertins.ufpel.fia.ia.util;
 
 import java.util.ArrayList;
 import java.util.List;
