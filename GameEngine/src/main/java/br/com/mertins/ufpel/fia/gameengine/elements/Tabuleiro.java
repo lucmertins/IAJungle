@@ -43,7 +43,7 @@ public class Tabuleiro {
     }
     private final int tamanho = 7;
     private Peca[][] tabuleiro;
-    private Situacao situacao;
+    protected Situacao situacao;
 
     public Tabuleiro() {
     }

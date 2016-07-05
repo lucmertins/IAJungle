@@ -1,5 +1,8 @@
 package br.com.mertins.ufpel.fia.ia.util;
 
+import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
+import br.com.mertins.ufpel.fia.gameengine.elements.Peca;
+import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,14 +20,20 @@ public class Move {
     private final Infinite infinite;
     private final List<Move> children = new ArrayList<>();
     private Move parent = null;
+    private final Jogador jogador;
+    private Peca peca;
+    private Tabuleiro.Posicao posicaoAtual;
+    private Tabuleiro.Posicao posicaoNova;
     
-    public Move(int value) {
+    public Move(int value,Jogador jogador) {
         this.value = value;
+        this.jogador=jogador;
         this.infinite = Infinite.NONE;
     }
 
-    public Move(Infinite infinite) {
+    public Move(Infinite infinite,Jogador jogador) {
         this.infinite = infinite;
+        this.jogador=jogador;
         this.value = 0;
     }
 
@@ -34,15 +43,43 @@ public class Move {
 
     public void setValue(int value) {
         this.value = value;
-        Move temp = this.parent;
-        while (temp != null) {
-            if (temp.value < this.value) {
-                temp.value = this.value;
-                temp = temp.parent;
-            } else {
-                temp = null;
-            }
-        }
+//        Move temp = this.parent;
+//        while (temp != null) {
+//            if (temp.value < this.value) {
+//                temp.value = this.value;
+//                temp = temp.parent;
+//            } else {
+//                temp = null;
+//            }
+//        }
+    }
+
+    public Peca getPeca() {
+        return peca;
+    }
+
+    public void setPeca(Peca peca) {
+        this.peca = peca;
+    }
+
+    public Tabuleiro.Posicao getPosicaoAtual() {
+        return posicaoAtual;
+    }
+
+    public void setPosicaoAtual(Tabuleiro.Posicao posicaoAtual) {
+        this.posicaoAtual = posicaoAtual;
+    }
+
+    public Tabuleiro.Posicao getPosicaoNova() {
+        return posicaoNova;
+    }
+
+    public void setPosicaoNova(Tabuleiro.Posicao posicaoNova) {
+        this.posicaoNova = posicaoNova;
+    }
+
+    public Jogador getJogador() {
+        return jogador;
     }
 
     public Infinite getInfinite() {
@@ -52,7 +89,6 @@ public class Move {
     public List<Move> getChildren() {
         return children;
     }
-
    
    public Move max(Move other) {
         if (other == null) {

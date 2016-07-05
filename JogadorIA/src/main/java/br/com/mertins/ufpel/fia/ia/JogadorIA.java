@@ -22,7 +22,7 @@ public class JogadorIA {
 
     public JogadorIA() {
         Observator observator = new Observator(Observator.ALGORITHMS.MINIMAX);
-        minimax = new MiniMax(observator, 6);
+        minimax = new MiniMax(observator, 3);
     }
 
     public void run() {
@@ -71,6 +71,7 @@ public class JogadorIA {
 
     private void jogar(Conexao conexao, Mensagem msgRecebida) throws IOException {
         Board board = new Board(msgRecebida.getTabuleiro());
+
         conexao.setTabuleiro(board);
         minimax.setBoard(board);
         Move move = minimax.run(conexao.getJogador(), board);
