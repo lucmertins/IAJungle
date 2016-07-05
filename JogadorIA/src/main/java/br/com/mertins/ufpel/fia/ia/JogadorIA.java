@@ -22,7 +22,7 @@ public class JogadorIA {
 
     public JogadorIA() {
         Observator observator = new Observator(Observator.ALGORITHMS.MINIMAX);
-        minimax = new MiniMax(observator, 3);
+        minimax = new MiniMax(observator, 6);
     }
 
     public void run() {
@@ -38,6 +38,7 @@ public class JogadorIA {
                         conexao.setJogador(receber.getJogador());
                         Board board = new Board(receber.getTabuleiro());
                         conexao.setTabuleiro(board);
+                        jogar(conexao, receber);
                         break;
                     case JOGADAINVALIDA:
                     case JOGADA:
@@ -71,22 +72,14 @@ public class JogadorIA {
 
     private void jogar(Conexao conexao, Mensagem msgRecebida) throws IOException {
         Board board = new Board(msgRecebida.getTabuleiro());
-
         conexao.setTabuleiro(board);
         minimax.setBoard(board);
         Move move = minimax.run(conexao.getJogador(), board);
         Mensagem msg = new Mensagem();
         msg.setJogador(conexao.getJogador());
-        if (conexao.getJogador() == Jogador.Jogador1) {
-            msg.setPosicaoAtual(Tabuleiro.Posicao.B1);
-            msg.setPosicaoNova(Tabuleiro.Posicao.B2);
-            msg.setTipoPeca(Peca.Tipo.Elefant);
-        } else {
-            msg.setPosicaoAtual(Tabuleiro.Posicao.C6);
-            msg.setPosicaoNova(Tabuleiro.Posicao.C5);
-            msg.setTipoPeca(Peca.Tipo.Tiger);
-        }
-
+        msg.setPosicaoAtual(move.getPosicaoAtual());
+        msg.setPosicaoNova(move.getPosicaoNova());
+        msg.setTipoPeca(move.getPeca().getTipo());
         msg.setTipo(Mensagem.TipoMsg.JOGADA);
         conexao.enviar(msg);
     }

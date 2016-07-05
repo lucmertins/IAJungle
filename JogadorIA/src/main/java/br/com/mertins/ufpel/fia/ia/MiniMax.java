@@ -44,14 +44,14 @@ public class MiniMax {
             return temp;
         } else if (maximizingPlayer) {
             Move bestValue = new Move(Move.Infinite.NEGATIVE, this.jogador);
-            for (Move moveChild : this.board.findCandidates(move, jogador)) {
+            for (Move moveChild : this.board.findCandidates(move)) {
                 Move temp = minimax(moveChild, depth - 1, false);
                 bestValue = bestValue.max(temp);
             }
             return bestValue;
         } else {
             Move bestValue = new Move(Move.Infinite.POSITIVE, Jogador.adversario(jogador));
-            for (Move moveChild : this.board.findCandidates(move, Jogador.adversario(jogador))) {
+            for (Move moveChild : this.board.findCandidates(move)) {
                 Move temp = minimax(moveChild, depth - 1, true);
                 bestValue = bestValue.min(temp);
             }

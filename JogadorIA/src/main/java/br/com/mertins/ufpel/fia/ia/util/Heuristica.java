@@ -1,6 +1,6 @@
 package br.com.mertins.ufpel.fia.ia.util;
 
-import br.com.mertins.ufpel.fia.ia.util.Move;
+import java.util.Random;
 
 /**
  *
@@ -8,6 +8,10 @@ import br.com.mertins.ufpel.fia.ia.util.Move;
  */
 public class Heuristica {
     public Move process(Move move) {
+        Random gerador = new Random();
+        int numero = gerador.nextInt(10);
+        move.setValue(move.getPeca()!=null?numero*move.getPeca().getTipo().peso():numero);
+        
 //        Resultado gameOver = this.gameOver(node);
 //        switch(gameOver){
 //            case VITORIA:

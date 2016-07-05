@@ -101,6 +101,10 @@ public class Tabuleiro {
         }
     }
 
+    public Posicao posicao(Peca peca) {
+        return posicao(peca.getJogador(), peca);
+    }
+
     public Posicao posicao(Jogador jogador, Peca peca) {
         for (int y = 0; y < tabuleiro.length; y++) {
             for (int x = 0; x < tabuleiro.length; x++) {
