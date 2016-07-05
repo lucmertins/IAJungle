@@ -42,10 +42,10 @@ public class Board extends Tabuleiro {
         }
 
         // efetuar jogada! Peca, posicao velha, posicao nova e jogador?
-        if (this.pecasNoTabuleiro(Jogador.Jogador1).size() == 0) {
+        if (this.pecasNoTabuleiro(Jogador.Jogador1).isEmpty()) {
             return Situacao.WINJOG2;
         }
-        if (this.pecasNoTabuleiro(Jogador.Jogador2).size() == 0) {
+        if (this.pecasNoTabuleiro(Jogador.Jogador2).isEmpty()) {
             return Situacao.WINJOG1;
         }
         //verificar se alguma peça chegou na toca adversaria
@@ -58,21 +58,29 @@ public class Board extends Tabuleiro {
         Posicao posicaoAtual = this.posicao(peca);
         int posXAtual = Posicao.posX(posicaoAtual);
         int posYAtual = Posicao.posY(posicaoAtual);
-        if (posXAtual == 0) {
-            lista.add(Posicao.posicao(1, posYAtual));
-        } else if (posXAtual == 6) {
-            lista.add(Posicao.posicao(5, posYAtual));
-        } else {
-            lista.add(Posicao.posicao(posXAtual - 1, posYAtual));
-            lista.add(Posicao.posicao(posXAtual + 1, posYAtual));
+        switch (posXAtual) {
+            case 0:
+                lista.add(Posicao.posicao(1, posYAtual));
+                break;
+            case 6:
+                lista.add(Posicao.posicao(5, posYAtual));
+                break;
+            default:
+                lista.add(Posicao.posicao(posXAtual - 1, posYAtual));
+                lista.add(Posicao.posicao(posXAtual + 1, posYAtual));
+                break;
         }
-        if (posYAtual == 0) {
-            lista.add(Posicao.posicao(posXAtual, 1));
-        } else if (posYAtual == 6) {
-            lista.add(Posicao.posicao(posXAtual, 5));
-        } else {
-            lista.add(Posicao.posicao(posXAtual, posYAtual - 1));
-            lista.add(Posicao.posicao(posXAtual, posYAtual + 1));
+        switch (posYAtual) {
+            case 0:
+                lista.add(Posicao.posicao(posXAtual, 1));
+                break;
+            case 6:
+                lista.add(Posicao.posicao(posXAtual, 5));
+                break;
+            default:
+                lista.add(Posicao.posicao(posXAtual, posYAtual - 1));
+                lista.add(Posicao.posicao(posXAtual, posYAtual + 1));
+                break;
         }
         Posicao[] posicoes = lista.toArray(new Posicao[lista.size()]);
         return posicoes;

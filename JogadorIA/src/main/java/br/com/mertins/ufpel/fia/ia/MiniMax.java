@@ -15,7 +15,7 @@ public class MiniMax {
 
     private final Observator observator;
     private Board board;
-    private Heuristica heuristica;
+    private final Heuristica heuristica;
     private final int depth;
     private Jogador jogador;
 
@@ -40,7 +40,7 @@ public class MiniMax {
 
     private Move minimax(Move move, int depth, boolean maximizingPlayer) {
         if (depth == 0 || this.board.gameOver(move) != Tabuleiro.Situacao.UNDEFINED) {
-            Move temp = this.heuristica.process(move);
+            Move temp = this.heuristica.process(this.board,move);
             return temp;
         } else if (maximizingPlayer) {
             Move bestValue = new Move(Move.Infinite.NEGATIVE, this.jogador);

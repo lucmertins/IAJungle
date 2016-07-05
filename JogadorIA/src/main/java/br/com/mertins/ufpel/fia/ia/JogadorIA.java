@@ -1,8 +1,6 @@
 package br.com.mertins.ufpel.fia.ia;
 
 import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
-import br.com.mertins.ufpel.fia.gameengine.elements.Peca;
-import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
 import br.com.mertins.ufpel.fia.network.Conexao;
 import br.com.mertins.ufpel.fia.ia.monitor.Observator;
 import br.com.mertins.ufpel.fia.ia.util.Board;
