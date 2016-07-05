@@ -4,9 +4,14 @@ import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
 import br.com.mertins.ufpel.fia.gameengine.elements.Peca;
 import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
 import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro.Posicao;
-import br.com.mertins.ufpel.fia.serversocket.Conexao;
-import br.com.mertins.ufpel.fia.serversocket.Mensagem;
-import static br.com.mertins.ufpel.fia.serversocket.Mensagem.TipoMsg.CONEXAOENCERRADA;
+import br.com.mertins.ufpel.fia.network.Conexao;
+import br.com.mertins.ufpel.fia.network.Mensagem;
+import static br.com.mertins.ufpel.fia.network.Mensagem.TipoMsg.CHEGOUTOCA;
+import static br.com.mertins.ufpel.fia.network.Mensagem.TipoMsg.COMEUTODASPECAS;
+import static br.com.mertins.ufpel.fia.network.Mensagem.TipoMsg.CONEXAOENCERRADA;
+import static br.com.mertins.ufpel.fia.network.Mensagem.TipoMsg.JOGADA;
+import static br.com.mertins.ufpel.fia.network.Mensagem.TipoMsg.JOGADAINVALIDA;
+import static br.com.mertins.ufpel.fia.network.Mensagem.TipoMsg.JOGOESTABELECIDO;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -190,9 +195,6 @@ public class FormClient extends javax.swing.JFrame {
             enableCompontes(false);
             Mensagem msg = new Mensagem();
             msg.setJogador(this.conexao.getJogador());
-            msg.setPosicaoAtual(Posicao.B1);
-            msg.setPosicaoNova(Posicao.B2);
-            msg.setTipoPeca(Peca.Tipo.Elefant);
             msg.setTipo(Mensagem.TipoMsg.JOGADA);
 
             Peca peca = (Peca) ((ComboItem) this.cmbPeca.getModel().getSelectedItem()).value;

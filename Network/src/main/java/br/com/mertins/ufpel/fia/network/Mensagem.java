@@ -1,4 +1,6 @@
-package br.com.mertins.ufpel.fia.serversocket;
+package br.com.mertins.ufpel.fia.network;
+
+
 
 import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
 import br.com.mertins.ufpel.fia.gameengine.elements.Peca;

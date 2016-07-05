@@ -59,6 +59,11 @@
             <artifactId>GameEngine</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Network</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     
     

@@ -1,5 +1,6 @@
 package br.com.mertins.ufpel.fia.ia.util;
 
+import br.com.mertins.ufpel.fia.gameengine.elements.Peca;
 import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +9,14 @@ import java.util.List;
  *
  * @author mertins
  */
-public class Board extends Tabuleiro{
+public class Board extends Tabuleiro {
+
+    public Board() {
+    }
+
+    public Board(Peca[][] tabuleiro) {
+        super(tabuleiro);
+    }
 
     public Move[] findCandidates(Move node) {
         List<Move> vagos = new ArrayList();

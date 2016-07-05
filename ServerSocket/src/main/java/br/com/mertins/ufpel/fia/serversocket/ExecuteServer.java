@@ -1,5 +1,7 @@
 package br.com.mertins.ufpel.fia.serversocket;
 
+import br.com.mertins.ufpel.fia.network.Conexao;
+import br.com.mertins.ufpel.fia.network.Mensagem;
 import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
 import br.com.mertins.ufpel.fia.gameengine.elements.Peca;
 import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;

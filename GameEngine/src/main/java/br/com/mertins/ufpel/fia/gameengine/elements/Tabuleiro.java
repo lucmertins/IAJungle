@@ -1,6 +1,5 @@
 package br.com.mertins.ufpel.fia.gameengine.elements;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -115,7 +114,7 @@ public class Tabuleiro {
 
     public Peca peca(Jogador jogador, Posicao posicao) {
         Peca peca = tabuleiro[Posicao.posY(posicao)][Posicao.posX(posicao)];
-        return peca.getJogador() == jogador ? peca : null;
+        return peca != null && peca.getJogador() == jogador ? peca : null;
     }
 
     public List<Peca> pecasNoTabuleiro(Jogador jogador) {
@@ -188,5 +187,5 @@ public class Tabuleiro {
         }
         return total;
     }
-    
+
 }
