@@ -11,9 +11,9 @@
     <modules>
         <module>GameEngine</module>
         <module>JogadorIA</module>
+        <module>Network</module>
         <module>ServerSocket</module>
         <module>ViewGame</module>
-        <module>Network</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

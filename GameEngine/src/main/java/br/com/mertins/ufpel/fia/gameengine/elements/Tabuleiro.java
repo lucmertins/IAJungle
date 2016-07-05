@@ -118,7 +118,7 @@ public class Tabuleiro {
 
     public Peca peca(Jogador jogador, Posicao posicao) {
         Peca peca = tabuleiro[Posicao.posY(posicao)][Posicao.posX(posicao)];
-        return peca != null && peca.getJogador() == jogador ? peca : null;
+        return peca != null && peca.getJogador() == jogador && peca.getTipo() != Peca.Tipo.Toca ? peca : null;
     }
 
     public List<Peca> pecasNoTabuleiro(Jogador jogador) {

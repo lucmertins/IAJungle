@@ -4,7 +4,6 @@ import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
 import br.com.mertins.ufpel.fia.gameengine.elements.Peca;
 import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -40,17 +39,20 @@ public class Board extends Tabuleiro {
         if (move.getPeca() == null) {
             return Situacao.UNDEFINED;
         }
-
-        // efetuar jogada! Peca, posicao velha, posicao nova e jogador?
-        if (this.pecasNoTabuleiro(Jogador.Jogador1).isEmpty()) {
-            return Situacao.WINJOG2;
+        Board boardTemp = new Board(this.getTabuleiro());
+        Movimento movimento = boardTemp.move(move.getPeca(), move.getPosicaoAtual(), move.getPosicaoNova());
+        if (movimento == Movimento.WINALLPECAS || movimento == Movimento.WINTOCA) {
+            return move.getJogador() == Jogador.Jogador1 ? Situacao.WINJOG1 : Situacao.WINJOG2;
         }
-        if (this.pecasNoTabuleiro(Jogador.Jogador2).isEmpty()) {
-            return Situacao.WINJOG1;
-        }
-        //verificar se alguma peça chegou na toca adversaria
-
         return Situacao.UNDEFINED;
+    }
+
+    public int distanciaToca(Jogador jogador, Posicao ini) {
+
+        if (jogador == Jogador.Jogador1) {
+            return Math.abs(Posicao.posX(ini) - Posicao.posX(Posicao.D7)) + Math.abs(Posicao.posY(ini) - Posicao.posX(Posicao.D7));
+        }
+        return Math.abs(Posicao.posX(ini) - Posicao.posX(Posicao.D1)) + Math.abs(Posicao.posY(ini) - Posicao.posX(Posicao.D1));
     }
 
     private Posicao[] posicoesPossiveis(Peca peca) {
