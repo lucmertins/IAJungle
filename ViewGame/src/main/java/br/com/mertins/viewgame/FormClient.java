@@ -233,9 +233,6 @@ public class FormClient extends javax.swing.JFrame {
             lbMensagem.setText("Posicao inválida");
             return false;
         }
-
-        // Peca peca = (Peca) ((ComboItem) this.cmbPeca.getModel().getSelectedItem()).value;
-        //Posicao posicaoOri = conexao.getTabuleiro().posicao(this.conexao.getJogador(), peca);
         return true;
     }
 

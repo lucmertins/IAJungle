@@ -17,14 +17,14 @@ import java.util.logging.Logger;
  * @author mertins
  */
 public class JogadorIA {
-    
+
     private MiniMax minimax;
-    
+
     public JogadorIA() {
         Observator observator = new Observator(Observator.ALGORITHMS.MINIMAX);
         minimax = new MiniMax(observator, 6);
     }
-    
+
     public void run() {
         Conexao conexao = new Conexao();
         try {
@@ -36,7 +36,8 @@ public class JogadorIA {
                 switch (receber.getTipo()) {
                     case JOGOESTABELECIDO:
                         conexao.setJogador(receber.getJogador());
-                        this.jogar(conexao, receber);
+                        Board board = new Board(receber.getTabuleiro());
+                        conexao.setTabuleiro(board);
                         break;
                     case JOGADAINVALIDA:
                     case JOGADA:
@@ -67,7 +68,7 @@ public class JogadorIA {
             Logger.getLogger(JogadorIA.class.getName()).log(Level.SEVERE, "Falha", ex);
         }
     }
-    
+
     private void jogar(Conexao conexao, Mensagem msgRecebida) throws IOException {
         Board board = new Board(msgRecebida.getTabuleiro());
         conexao.setTabuleiro(board);
@@ -75,13 +76,20 @@ public class JogadorIA {
         Move move = minimax.run(conexao.getJogador(), board);
         Mensagem msg = new Mensagem();
         msg.setJogador(conexao.getJogador());
-        msg.setPosicaoAtual(Tabuleiro.Posicao.B1);
-        msg.setPosicaoNova(Tabuleiro.Posicao.B2);
-        msg.setTipoPeca(Peca.Tipo.Elefant);
+        if (conexao.getJogador() == Jogador.Jogador1) {
+            msg.setPosicaoAtual(Tabuleiro.Posicao.B1);
+            msg.setPosicaoNova(Tabuleiro.Posicao.B2);
+            msg.setTipoPeca(Peca.Tipo.Elefant);
+        } else {
+            msg.setPosicaoAtual(Tabuleiro.Posicao.C6);
+            msg.setPosicaoNova(Tabuleiro.Posicao.C5);
+            msg.setTipoPeca(Peca.Tipo.Tiger);
+        }
+
         msg.setTipo(Mensagem.TipoMsg.JOGADA);
         conexao.enviar(msg);
     }
-    
+
     public static void main(String[] args) {
         JogadorIA jogador = new JogadorIA();
         jogador.run();
