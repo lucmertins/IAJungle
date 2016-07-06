@@ -20,7 +20,7 @@ public class JogadorIA {
 
     public JogadorIA() {
         Observator observator = new Observator(Observator.ALGORITHMS.MINIMAX);
-        minimax = new MiniMax(observator, 6);
+        minimax = new MiniMax(observator,5);
     }
 
     public void run() {

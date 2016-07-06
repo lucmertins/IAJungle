@@ -48,11 +48,22 @@ public class Board extends Tabuleiro {
     }
 
     public int distanciaToca(Jogador jogador, Posicao ini) {
+        return distanciaXToca(jogador, ini) + distanciaYToca(jogador, ini);
+    }
+
+    public int distanciaXToca(Jogador jogador, Posicao ini) {
 
         if (jogador == Jogador.Jogador1) {
-            return Math.abs(Posicao.posX(ini) - Posicao.posX(Posicao.D7)) + Math.abs(Posicao.posY(ini) - Posicao.posX(Posicao.D7));
+            return Math.abs(Posicao.posX(ini) - Posicao.posX(Posicao.D7));
         }
-        return Math.abs(Posicao.posX(ini) - Posicao.posX(Posicao.D1)) + Math.abs(Posicao.posY(ini) - Posicao.posX(Posicao.D1));
+        return Math.abs(Posicao.posX(ini) - Posicao.posX(Posicao.D1));
+    }
+
+    public int distanciaYToca(Jogador jogador, Posicao ini) {
+        if (jogador == Jogador.Jogador1) {
+            return Math.abs(Posicao.posY(ini) - Posicao.posY(Posicao.D7));
+        }
+        return Math.abs(Posicao.posY(ini) - Posicao.posY(Posicao.D1));
     }
 
     private Posicao[] posicoesPossiveis(Peca peca) {
@@ -84,6 +95,12 @@ public class Board extends Tabuleiro {
                 lista.add(Posicao.posicao(posXAtual, posYAtual + 1));
                 break;
         }
+// remover os movimentos que conflitam com peças adversarias maiores
+//        List<Posicao> listaFinal = new ArrayList<>();
+//        lista.stream().filter((posicao) -> (this.movimentoValido(peca, posicaoAtual, posicao) != Movimento.INVALIDO)).forEach((posicao) -> {
+//            listaFinal.add(posicao);
+//        });
+
         Posicao[] posicoes = lista.toArray(new Posicao[lista.size()]);
         return posicoes;
     }

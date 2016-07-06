@@ -145,7 +145,7 @@ public class Tabuleiro {
         this.tabuleiro = tabuleiro;
     }
 
-    private Movimento movimentoValido(Peca peca, Posicao posIni, Posicao posFim) {
+    protected Movimento movimentoValido(Peca peca, Posicao posIni, Posicao posFim) {
         if (this.situacao == Situacao.UNDEFINED && peca.getTipo().movel() && alcancavel(posIni, posFim)) {        // jogo em aberto e peça é movivel?
             Peca newPos = tabuleiro[Posicao.posY(posFim)][Posicao.posX(posFim)];
             if (newPos == null) {                                                   // local futuro esta vazio?
@@ -161,6 +161,7 @@ public class Tabuleiro {
                 }
             }
         }
+        System.out.printf("Inválido [%s] de [%s] para [%s]\n", peca.getTipo(), posIni, posFim);
         return Movimento.INVALIDO;
     }
 
