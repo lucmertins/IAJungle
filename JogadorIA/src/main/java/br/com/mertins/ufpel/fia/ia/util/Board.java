@@ -4,6 +4,7 @@ import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
 import br.com.mertins.ufpel.fia.gameengine.elements.Peca;
 import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -19,27 +20,35 @@ public class Board extends Tabuleiro {
         super(tabuleiro);
     }
 
-    public Move[] findCandidates(Move move) {
-        List<Move> vagos = new ArrayList();
-        this.pecasNoTabuleiro(move.getJogador()).stream().forEach((peca) -> {
-            Posicao posicaoAtual = this.posicao(peca);
-            Posicao[] posicoesPossiveis = posicoesPossiveis(peca);
-            for (Posicao posicaoNova : posicoesPossiveis) {
-                Move candMove = new Move(Move.Infinite.NONE, move.getJogador());
-                candMove.setPeca(peca);
-                candMove.setPosicaoAtual(posicaoAtual);
-                candMove.setPosicaoNova(posicaoNova);
-                vagos.add(candMove);
-            }
-        });
-        return vagos.toArray(new Move[vagos.size()]);
+    public Board(BoardState state) {
+        super(state.getTabuleiro());
     }
 
-    public Situacao gameOver(Move move) {
+    public Move[] findCandidates(Jogador jogador) {
+        List<Move> possiveis = new ArrayList();
+        this.pecasNoTabuleiro(jogador).stream().forEach((peca) -> {
+            if (peca != null) {
+                Posicao posicaoAtual = this.posicao(peca);
+                Posicao[] posicoesPossiveis = posicoesPossiveis(peca);
+                for (Posicao posicaoNova : posicoesPossiveis) {
+                    if (this.movimentoValido(peca, posicaoAtual, posicaoNova) != Movimento.INVALIDO) {
+                        Move candMove = new Move(Move.Infinite.NONE, jogador);
+                        candMove.setPeca(peca);
+                        candMove.setPosicaoAtual(posicaoAtual);
+                        candMove.setPosicaoNova(posicaoNova);
+                        possiveis.add(candMove);
+                    }
+                }
+            }
+        });
+        return possiveis.toArray(new Move[possiveis.size()]);
+    }
+
+    public static Situacao gameOver(Move move, BoardState boardState) {
         if (move.getPeca() == null) {
             return Situacao.UNDEFINED;
         }
-        Board boardTemp = new Board(this.getTabuleiro());
+        Board boardTemp = new Board(boardState.getTabuleiro());
         Movimento movimento = boardTemp.move(move.getPeca(), move.getPosicaoAtual(), move.getPosicaoNova());
         if (movimento == Movimento.WINALLPECAS || movimento == Movimento.WINTOCA) {
             return move.getJogador() == Jogador.Jogador1 ? Situacao.WINJOG1 : Situacao.WINJOG2;
@@ -64,6 +73,15 @@ public class Board extends Tabuleiro {
             return Math.abs(Posicao.posY(ini) - Posicao.posY(Posicao.D7));
         }
         return Math.abs(Posicao.posY(ini) - Posicao.posY(Posicao.D1));
+    }
+
+    public BoardState getState() {
+        Peca[][] tabuleiro = getTabuleiro();
+        Peca[][] novotab=new Peca[tabuleiro.length][tabuleiro.length];
+        for(int j=0;j<tabuleiro.length;j++){
+            System.arraycopy(tabuleiro[j], 0, novotab[j], 0, tabuleiro.length);
+        }
+        return new BoardState(novotab);
     }
 
     private Posicao[] posicoesPossiveis(Peca peca) {
@@ -96,13 +114,29 @@ public class Board extends Tabuleiro {
                 break;
         }
 // remover os movimentos que conflitam com peças adversarias maiores
-//        List<Posicao> listaFinal = new ArrayList<>();
-//        lista.stream().filter((posicao) -> (this.movimentoValido(peca, posicaoAtual, posicao) != Movimento.INVALIDO)).forEach((posicao) -> {
-//            listaFinal.add(posicao);
-//        });
-
-        Posicao[] posicoes = lista.toArray(new Posicao[lista.size()]);
+        List<Posicao> listaFinal = new ArrayList<>();
+        for (Posicao posicao : lista) {
+            if (this.movimentoValido(peca, posicaoAtual, posicao) != Movimento.INVALIDO) {
+                listaFinal.add(posicao);
+            }
+        }
+        Posicao[] posicoes = listaFinal.toArray(new Posicao[listaFinal.size()]);
         return posicoes;
     }
 
+    public void print() {
+        Peca[][] tabuleiro = this.getTabuleiro();
+        System.out.printf("\n\n********\n\n");
+        for (int j = 0; j < this.getTabuleiro().length; j++) {
+            System.out.printf("\n");
+            for (int i = 0; i < this.getTabuleiro().length; i++) {
+                Peca peca = tabuleiro[j][i];
+                if (peca == null) {
+                    System.out.printf("\t_ __\t");
+                } else {
+                    System.out.printf("\t%s %s\t", peca.getTipo().sigla(), peca.getJogador().sigla());
+                }
+            }
+        }
+    }
 }

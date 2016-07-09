@@ -48,6 +48,23 @@ public class Peca implements Serializable, Comparable<Object> {
                     return "Sem descrição";
             }
         }
+
+        public String sigla() {
+            switch (this) {
+                case Toca:
+                    return "T";
+                case Elefant:
+                    return "E";
+                case Tiger:
+                    return "T";
+                case Dog:
+                    return "C";
+                case Rat:
+                    return "R";
+                default:
+                    return "";
+            }
+        }
     }
     private final Jogador jogador;
     private final Tipo tipo;

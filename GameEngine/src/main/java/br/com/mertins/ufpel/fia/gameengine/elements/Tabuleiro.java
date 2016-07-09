@@ -43,7 +43,7 @@ public class Tabuleiro {
     }
     private final int tamanho = 7;
     private Peca[][] tabuleiro;
-    protected Situacao situacao;
+    protected Situacao situacao=Situacao.UNDEFINED;
 
     public Tabuleiro() {
     }
@@ -84,7 +84,7 @@ public class Tabuleiro {
             case VALIDO:
                 tabuleiro[Posicao.posY(posIni)][Posicao.posX(posIni)] = null;
                 tabuleiro[Posicao.posY(posFim)][Posicao.posX(posFim)] = peca;
-                Jogador adversario = peca.getJogador() == Jogador.Jogador1 ? Jogador.Jogador2 : Jogador.Jogador1;
+                Jogador adversario = Jogador.adversario(peca.getJogador());
                 if (numeroPecas(adversario) > 0) {
                     return Movimento.VALIDO;
                 } else {
@@ -161,7 +161,6 @@ public class Tabuleiro {
                 }
             }
         }
-        System.out.printf("Inválido [%s] de [%s] para [%s]\n", peca.getTipo(), posIni, posFim);
         return Movimento.INVALIDO;
     }
 

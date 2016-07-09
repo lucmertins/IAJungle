@@ -11,7 +11,8 @@ import java.util.Random;
  */
 public class Heuristica {
 
-    public Move process(Board board, Move move) {
+    public Move process(BoardState state, Move move) {
+        Board board=new Board(state.getTabuleiro());
         Random gerador = new Random();
         int numero = gerador.nextInt(4) + 1;
         int value = move.getPeca() != null ? numero * move.getPeca().getTipo().peso() : numero;

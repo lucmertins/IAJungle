@@ -16,11 +16,11 @@ import java.util.logging.Logger;
  */
 public class JogadorIA {
 
-    private MiniMax minimax;
+    private final MiniMax minimax;
 
     public JogadorIA() {
         Observator observator = new Observator(Observator.ALGORITHMS.MINIMAX);
-        minimax = new MiniMax(observator,5);
+        minimax = new MiniMax(observator, 2);
     }
 
     public void run() {
@@ -36,7 +36,9 @@ public class JogadorIA {
                         conexao.setJogador(receber.getJogador());
                         Board board = new Board(receber.getTabuleiro());
                         conexao.setTabuleiro(board);
-                        jogar(conexao, receber);
+                        if (conexao.getJogador() == Jogador.Jogador1) {
+                            jogar(conexao, receber);
+                        }
                         break;
                     case JOGADAINVALIDA:
                     case JOGADA:
@@ -71,8 +73,7 @@ public class JogadorIA {
     private void jogar(Conexao conexao, Mensagem msgRecebida) throws IOException {
         Board board = new Board(msgRecebida.getTabuleiro());
         conexao.setTabuleiro(board);
-        minimax.setBoard(board);
-        Move move = minimax.run(conexao.getJogador(), board);
+        Move move = minimax.run(conexao.getJogador(), board.getState());
         Mensagem msg = new Mensagem();
         msg.setJogador(conexao.getJogador());
         msg.setPosicaoAtual(move.getPosicaoAtual());
