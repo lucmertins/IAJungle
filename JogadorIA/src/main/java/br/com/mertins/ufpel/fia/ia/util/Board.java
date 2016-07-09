@@ -71,14 +71,6 @@ public class Board extends Tabuleiro {
         return Math.abs(Posicao.posY(ini) - Posicao.posY(Posicao.D1));
     }
 
-//    public BoardState getState() {
-//        Peca[][] tabuleiro = ();
-//        Peca[][] novotab = new Peca[tabuleiro.length][tabuleiro.length];
-//        for (int j = 0; j < tabuleiro.length; j++) {
-//            System.arraycopy(tabuleiro[j], 0, novotab[j], 0, tabuleiro.length);
-//        }
-//        return new BoardState(novotab);
-//    }
     private Posicao[] posicoesPossiveis(Peca peca) {
         List<Posicao> lista = new ArrayList<>();
         Posicao posicaoAtual = this.posicao(peca);
@@ -119,9 +111,9 @@ public class Board extends Tabuleiro {
         return posicoes;
     }
 
-    public void print() {
+    public void print(Jogador jogador) {
         Peca[][] tabuleiro = this.getTabuleiroState().getTabuleiro();
-        System.out.printf("\n\n********\n\n");
+        System.out.printf("\n\n****Jogador da vez [%s] ****\n\n",jogador);
         for (int j = 0; j < tabuleiro.length; j++) {
             System.out.printf("\n");
             for (int i = 0; i < tabuleiro.length; i++) {
@@ -133,5 +125,10 @@ public class Board extends Tabuleiro {
                 }
             }
         }
+        System.out.println("\n\n");
+    }
+    
+    public void print(Jogador jogador,Move move,boolean adversario) {
+        System.out.printf("\n%s %s avaliando mover %s de %s para %s   valor [%d] \n",adversario?"Adversario":"IA",jogador,move.getPeca().getTipo().descricao(),move.getPosicaoAtual(),move.getPosicaoNova(),move.getValue());
     }
 }

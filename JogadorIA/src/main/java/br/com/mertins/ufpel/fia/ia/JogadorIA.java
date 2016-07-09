@@ -41,6 +41,8 @@ public class JogadorIA {
                         }
                         break;
                     case JOGADAINVALIDA:
+                        System.exit(1);
+                        break;
                     case JOGADA:
                         if (receber.getJogador() == conexao.getJogador()) {
                             if (receber.getPosicaoNova() != null) {  // se não for a primeira jogada

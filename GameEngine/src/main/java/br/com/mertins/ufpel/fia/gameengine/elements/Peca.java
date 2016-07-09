@@ -52,7 +52,7 @@ public class Peca implements Serializable, Comparable<Object> {
         public String sigla() {
             switch (this) {
                 case Toca:
-                    return "T";
+                    return "O";
                 case Elefant:
                     return "E";
                 case Tiger:

@@ -50,7 +50,7 @@ public class Tabuleiro {
     }
 
     public Tabuleiro(TabuleiroState tabuleiroState) {
-        this.tabuleiroState = tabuleiroState;
+        this.tabuleiroState = new TabuleiroState(tabuleiroState.getTabuleiro());
     }
 
     public void init() {
@@ -59,23 +59,23 @@ public class Tabuleiro {
         tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.D1)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.D1)] = peca;
         peca = new Peca(Jogador.Jogador1, Peca.Tipo.Rat);
         tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.F1)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.F1)] = peca;
-        peca = new Peca(Jogador.Jogador1, Peca.Tipo.Elefant);
-        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.B1)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.B1)] = peca;
-        peca = new Peca(Jogador.Jogador1, Peca.Tipo.Tiger);
-        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.E2)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.E2)] = peca;
-        peca = new Peca(Jogador.Jogador1, Peca.Tipo.Dog);
-        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.C2)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.C2)] = peca;
+//        peca = new Peca(Jogador.Jogador1, Peca.Tipo.Elefant);
+//        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.B1)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.B1)] = peca;
+//        peca = new Peca(Jogador.Jogador1, Peca.Tipo.Tiger);
+//        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.E2)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.E2)] = peca;
+//        peca = new Peca(Jogador.Jogador1, Peca.Tipo.Dog);
+//        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.C2)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.C2)] = peca;
 
         peca = new Peca(Jogador.Jogador2, Peca.Tipo.Toca);
         tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.D7)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.D7)] = peca;
         peca = new Peca(Jogador.Jogador2, Peca.Tipo.Rat);
         tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.B7)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.B1)] = peca;
-        peca = new Peca(Jogador.Jogador2, Peca.Tipo.Elefant);
-        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.F7)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.F1)] = peca;
-        peca = new Peca(Jogador.Jogador2, Peca.Tipo.Tiger);
-        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.C6)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.C6)] = peca;
-        peca = new Peca(Jogador.Jogador2, Peca.Tipo.Dog);
-        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.E6)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.E6)] = peca;
+//        peca = new Peca(Jogador.Jogador2, Peca.Tipo.Elefant);
+//        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.F7)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.F1)] = peca;
+//        peca = new Peca(Jogador.Jogador2, Peca.Tipo.Tiger);
+//        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.C6)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.C6)] = peca;
+//        peca = new Peca(Jogador.Jogador2, Peca.Tipo.Dog);
+//        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.E6)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.E6)] = peca;
         this.situacao = Situacao.UNDEFINED;
     }
 
