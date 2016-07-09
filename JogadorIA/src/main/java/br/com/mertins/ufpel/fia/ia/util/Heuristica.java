@@ -3,6 +3,7 @@ package br.com.mertins.ufpel.fia.ia.util;
 import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
 import br.com.mertins.ufpel.fia.gameengine.elements.Peca;
 import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro.Posicao;
+import br.com.mertins.ufpel.fia.gameengine.elements.TabuleiroState;
 import java.util.Random;
 
 /**
@@ -11,8 +12,8 @@ import java.util.Random;
  */
 public class Heuristica {
 
-    public Move process(BoardState state, Move move) {
-        Board board=new Board(state.getTabuleiro());
+    public Move process(TabuleiroState state, Move move) {
+        Board board = new Board(state);
         Random gerador = new Random();
         int numero = gerador.nextInt(4) + 1;
         int value = move.getPeca() != null ? numero * move.getPeca().getTipo().peso() : numero;
@@ -48,8 +49,8 @@ public class Heuristica {
 
             value += 100 - 9 * board.distanciaXToca(move.getJogador(), move.getPosicaoNova());
             value += 100 - 3 * board.distanciaYToca(move.getJogador(), move.getPosicaoNova());
-        }else{
-            value=-500000;
+        } else {
+            value = -500000;
         }
 //        value += move.getPeca().getTipo().peso();
         move.setValue(value);

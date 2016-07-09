@@ -42,18 +42,19 @@ public class Tabuleiro {
 
     }
     private final int tamanho = 7;
-    private Peca[][] tabuleiro;
-    protected Situacao situacao=Situacao.UNDEFINED;
+    private TabuleiroState tabuleiroState;
+    protected Situacao situacao = Situacao.UNDEFINED;
 
     public Tabuleiro() {
+        this.tabuleiroState = new TabuleiroState(new Peca[tamanho][tamanho]);
     }
 
-    public Tabuleiro(Peca[][] tabuleiro) {
-        this.tabuleiro = tabuleiro;
+    public Tabuleiro(TabuleiroState tabuleiroState) {
+        this.tabuleiroState = tabuleiroState;
     }
 
     public void init() {
-        tabuleiro = new Peca[tamanho][tamanho];
+        Peca[][] tabuleiro = this.tabuleiroState.getTabuleiro();
         Peca peca = new Peca(Jogador.Jogador1, Peca.Tipo.Toca);
         tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.D1)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.D1)] = peca;
         peca = new Peca(Jogador.Jogador1, Peca.Tipo.Rat);
@@ -80,6 +81,7 @@ public class Tabuleiro {
 
     public Movimento move(Peca peca, Posicao posIni, Posicao posFim) {
         Movimento mov = movimentoValido(peca, posIni, posFim);
+        Peca[][] tabuleiro = this.tabuleiroState.getTabuleiro();
         switch (mov) {
             case VALIDO:
                 tabuleiro[Posicao.posY(posIni)][Posicao.posX(posIni)] = null;
@@ -106,6 +108,7 @@ public class Tabuleiro {
     }
 
     public Posicao posicao(Jogador jogador, Peca peca) {
+        Peca[][] tabuleiro = this.tabuleiroState.getTabuleiro();
         for (int y = 0; y < tabuleiro.length; y++) {
             for (int x = 0; x < tabuleiro.length; x++) {
                 if (tabuleiro[y][x] != null && tabuleiro[y][x].getJogador() == jogador && tabuleiro[y][x].getTipo() == peca.getTipo()) {
@@ -117,12 +120,14 @@ public class Tabuleiro {
     }
 
     public Peca peca(Jogador jogador, Posicao posicao) {
+        Peca[][] tabuleiro = this.tabuleiroState.getTabuleiro();
         Peca peca = tabuleiro[Posicao.posY(posicao)][Posicao.posX(posicao)];
         return peca != null && peca.getJogador() == jogador && peca.getTipo() != Peca.Tipo.Toca ? peca : null;
     }
 
     public List<Peca> pecasNoTabuleiro(Jogador jogador) {
         List<Peca> lista = new ArrayList();
+        Peca[][] tabuleiro = this.tabuleiroState.getTabuleiro();
         try {
             for (Peca[] tab : tabuleiro) {
                 for (int x = 0; x < tabuleiro.length; x++) {
@@ -137,17 +142,17 @@ public class Tabuleiro {
         return lista;
     }
 
-    public Peca[][] getTabuleiro() {
-        return tabuleiro;
+    public TabuleiroState getTabuleiroState() {
+        return tabuleiroState;
     }
 
-    public void setTabuleiro(Peca[][] tabuleiro) {
-        this.tabuleiro = tabuleiro;
+    public void setTabuleiroState(TabuleiroState tabuleiroState) {
+        this.tabuleiroState = tabuleiroState;
     }
 
     protected Movimento movimentoValido(Peca peca, Posicao posIni, Posicao posFim) {
         if (this.situacao == Situacao.UNDEFINED && peca.getTipo().movel() && alcancavel(posIni, posFim)) {        // jogo em aberto e peça é movivel?
-            Peca newPos = tabuleiro[Posicao.posY(posFim)][Posicao.posX(posFim)];
+            Peca newPos = this.tabuleiroState.getTabuleiro()[Posicao.posY(posFim)][Posicao.posX(posFim)];
             if (newPos == null) {                                                   // local futuro esta vazio?
                 return Movimento.VALIDO;
             } else if (newPos.getJogador() != peca.getJogador()) {                  // não é sobreposição de peças do mesmo jogador?

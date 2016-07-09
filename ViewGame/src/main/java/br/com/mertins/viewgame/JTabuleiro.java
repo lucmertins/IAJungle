@@ -2,7 +2,7 @@ package br.com.mertins.viewgame;
 
 import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
 import br.com.mertins.ufpel.fia.gameengine.elements.Peca;
-import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
+import br.com.mertins.ufpel.fia.gameengine.elements.TabuleiroState;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -25,14 +25,13 @@ public class JTabuleiro extends javax.swing.JPanel {
     private final int size = 420;
     private final int ajustey = 44;
     private final int ajustex = 12;
-    private Tabuleiro tabuleiro;
+    private TabuleiroState tabuleiroState;
 
-    public void setTabuleiro(Peca[][] tabuleiro) {
-        this.setTabuleiro(new Tabuleiro(tabuleiro));
-    }
-
-    public void setTabuleiro(Tabuleiro tabuleiro) {
-        this.tabuleiro = tabuleiro;
+//    public void setTabuleiro(Peca[][] tabuleiro) {
+//        this.setTabuleiro(new Tabuleiro(tabuleiroState));
+//    }
+    public void setTabuleiroState(TabuleiroState tabuleiroState) {
+        this.tabuleiroState = tabuleiroState;
         this.repaint();
     }
 
@@ -72,8 +71,8 @@ public class JTabuleiro extends javax.swing.JPanel {
         g2d.setFont(font);
         g2d.drawString("Jog2", 194, 30);
         g2d.drawString("Jog1", 194, 396);
-        if (tabuleiro != null && tabuleiro.getTabuleiro()!=null) {
-            Peca[][] pecas = tabuleiro.getTabuleiro();
+        if (tabuleiroState != null && tabuleiroState.getTabuleiro() != null) {
+            Peca[][] pecas = tabuleiroState.getTabuleiro();
             for (int y = 0; y < pecas.length; y++) {
                 for (int x = 0; x < pecas.length; x++) {
                     if (pecas[y][x] != null) {

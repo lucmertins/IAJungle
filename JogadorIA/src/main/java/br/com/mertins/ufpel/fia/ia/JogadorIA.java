@@ -34,7 +34,7 @@ public class JogadorIA {
                 switch (receber.getTipo()) {
                     case JOGOESTABELECIDO:
                         conexao.setJogador(receber.getJogador());
-                        Board board = new Board(receber.getTabuleiro());
+                        Board board = new Board(receber.getTabuleiroState());
                         conexao.setTabuleiro(board);
                         if (conexao.getJogador() == Jogador.Jogador1) {
                             jogar(conexao, receber);
@@ -71,9 +71,9 @@ public class JogadorIA {
     }
 
     private void jogar(Conexao conexao, Mensagem msgRecebida) throws IOException {
-        Board board = new Board(msgRecebida.getTabuleiro());
+        Board board = new Board(msgRecebida.getTabuleiroState());
         conexao.setTabuleiro(board);
-        Move move = minimax.run(conexao.getJogador(), board.getState());
+        Move move = minimax.run(conexao.getJogador(), msgRecebida.getTabuleiroState());
         Mensagem msg = new Mensagem();
         msg.setJogador(conexao.getJogador());
         msg.setPosicaoAtual(move.getPosicaoAtual());

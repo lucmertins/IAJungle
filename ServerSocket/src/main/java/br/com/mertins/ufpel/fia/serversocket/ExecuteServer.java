@@ -95,7 +95,7 @@ public class ExecuteServer {
                 Mensagem msg = new Mensagem();
                 msg.setTipo(Mensagem.TipoMsg.JOGOESTABELECIDO);
                 msg.setJogador(Jogador.Jogador1);
-                msg.setTabuleiro(tabuleiro.getTabuleiro());
+                msg.setTabuleiroState(tabuleiro.getTabuleiroState());
                 enviaMsg(jog1, msg);
                 msg.setJogador(Jogador.Jogador2);
                 enviaMsg(jog2, msg);
@@ -112,8 +112,7 @@ public class ExecuteServer {
                         receber = conexao.receber();     // Enviar sempre o tabuleiro e a movimentação efetuada
                         Peca peca = tabuleiro.peca(receber.getJogador(), receber.getPosicaoAtual());
                         msg = new Mensagem();
-                        Peca[][] tab = tabuleiro.getTabuleiro();
-                        msg.setTabuleiro(tab);
+                        msg.setTabuleiroState(tabuleiro.getTabuleiroState());
                         if (peca == null) {
                             msg.setJogador(receber.getJogador());
                             msg.setTipo(Mensagem.TipoMsg.JOGADAINVALIDA);

@@ -254,13 +254,13 @@ public class FormClient extends javax.swing.JFrame {
             lbMensagem.setText(String.format("%s %s", receber.getTipo().toString(), receber.getJogador() == null ? "" : receber.getJogador()));
             switch (receber.getTipo()) {
                 case JOGOESTABELECIDO:
-                    Tabuleiro tabuleiro = new Tabuleiro(receber.getTabuleiro());
+                    Tabuleiro tabuleiro = new Tabuleiro(receber.getTabuleiroState());
                     conexao.setJogador(receber.getJogador());
                     conexao.setTabuleiro(tabuleiro);
                     lbJogador.setText(conexao.getJogador().toString());
                     lbJogador.setBackground(conexao.getJogador() == Jogador.Jogador1 ? Color.yellow : Color.green);
                     lbJogador.setOpaque(true);
-                    jtabuleiro.setTabuleiro(tabuleiro);
+                    jtabuleiro.setTabuleiroState(receber.getTabuleiroState());
                     this.txtMovimento.setText(null);
                     if (conexao.getJogador() == Jogador.Jogador1) {
                         enableCompontes(true);
@@ -271,8 +271,8 @@ public class FormClient extends javax.swing.JFrame {
                     break;
                 case JOGADAINVALIDA:
                 case JOGADA:
-                    Tabuleiro tab = new Tabuleiro(receber.getTabuleiro());
-                    jtabuleiro.setTabuleiro(tab);
+                    Tabuleiro tab = new Tabuleiro(receber.getTabuleiroState());
+                    jtabuleiro.setTabuleiroState(receber.getTabuleiroState());
                     conexao.setTabuleiro(tab);
                     if (receber.getJogador() == conexao.getJogador()) {
                         this.atualizaCmb(tab);

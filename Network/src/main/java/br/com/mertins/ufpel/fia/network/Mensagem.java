@@ -5,6 +5,7 @@ package br.com.mertins.ufpel.fia.network;
 import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
 import br.com.mertins.ufpel.fia.gameengine.elements.Peca;
 import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
+import br.com.mertins.ufpel.fia.gameengine.elements.TabuleiroState;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -24,7 +25,7 @@ public class Mensagem implements Serializable {
     private Tabuleiro.Posicao posicaoAtual;
     private Tabuleiro.Posicao posicaoNova;
     private Peca.Tipo tipoPeca;
-    private Peca[][] tabuleiro;
+    private TabuleiroState tabuleiroState;
 
     public Mensagem() {
     }
@@ -77,12 +78,12 @@ public class Mensagem implements Serializable {
         this.posicaoNova = posicaoNova;
     }
 
-    public Peca[][] getTabuleiro() {
-        return tabuleiro;
+    public TabuleiroState getTabuleiroState() {
+        return tabuleiroState;
     }
 
-    public void setTabuleiro(Peca[][] tabuleiro) {
-        this.tabuleiro = tabuleiro;
+    public void setTabuleiroState(TabuleiroState tabuleiroState) {
+        this.tabuleiroState = tabuleiroState;
     }
 
     public Peca.Tipo getTipoPeca() {
