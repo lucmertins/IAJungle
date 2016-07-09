@@ -110,10 +110,7 @@ public class Peca implements Serializable, Comparable<Object> {
         if (this.jogador != other.jogador) {
             return false;
         }
-        if (this.tipo != other.tipo) {
-            return false;
-        }
-        return true;
+        return this.tipo == other.tipo;
     }
 
     @Override

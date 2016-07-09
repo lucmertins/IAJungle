@@ -59,23 +59,23 @@ public class Tabuleiro {
         tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.D1)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.D1)] = peca;
         peca = new Peca(Jogador.Jogador1, Peca.Tipo.Rat);
         tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.F1)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.F1)] = peca;
-//        peca = new Peca(Jogador.Jogador1, Peca.Tipo.Elefant);
-//        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.B1)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.B1)] = peca;
-//        peca = new Peca(Jogador.Jogador1, Peca.Tipo.Tiger);
-//        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.E2)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.E2)] = peca;
-//        peca = new Peca(Jogador.Jogador1, Peca.Tipo.Dog);
-//        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.C2)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.C2)] = peca;
+        peca = new Peca(Jogador.Jogador1, Peca.Tipo.Elefant);
+        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.B1)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.B1)] = peca;
+        peca = new Peca(Jogador.Jogador1, Peca.Tipo.Tiger);
+        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.E2)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.E2)] = peca;
+        peca = new Peca(Jogador.Jogador1, Peca.Tipo.Dog);
+        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.C2)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.C2)] = peca;
 
         peca = new Peca(Jogador.Jogador2, Peca.Tipo.Toca);
         tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.D7)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.D7)] = peca;
         peca = new Peca(Jogador.Jogador2, Peca.Tipo.Rat);
         tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.B7)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.B1)] = peca;
-//        peca = new Peca(Jogador.Jogador2, Peca.Tipo.Elefant);
-//        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.F7)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.F1)] = peca;
-//        peca = new Peca(Jogador.Jogador2, Peca.Tipo.Tiger);
-//        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.C6)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.C6)] = peca;
-//        peca = new Peca(Jogador.Jogador2, Peca.Tipo.Dog);
-//        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.E6)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.E6)] = peca;
+        peca = new Peca(Jogador.Jogador2, Peca.Tipo.Elefant);
+        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.F7)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.F1)] = peca;
+        peca = new Peca(Jogador.Jogador2, Peca.Tipo.Tiger);
+        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.C6)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.C6)] = peca;
+        peca = new Peca(Jogador.Jogador2, Peca.Tipo.Dog);
+        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.E6)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.E6)] = peca;
         this.situacao = Situacao.UNDEFINED;
     }
 
@@ -87,12 +87,20 @@ public class Tabuleiro {
                 tabuleiro[Posicao.posY(posIni)][Posicao.posX(posIni)] = null;
                 tabuleiro[Posicao.posY(posFim)][Posicao.posX(posFim)] = peca;
                 Jogador adversario = Jogador.adversario(peca.getJogador());
-                if (numeroPecas(adversario) > 0) {
-                    return Movimento.VALIDO;
-                } else {
+                if (tabuleiro[0][3].getJogador() == Jogador.Jogador1) {
+                    this.situacao = Situacao.WINJOG1;
+                    return Movimento.WINTOCA;
+
+                }
+                if (tabuleiro[6][3].getJogador() == Jogador.Jogador2) {
+                    this.situacao = Situacao.WINJOG2;
+                    return Movimento.WINTOCA;
+                }
+                if (numeroPecas(adversario) == 0) {
                     this.situacao = peca.getJogador() == Jogador.Jogador1 ? Situacao.WINJOG1 : Situacao.WINJOG2;
                     return Movimento.WINALLPECAS;
                 }
+                return Movimento.VALIDO;
             case WINTOCA:
                 this.situacao = peca.getJogador() == Jogador.Jogador1 ? Situacao.WINJOG1 : Situacao.WINJOG2;
                 return Movimento.WINTOCA;
@@ -157,8 +165,7 @@ public class Tabuleiro {
                 return Movimento.VALIDO;
             } else if (newPos.getJogador() != peca.getJogador()) {                  // não é sobreposição de peças do mesmo jogador?
                 if (newPos.getTipo() == Peca.Tipo.Toca) {                           //chegou na toca?
-                    this.situacao = peca.getJogador() == Jogador.Jogador1 ? Situacao.WINJOG1 : Situacao.WINJOG2;
-                    return Movimento.WINTOCA;
+                    return Movimento.VALIDO;
                 } else if (peca.getTipo() == Peca.Tipo.Rat && newPos.getTipo() == Peca.Tipo.Elefant // rato comendo elefante?
                         || ((peca.getTipo().peso() >= newPos.getTipo().peso() // ou peça de peso >= e não é elefante comendo rato?
                         && !(peca.getTipo() == Peca.Tipo.Elefant && newPos.getTipo() == Peca.Tipo.Rat)))) {
@@ -189,11 +196,7 @@ public class Tabuleiro {
     private int numeroPecas(Jogador jogador) {
         int total = 0;
         List<Peca> pecasNoTabuleiro = pecasNoTabuleiro(jogador);
-        for (Peca peca : pecasNoTabuleiro) {
-            if (peca.getJogador() == jogador) {
-                total++;
-            }
-        }
+        total = pecasNoTabuleiro.stream().filter((peca) -> (peca.getJogador() == jogador)).map((_item) -> 1).reduce(total, Integer::sum);
         return total;
     }
 

@@ -12,28 +12,26 @@ import java.util.List;
  */
 public class Move {
 
-    public enum Infinite {
-        POSITIVE, NEGATIVE, NONE
-    }
-
+//    public enum Infinite {
+//        POSITIVE, NEGATIVE, NONE
+//    }
     private int value;
-    private final Infinite infinite;
+//    private final Infinite infinite;
     private final List<Move> children = new ArrayList<>();
     private Move parent = null;
     private final Jogador jogador;
     private Peca peca;
     private Tabuleiro.Posicao posicaoAtual;
     private Tabuleiro.Posicao posicaoNova;
-    
-    public Move(int value,Jogador jogador) {
+
+    public Move(int value, Jogador jogador) {
         this.value = value;
-        this.jogador=jogador;
-        this.infinite = Infinite.NONE;
+        this.jogador = jogador;
+//        this.infinite = Infinite.NONE;
     }
 
-    public Move(Infinite infinite,Jogador jogador) {
-        this.infinite = infinite;
-        this.jogador=jogador;
+    public Move(Jogador jogador) {
+        this.jogador = jogador;
         this.value = 0;
     }
 
@@ -82,42 +80,22 @@ public class Move {
         return jogador;
     }
 
-    public Infinite getInfinite() {
-        return infinite;
-    }
-
     public List<Move> getChildren() {
         return children;
     }
-   
-   public Move max(Move other) {
+
+    public Move max(Move other) {
         if (other == null) {
             return this;
         }
-        if (this.infinite == Infinite.NONE && other.infinite == Infinite.NONE) {
-            return this.value >= other.value ? this : other;
-        } else if (this.infinite == Infinite.NEGATIVE && other.infinite != Infinite.NEGATIVE) {
-            return other;
-        } else if (this.infinite != Infinite.NEGATIVE && other.infinite == Infinite.NEGATIVE) {
-            return this;
-        } else {
-            return this;
-        }
+        return this.value >= other.value ? this : other;
     }
 
     public Move min(Move other) {
         if (other == null) {
             return this;
         }
-        if (this.infinite == Infinite.NONE && other.infinite == Infinite.NONE) {
-            return this.value < other.value ? this : other;
-        } else if (this.infinite == Infinite.POSITIVE && other.infinite != Infinite.POSITIVE) {
-            return other;
-        } else if (this.infinite != Infinite.POSITIVE && other.infinite == Infinite.POSITIVE) {
-            return this;
-        } else {
-            return this;
-        }
+        return this.value < other.value ? this : other;
     }
 
     public void addChild(Move node) {

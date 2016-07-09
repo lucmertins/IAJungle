@@ -22,21 +22,20 @@ public class Board extends Tabuleiro {
 
     public Move[] findCandidates(Jogador jogador) {
         List<Move> possiveis = new ArrayList();
-        this.pecasNoTabuleiro(jogador).stream().forEach((peca) -> {
-            if (peca != null) {
-                Posicao posicaoAtual = this.posicao(peca);
-                Posicao[] posicoesPossiveis = posicoesPossiveis(peca);
-                for (Posicao posicaoNova : posicoesPossiveis) {
-                    if (this.movimentoValido(peca, posicaoAtual, posicaoNova) != Movimento.INVALIDO) {
-                        Move candMove = new Move(Move.Infinite.NONE, jogador);
-                        candMove.setPeca(peca);
-                        candMove.setPosicaoAtual(posicaoAtual);
-                        candMove.setPosicaoNova(posicaoNova);
-                        possiveis.add(candMove);
-                    }
+        List<Peca> pecasNoTabuleiro = this.pecasNoTabuleiro(jogador);
+        for (Peca peca : pecasNoTabuleiro) {
+            Posicao posicaoAtual = this.posicao(peca);
+            Posicao[] posicoesPossiveis = posicoesPossiveis(peca);
+            for (Posicao posicaoNova : posicoesPossiveis) {
+                if (this.movimentoValido(peca, posicaoAtual, posicaoNova) != Movimento.INVALIDO) {
+                    Move candMove = new Move(jogador);
+                    candMove.setPeca(peca);
+                    candMove.setPosicaoAtual(posicaoAtual);
+                    candMove.setPosicaoNova(posicaoNova);
+                    possiveis.add(candMove);
                 }
             }
-        });
+        }
         return possiveis.toArray(new Move[possiveis.size()]);
     }
 
@@ -113,7 +112,7 @@ public class Board extends Tabuleiro {
 
     public void print(Jogador jogador) {
         Peca[][] tabuleiro = this.getTabuleiroState().getTabuleiro();
-        System.out.printf("\n\n****Jogador da vez [%s] ****\n\n",jogador);
+        System.out.printf("\n\n****Jogador da vez [%s] ****\n\n", jogador);
         for (int j = 0; j < tabuleiro.length; j++) {
             System.out.printf("\n");
             for (int i = 0; i < tabuleiro.length; i++) {
@@ -127,8 +126,8 @@ public class Board extends Tabuleiro {
         }
         System.out.println("\n\n");
     }
-    
-    public void print(Jogador jogador,Move move,boolean adversario) {
-        System.out.printf("\n%s %s avaliando mover %s de %s para %s   valor [%d] \n",adversario?"Adversario":"IA",jogador,move.getPeca().getTipo().descricao(),move.getPosicaoAtual(),move.getPosicaoNova(),move.getValue());
+
+    public void print(Jogador jogador, Move move, boolean adversario) {
+        System.out.printf("\n%s %s avaliando mover %s de %s para %s   valor [%d] \n", adversario ? "Adversario" : "IA", jogador, move.getPeca().getTipo().descricao(), move.getPosicaoAtual(), move.getPosicaoNova(), move.getValue());
     }
 }

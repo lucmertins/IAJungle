@@ -27,7 +27,7 @@ public class MiniMax {
 
     public Move run(Jogador jogador, TabuleiroState tabuleiroState) {
         this.jogador = jogador;
-        Move raiz = new Move(Move.Infinite.NONE, this.jogador);
+        Move raiz = new Move(this.jogador);
         Move move = minimax(raiz, tabuleiroState, this.depth, true);
         System.out.printf("\nvoltou do minimax %s   %s de %s para %s   valor [%d] \n", move.getJogador(), move.getPeca().getTipo().descricao(), move.getPosicaoAtual(), move.getPosicaoNova(), move.getValue());
         Move temp = move;
