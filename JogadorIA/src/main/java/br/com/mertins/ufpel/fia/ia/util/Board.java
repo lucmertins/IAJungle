@@ -44,6 +44,12 @@ public class Board extends Tabuleiro {
             return Situacao.UNDEFINED;
         }
         Board boardTemp = new Board(tabuleiroState);
+        if (tabuleiroState.getTabuleiro()[0][3].getJogador() == Jogador.Jogador1) {
+            return Situacao.WINJOG1;
+        }
+        if (tabuleiroState.getTabuleiro()[6][3].getJogador() == Jogador.Jogador2) {
+            return Situacao.WINJOG2;
+        }
         Movimento movimento = boardTemp.move(move.getPeca(), move.getPosicaoAtual(), move.getPosicaoNova());
         if (movimento == Movimento.WINALLPECAS || movimento == Movimento.WINTOCA) {
             return move.getJogador() == Jogador.Jogador1 ? Situacao.WINJOG1 : Situacao.WINJOG2;

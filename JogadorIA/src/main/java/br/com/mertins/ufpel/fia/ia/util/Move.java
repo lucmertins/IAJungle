@@ -11,12 +11,7 @@ import java.util.List;
  * @author mertins
  */
 public class Move {
-
-//    public enum Infinite {
-//        POSITIVE, NEGATIVE, NONE
-//    }
     private int value;
-//    private final Infinite infinite;
     private final List<Move> children = new ArrayList<>();
     private Move parent = null;
     private final Jogador jogador;
@@ -27,7 +22,6 @@ public class Move {
     public Move(int value, Jogador jogador) {
         this.value = value;
         this.jogador = jogador;
-//        this.infinite = Infinite.NONE;
     }
 
     public Move(Jogador jogador) {

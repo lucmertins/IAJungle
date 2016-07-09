@@ -20,7 +20,7 @@ public class JogadorIA {
 
     public JogadorIA() {
         Observator observator = new Observator(Observator.ALGORITHMS.MINIMAX);
-        minimax = new MiniMax(observator, 2);
+        minimax = new MiniMax(observator, 5);
     }
 
     public void run() {
@@ -41,8 +41,6 @@ public class JogadorIA {
                         }
                         break;
                     case JOGADAINVALIDA:
-                        System.exit(1);
-                        break;
                     case JOGADA:
                         if (receber.getJogador() == conexao.getJogador()) {
                             if (receber.getPosicaoNova() != null) {  // se não for a primeira jogada

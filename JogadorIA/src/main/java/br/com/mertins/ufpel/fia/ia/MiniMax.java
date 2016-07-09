@@ -29,14 +29,14 @@ public class MiniMax {
         this.jogador = jogador;
         Move raiz = new Move(this.jogador);
         Move move = minimax(raiz, tabuleiroState, this.depth, true);
-        System.out.printf("\nvoltou do minimax %s   %s de %s para %s   valor [%d] \n", move.getJogador(), move.getPeca().getTipo().descricao(), move.getPosicaoAtual(), move.getPosicaoNova(), move.getValue());
+//        System.out.printf("\nvoltou do minimax %s   %s de %s para %s   valor [%d] \n", move.getJogador(), move.getPeca().getTipo().descricao(), move.getPosicaoAtual(), move.getPosicaoNova(), move.getValue());
+//        printTree(raiz, 0);
         Move temp = move;
         while (temp.getParent() != raiz) {
-            System.out.printf("\ncaminho avaliando mover %s de %s para %s   valor [%d] \n", temp.getPeca().getTipo().descricao(), temp.getPosicaoAtual(), temp.getPosicaoNova(), temp.getValue());
+//            System.out.printf("\ncaminho avaliando mover %s de %s para %s   valor [%d] \n", temp.getPeca().getTipo().descricao(), temp.getPosicaoAtual(), temp.getPosicaoNova(), temp.getValue());
             temp = temp.getParent();
         }
-        System.out.printf("\nmovimento escolhido %s de %s para %s   valor [%d] \n\n", temp.getPeca().getTipo().descricao(), temp.getPosicaoAtual(), temp.getPosicaoNova(), temp.getValue());
-
+//        System.out.printf("\nmovimento escolhido %s de %s para %s   valor [%d] \n\n", temp.getPeca().getTipo().descricao(), temp.getPosicaoAtual(), temp.getPosicaoNova(), temp.getValue());
         Board board = new Board(tabuleiroState);
         System.out.printf("\n\n\n Jogada escolhida\n\n\n");
         board.print(jogador, temp, false);
@@ -46,7 +46,6 @@ public class MiniMax {
 
     private Move minimax(Move move, TabuleiroState tabuleiroState, int depth, boolean maximizingPlayer) {
         final Board tempBoard = new Board(tabuleiroState);
-//        tempBoard.print(jogador);
         if (depth == 0 || Board.gameOver(move, tabuleiroState) != Tabuleiro.Situacao.UNDEFINED) {
             Move temp = this.heuristica.process(tabuleiroState, move);
             return temp;
@@ -73,4 +72,27 @@ public class MiniMax {
         }
     }
 
+    private void printTree(Move no, int nivel) {
+        if (nivel == 0) {
+            System.out.println("Raiz");
+            for (Move child : no.getChildren()) {
+                System.out.printf("\t%s %s->%s [%d]", child.getPeca().getTipo(), child.getPosicaoAtual(), child.getPosicaoNova(),child.getValue());
+            }
+            System.out.println();
+            for (Move child : no.getChildren()) {
+                printTree(child, nivel + 1);
+            }
+        } else {
+            for (int i = 0; i < nivel; i++) {
+                System.out.printf("\t");
+            }
+            for (Move child : no.getChildren()) {
+                System.out.printf("\t%s %s->%s  [%d]", child.getPeca().getTipo(), child.getPosicaoAtual(), child.getPosicaoNova(),child.getValue());
+            }
+            System.out.println();
+            for (Move child : no.getChildren()) {
+                printTree(child, nivel + 1);
+            }
+        }
+    }
 }
