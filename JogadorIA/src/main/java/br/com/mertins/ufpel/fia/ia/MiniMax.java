@@ -27,7 +27,7 @@ public class MiniMax {
 
     public Move run(Jogador jogador, TabuleiroState tabuleiroState) {
         this.jogador = jogador;
-        Move raiz = new Move(this.jogador);
+        Move raiz = new Move(this.jogador, true);
         Move move = minimax(raiz, tabuleiroState, this.depth, true);
 //        System.out.printf("\nvoltou do minimax %s   %s de %s para %s   valor [%d] \n", move.getJogador(), move.getPeca().getTipo().descricao(), move.getPosicaoAtual(), move.getPosicaoNova(), move.getValue());
 //        printTree(raiz, 0);
@@ -51,7 +51,7 @@ public class MiniMax {
             return temp;
         } else if (maximizingPlayer) {
             Move bestValue = null;
-            for (Move moveChild : tempBoard.findCandidates(this.jogador)) {
+            for (Move moveChild : tempBoard.findCandidates(this.jogador, true)) {
                 move.addChild(moveChild);
                 Board boardChild = new Board(tabuleiroState);
                 boardChild.move(moveChild.getPeca(), moveChild.getPosicaoAtual(), moveChild.getPosicaoNova());
@@ -61,7 +61,7 @@ public class MiniMax {
             return bestValue;
         } else {
             Move bestValue = null;
-            for (Move moveChild : tempBoard.findCandidates(Jogador.adversario(this.jogador))) {
+            for (Move moveChild : tempBoard.findCandidates(Jogador.adversario(this.jogador), false)) {
                 move.addChild(moveChild);
                 Board boardChild = new Board(tabuleiroState);
                 boardChild.move(moveChild.getPeca(), moveChild.getPosicaoAtual(), moveChild.getPosicaoNova());
@@ -76,7 +76,7 @@ public class MiniMax {
         if (nivel == 0) {
             System.out.println("Raiz");
             for (Move child : no.getChildren()) {
-                System.out.printf("\t%s %s->%s [%d]", child.getPeca().getTipo(), child.getPosicaoAtual(), child.getPosicaoNova(),child.getValue());
+                System.out.printf("\t%s %s->%s [%d]", child.getPeca().getTipo(), child.getPosicaoAtual(), child.getPosicaoNova(), child.getValue());
             }
             System.out.println();
             for (Move child : no.getChildren()) {
@@ -87,7 +87,7 @@ public class MiniMax {
                 System.out.printf("\t");
             }
             for (Move child : no.getChildren()) {
-                System.out.printf("\t%s %s->%s  [%d]", child.getPeca().getTipo(), child.getPosicaoAtual(), child.getPosicaoNova(),child.getValue());
+                System.out.printf("\t%s %s->%s  [%d]", child.getPeca().getTipo(), child.getPosicaoAtual(), child.getPosicaoNova(), child.getValue());
             }
             System.out.println();
             for (Move child : no.getChildren()) {

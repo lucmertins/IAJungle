@@ -11,6 +11,7 @@ import java.util.List;
  * @author mertins
  */
 public class Move {
+
     private int value;
     private final List<Move> children = new ArrayList<>();
     private Move parent = null;
@@ -18,13 +19,9 @@ public class Move {
     private Peca peca;
     private Tabuleiro.Posicao posicaoAtual;
     private Tabuleiro.Posicao posicaoNova;
+    boolean ia;
 
-    public Move(int value, Jogador jogador) {
-        this.value = value;
-        this.jogador = jogador;
-    }
-
-    public Move(Jogador jogador) {
+    public Move(Jogador jogador, boolean ia) {
         this.jogador = jogador;
         this.value = 0;
     }
@@ -35,15 +32,15 @@ public class Move {
 
     public void setValue(int value) {
         this.value = value;
-//        Move temp = this.parent;
-//        while (temp != null) {
-//            if (temp.value < this.value) {
-//                temp.value = this.value;
-//                temp = temp.parent;
-//            } else {
-//                temp = null;
-//            }
-//        }
+        Move temp = this.parent;
+        while (temp != null) {
+            if (ia && temp.value > this.value) {
+                temp.value = this.value;
+            } else if (!ia && temp.value < this.value) {
+                temp.value = this.value;
+            }
+            temp = temp.parent;
+        }
     }
 
     public Peca getPeca() {
