@@ -33,7 +33,7 @@ public class MiniMax {
 //        printTree(raiz, 0);
         Move temp = move;
         while (temp.getParent() != raiz) {
-//            System.out.printf("\ncaminho avaliando mover %s de %s para %s   valor [%d] \n", temp.getPeca().getTipo().descricao(), temp.getPosicaoAtual(), temp.getPosicaoNova(), temp.getValue());
+            System.out.printf("\ncaminho avaliando mover %s de %s para %s   valor [%d]", temp.getPeca().getTipo().descricao(), temp.getPosicaoAtual(), temp.getPosicaoNova(), temp.getValue());
             temp = temp.getParent();
         }
 //        System.out.printf("\nmovimento escolhido %s de %s para %s   valor [%d] \n\n", temp.getPeca().getTipo().descricao(), temp.getPosicaoAtual(), temp.getPosicaoNova(), temp.getValue());
