@@ -23,7 +23,8 @@ public class Move {
 
     public Move(Jogador jogador, boolean ia) {
         this.jogador = jogador;
-        this.value = 0;
+        
+        this.value = ia?Integer.MIN_VALUE:Integer.MAX_VALUE;
     }
 
     public int getValue() {
@@ -34,9 +35,9 @@ public class Move {
         this.value = value;
         Move temp = this.parent;
         while (temp != null) {
-            if (ia && temp.value > this.value) {
+            if (ia && temp.value < this.value) {
                 temp.value = this.value;
-            } else if (!ia && temp.value < this.value) {
+            } else if (!ia && temp.value > this.value) {
                 temp.value = this.value;
             }
             temp = temp.parent;
