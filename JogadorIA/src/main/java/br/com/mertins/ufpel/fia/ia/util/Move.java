@@ -24,7 +24,7 @@ public class Move {
     public Move(Jogador jogador, boolean ia) {
         this.jogador = jogador;
         
-        this.value = ia?Integer.MIN_VALUE:Integer.MAX_VALUE;
+//        this.value = ia?Integer.MIN_VALUE:Integer.MAX_VALUE;
     }
 
     public int getValue() {
@@ -33,15 +33,15 @@ public class Move {
 
     public void setValue(int value) {
         this.value = value;
-        Move temp = this.parent;
-        while (temp != null) {
-            if (ia && temp.value < this.value) {
-                temp.value = this.value;
-            } else if (!ia && temp.value > this.value) {
-                temp.value = this.value;
-            }
-            temp = temp.parent;
-        }
+//        Move temp = this.parent;
+//        while (temp != null) {
+//            if (ia && temp.value < this.value) {
+//                temp.value = this.value;
+//            } else if (!ia && temp.value > this.value) {
+//                temp.value = this.value;
+//            }
+//            temp = temp.parent;
+//        }
     }
 
     public Peca getPeca() {

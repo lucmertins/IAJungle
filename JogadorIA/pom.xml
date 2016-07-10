@@ -34,7 +34,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>br.com.mertins.ufpel.fia.serversocket.Execute</mainClass>
+                            <mainClass>br.com.mertins.ufpel.fia.ia.JogadorIA</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
