@@ -27,7 +27,11 @@ public class Heuristica {
         int numPecas = pecasJogador.size() - pecasAdversario.size();
         value += numPecas > 0 ? numPecas * 200 : 100;
         for (Peca peca : pecasJogador) {
-            value += 200 - board.distanciaToca(move.getJogador(), board.posicao(peca));
+            value += 200 - board.distanciaToca(move.getJogador(), board.posicao(peca))*2;
+        }
+        
+        for (Peca peca : pecasJogador) {
+            value += 200 - board.distanciaYToca(move.getJogador(), board.posicao(peca))*2;
         }
         move.setValue(value);
 //        board.print(move.getJogador(), move, false);

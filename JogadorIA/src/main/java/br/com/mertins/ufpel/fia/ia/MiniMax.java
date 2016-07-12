@@ -56,13 +56,13 @@ public class MiniMax {
                 Move temp = minimax(moveChild, boardChild.getTabuleiroState(), depth - 1, alpha, beta, false);
                 bestValue = bestValue == null ? temp : bestValue.max(temp);
                 move.addChild(moveChild);
-//                if (temp != null && temp.getValue() > alpha) {
-//                    alpha = temp.getValue();
-//                }
-//                if (alpha < beta) {  //if alpha >= beta then return alpha (cut off)
-//                    move.addChild(moveChild);
-//                    bestValue = bestValue == null ? temp : bestValue.max(temp);
-//                }
+                if (temp != null && temp.getValue() > alpha) {
+                    alpha = temp.getValue();
+                }
+                if (alpha > beta) {  //if alpha >= beta then return alpha (cut off)
+                    move.addChild(moveChild);
+                    bestValue = bestValue == null ? temp : bestValue.max(temp);
+                }
             }
             return bestValue;
         } else {
@@ -73,13 +73,13 @@ public class MiniMax {
                 Move temp = minimax(moveChild, boardChild.getTabuleiroState(), depth - 1, alpha, beta, true);
                 bestValue = bestValue == null ? temp : bestValue.min(temp);
                 move.addChild(moveChild);
-//                if (temp != null && temp.getValue() < beta) {
-//                    beta = temp.getValue();
-//                }
-//                if (alpha < beta) {  // if alpha >= beta then return beta (cut off)
-//                    move.addChild(moveChild);
-//                    bestValue = bestValue == null ? temp : bestValue.min(temp);
-//                }
+                if (temp != null && temp.getValue() < beta) {
+                    beta = temp.getValue();
+                }
+                if (alpha > beta) {  // if alpha >= beta then return beta (cut off)
+                    move.addChild(moveChild);
+                    bestValue = bestValue == null ? temp : bestValue.min(temp);
+                }
 
             }
             return bestValue;
