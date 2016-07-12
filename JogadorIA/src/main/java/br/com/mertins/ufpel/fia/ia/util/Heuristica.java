@@ -17,8 +17,11 @@ public class Heuristica {
         Tabuleiro.Movimento movimento = board.move(move.getPeca(), move.getPosicaoAtual(), move.getPosicaoNova());
 //        board.print(move.getJogador());
         int value = 0;
-        if (movimento == Tabuleiro.Movimento.WINALLPECAS || movimento == Tabuleiro.Movimento.WINTOCA) {
-            value = 1000000;
+        if (movimento == Tabuleiro.Movimento.WINTOCA) {
+            value = 99999999;
+        }
+        if (movimento == Tabuleiro.Movimento.WINALLPECAS) {
+            value += 1000000;
         }
         Jogador adversario = Jogador.adversario(move.getJogador());
         board.getTabuleiroState();
