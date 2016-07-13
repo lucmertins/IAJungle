@@ -3,6 +3,7 @@ package br.com.mertins.viewgame;
 import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
 import br.com.mertins.ufpel.fia.gameengine.elements.Peca;
 import br.com.mertins.ufpel.fia.gameengine.elements.TabuleiroState;
+import br.com.mertins.viewgame.TabuleiroEvent.Botao;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -21,19 +22,22 @@ public class JTabuleiro extends javax.swing.JPanel {
      */
     public JTabuleiro() {
         initComponents();
+        
     }
     private final int sizeBloco = 60;
     private final int size = 420;
     private final int ajustey = 44;
     private final int ajustex = 12;
     private TabuleiroState tabuleiroState;
+    private TabuleiroEvent eventSource;
 
-//    public void setTabuleiro(Peca[][] tabuleiro) {
-//        this.setTabuleiro(new Tabuleiro(tabuleiroState));
-//    }
     public void setTabuleiroState(TabuleiroState tabuleiroState) {
         this.tabuleiroState = tabuleiroState;
         this.repaint();
+    }
+
+    public void addEventClick(TabuleiroEvent event) {
+        this.eventSource = event;
     }
 
     @Override
@@ -147,14 +151,15 @@ public class JTabuleiro extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
-        int posx = evt.getX() / sizeBloco;
-        int posy = 7 - evt.getY() / sizeBloco;
-        char letra = (char) ('A' + posx);
-        String resultado = String.format("%s%d", letra, posy);
-        if (evt.getButton() == MouseEvent.BUTTON3) {
-            System.out.printf("%s    botao 3\n", resultado);
-        } else {
-            System.out.printf("%s   outro botao\n", resultado);
+        if (this.eventSource != null) {
+            int posx = evt.getX() / sizeBloco;
+            int posy = 7 - evt.getY() / sizeBloco;
+            char letra = (char) ('A' + posx);
+            String resultado = String.format("%s%d", letra, posy);
+            Botao botao = evt.getButton() == MouseEvent.BUTTON1 ? Botao.BUTTON1
+                    : evt.getButton() == MouseEvent.BUTTON2 ? Botao.BUTTON2
+                            : evt.getButton() == MouseEvent.BUTTON3 ? Botao.BUTTON3 : Botao.BUTTON1;
+            this.eventSource.eventClick(botao, resultado);
         }
     }//GEN-LAST:event_formMouseClicked
 

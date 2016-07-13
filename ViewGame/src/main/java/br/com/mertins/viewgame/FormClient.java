@@ -25,13 +25,14 @@ import javax.swing.JOptionPane;
  *
  * @author mertins
  */
-public class FormClient extends javax.swing.JFrame {
+public class FormClient extends javax.swing.JFrame implements TabuleiroEvent{
 
     /**
      * Creates new form FormClient
      */
     public FormClient() {
         initComponents();
+        this.jtabuleiro.addEventClick(this);
     }
 
     /**
@@ -314,6 +315,11 @@ public class FormClient extends javax.swing.JFrame {
             result.add(new ComboItem(peca, peca.getTipo().descricao()));
         }
         return result;
+    }
+
+    @Override
+    public void eventClick(Botao bota, String local) {
+        txtMovimento.setText(local);
     }
 
     private class ComboItem {
