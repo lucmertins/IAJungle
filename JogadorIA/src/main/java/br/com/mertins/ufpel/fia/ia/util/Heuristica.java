@@ -19,9 +19,8 @@ public class Heuristica {
         int value = 0;
         if (movimento == Tabuleiro.Movimento.WINTOCA) {
             value = 99999999;
-        }
-        if (movimento == Tabuleiro.Movimento.WINALLPECAS) {
-            value += 1000000;
+        }else if (movimento == Tabuleiro.Movimento.WINALLPECAS) {
+            value += 10000000;
         }
         Jogador adversario = Jogador.adversario(move.getJogador());
         board.getTabuleiroState();
@@ -34,7 +33,7 @@ public class Heuristica {
         }
         
         for (Peca peca : pecasJogador) {
-            value += 200 - board.distanciaYToca(move.getJogador(), board.posicao(peca))*2;
+            value += 100 - board.distanciaYToca(move.getJogador(), board.posicao(peca))*2;
         }
         move.setValue(value);
 //        board.print(move.getJogador(), move, false);
