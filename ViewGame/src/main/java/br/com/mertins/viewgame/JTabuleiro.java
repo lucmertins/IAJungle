@@ -8,6 +8,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.MouseEvent;
 
 /**
  *
@@ -127,6 +128,12 @@ public class JTabuleiro extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -138,6 +145,18 @@ public class JTabuleiro extends javax.swing.JPanel {
             .addGap(0, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        int posx = evt.getX() / sizeBloco;
+        int posy = 7 - evt.getY() / sizeBloco;
+        char letra = (char) ('A' + posx);
+        String resultado = String.format("%s%d", letra, posy);
+        if (evt.getButton() == MouseEvent.BUTTON3) {
+            System.out.printf("%s    botao 3\n", resultado);
+        } else {
+            System.out.printf("%s   outro botao\n", resultado);
+        }
+    }//GEN-LAST:event_formMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
