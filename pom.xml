@@ -14,6 +14,7 @@
         <module>Network</module>
         <module>ServerSocket</module>
         <module>ViewGame</module>
+        <module>JogadorIAC</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
