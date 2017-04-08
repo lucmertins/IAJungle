@@ -14,13 +14,13 @@
             <plugin>
                 <groupId>com.github.maven-nar</groupId>
                 <artifactId>nar-maven-plugin</artifactId>
-                <version>3.5.0</version>
+                <version>3.5.1</version>
                 <extensions>true</extensions>
                 <configuration>
                     <libraries>
                         <library>
                             <type>jni</type>
-                            <narSystemPackage>r.com.mertins.ufpel.fia.nar</narSystemPackage>
+                            <narSystemPackage>br.com.mertins.ufpel.fia.nar</narSystemPackage>
                         </library>
                     </libraries>
                 </configuration>
