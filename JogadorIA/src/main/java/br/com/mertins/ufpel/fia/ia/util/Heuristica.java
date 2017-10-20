@@ -12,32 +12,55 @@ import java.util.List;
  */
 public class Heuristica {
 
-    public Move process(TabuleiroState state, Move move) {
+    public Move process(TabuleiroState state, Move move, WeightTunning conf) {
         Board board = new Board(state);
         Tabuleiro.Movimento movimento = board.move(move.getPeca(), move.getPosicaoAtual(), move.getPosicaoNova());
 //        board.print(move.getJogador());
         int value = 0;
+
+        // **** muito valor por chegar na toca
         if (movimento == Tabuleiro.Movimento.WINTOCA) {
-            value = 99999999;
-        }else if (movimento == Tabuleiro.Movimento.WINALLPECAS) {
-            value += 10000000;
-        }
-        Jogador adversario = Jogador.adversario(move.getJogador());
-        board.getTabuleiroState();
-        List<Peca> pecasJogador = board.pecasNoTabuleiro(move.getJogador());
-        List<Peca> pecasAdversario = board.pecasNoTabuleiro(adversario);
-        int numPecas = pecasJogador.size() - pecasAdversario.size();
-        value += numPecas > 0 ? numPecas * 200 : 100;
-        for (Peca peca : pecasJogador) {
-            value += 200 - board.distanciaToca(move.getJogador(), board.posicao(peca))*2;
-        }
-        
-        for (Peca peca : pecasJogador) {
-            value += 100 - board.distanciaYToca(move.getJogador(), board.posicao(peca))*2;
+            value = conf.getWinTocaWeight();
+            // **** muito valor por comer todas as peças
+        } else if (movimento == Tabuleiro.Movimento.WINALLPECAS) {
+            value = conf.getWinAllPecasWeight();
+        } else {
+            board.getTabuleiroState();
+            List<Peca> pecasJogador = board.pecasNoTabuleiro(move.getJogador());
+            // **** valoriza as peças
+            value += conf.getPecaWeight(move.getPeca().getTipo());
+            for (Peca peca : pecasJogador) {
+                value += conf.getPecaWeight(peca.getTipo());
+            }
+            // **** mais valor se tiver mais peças proximas a toca (distancia Manhattan menor)
+            for (Peca peca : pecasJogador) {
+                value += (Board.WORSTDISTANCE - board.distanciaToca(move.getJogador(), board.posicao(peca))) * conf.getNearTocaManhattanWeight();
+            }
+            // **** mais valor se tiver mais peças proxima no eixo y a toca (Y menor).
+            for (Peca peca : pecasJogador) {
+                value += (Board.WORSTDISTANCE - board.distanciaYToca(move.getJogador(), board.posicao(peca))) * conf.getNearTocaYWeight();
+            }
+
+            // Avaliação da situação do adversário
+            Jogador adversario = Jogador.adversario(move.getJogador());
+            List<Peca> pecasAdversario = board.pecasNoTabuleiro(adversario);
+            value -= conf.getPecaWeight(move.getPeca().getTipo());
+            for (Peca peca : pecasAdversario) {
+                value -= conf.getPecaWeight(peca.getTipo());
+            }
+            // **** ,menos valor se adversario tiver mais peças proximas a toca (distancia Manhattan menor)
+            for (Peca peca : pecasAdversario) {
+                value -= (Board.WORSTDISTANCE - board.distanciaToca(adversario, board.posicao(peca))) * conf.getNearTocaManhattanWeight();
+            }
+            // **** menos valor se adversário tiver mais peças proxima no eixo y a toca (Y menor).
+            for (Peca peca : pecasAdversario) {
+                value -= (Board.WORSTDISTANCE - board.distanciaYToca(adversario, board.posicao(peca))) * conf.getNearTocaYWeight();
+            }
+
         }
         move.setValue(value);
 //        board.print(move.getJogador(), move, false);
-//        System.out.printf("Heuristica peça[%s] novaposicao[%s] value[%d]\n", move.getPeca(), move.getPosicaoNova(), value);
+//        System.out.printf("Jogador [%s] Heuristica peça[%s] novaposicao[%s] value[%d]\n", move.getJogador(), move.getPeca(), move.getPosicaoNova(), value);
         return move;
     }
 }

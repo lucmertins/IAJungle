@@ -7,7 +7,7 @@ import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
 import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
 import br.com.mertins.ufpel.fia.gameengine.elements.TabuleiroState;
 import br.com.mertins.ufpel.fia.ia.util.Board;
-import br.com.mertins.ufpel.fia.ia.util.TreeNode;
+import br.com.mertins.ufpel.fia.ia.util.WeightTunning;
 
 /**
  *
@@ -45,8 +45,13 @@ public class MiniMax {
 
     private Move minimax(Move move, TabuleiroState tabuleiroState, int depth, int alpha, int beta, boolean maximizingPlayer) {
         final Board tempBoard = new Board(tabuleiroState);
-        if (depth == 0 || Board.gameOver(move, tabuleiroState) != Tabuleiro.Situacao.UNDEFINED) {
-            Move temp = this.heuristica.process(tabuleiroState, move);
+        Tabuleiro.Situacao situacao = Board.gameOver(move, tabuleiroState);
+//        boolean primeiro = true;
+        if (depth == 0 || situacao != Tabuleiro.Situacao.UNDEFINED) {
+            if (situacao != Tabuleiro.Situacao.UNDEFINED) {
+                System.out.printf("Jogador [%s] situacao [%s] depth [%d]   \n", move.getJogador(), situacao.toString(), depth,move.getPeca().getTipo(),move.getPosicaoAtual(),move.getPosicaoNova());
+            }
+            Move temp = this.heuristica.process(tabuleiroState, move, new WeightTunning());
             return temp;
         } else if (maximizingPlayer) {
             Move bestValue = null;
@@ -54,8 +59,13 @@ public class MiniMax {
                 Board boardChild = new Board(tabuleiroState);
                 boardChild.move(moveChild.getPeca(), moveChild.getPosicaoAtual(), moveChild.getPosicaoNova());
                 Move temp = minimax(moveChild, boardChild.getTabuleiroState(), depth - 1, alpha, beta, false);
-                bestValue = bestValue == null ? temp : bestValue.max(temp);
                 move.addChild(moveChild);
+                bestValue = bestValue == null ? temp : bestValue.max(temp);
+
+//                if (primeiro) {
+//                    bestValue = temp;
+//                    primeiro = false;
+//                }
 //                if (temp != null && temp.getValue() > alpha) {
 //                    alpha = temp.getValue();
 //                }
@@ -71,8 +81,13 @@ public class MiniMax {
                 Board boardChild = new Board(tabuleiroState);
                 boardChild.move(moveChild.getPeca(), moveChild.getPosicaoAtual(), moveChild.getPosicaoNova());
                 Move temp = minimax(moveChild, boardChild.getTabuleiroState(), depth - 1, alpha, beta, true);
-                bestValue = bestValue == null ? temp : bestValue.min(temp);
                 move.addChild(moveChild);
+                bestValue = bestValue == null ? temp : bestValue.min(temp);
+
+//                if (primeiro) {
+//                    bestValue = temp;
+//                    primeiro = false;
+//                }
 //                if (temp != null && temp.getValue() < beta) {
 //                    beta = temp.getValue();
 //                }
@@ -80,7 +95,6 @@ public class MiniMax {
 //                    move.addChild(moveChild);
 //                    bestValue = bestValue == null ? temp : bestValue.min(temp);
 //                }
-
             }
             return bestValue;
         }

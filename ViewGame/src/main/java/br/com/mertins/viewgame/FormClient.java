@@ -307,6 +307,8 @@ public class FormClient extends javax.swing.JFrame implements TabuleiroEvent {
                     break;
                 case CHEGOUTOCA:
                 case COMEUTODASPECAS:
+                    tab = new Tabuleiro(receber.getTabuleiroState());
+                    jtabuleiro.setTabuleiroState(receber.getTabuleiroState());
                     if (receber.getJogador() == conexao.getJogador()) {
                         enableCompontes(false);
                         JOptionPane.showMessageDialog(this, "Voce ganhou!");
@@ -337,24 +339,26 @@ public class FormClient extends javax.swing.JFrame implements TabuleiroEvent {
 
     @Override
     public void eventClick(Botao bota, String local) {
-        Tabuleiro tabuleiro = this.conexao.getTabuleiro();
-        Peca peca = tabuleiro.peca(this.conexao.getJogador(), Posicao.valueOf(local.toUpperCase()));
-        if (bota == Botao.BUTTON1) {
-            if (peca == null) {
-                lbMensagem.setText("Seleção inválida");
-            } else {
-                lbMensagem.setText(null);
-                txtHelp.setText(local);
-                ComboItem elemCmb = new ComboItem(peca, peca.getTipo().descricao());
-                cmbPeca.setSelectedItem(elemCmb);
-            }
+        if (this.conexao.getStatus() == Conexao.Status.JOGANDO) {
+            Tabuleiro tabuleiro = this.conexao.getTabuleiro();
+            Peca peca = tabuleiro.peca(this.conexao.getJogador(), Posicao.valueOf(local.toUpperCase()));
+            if (bota == Botao.BUTTON1) {
+                if (peca == null) {
+                    lbMensagem.setText("Seleção inválida");
+                } else {
+                    lbMensagem.setText(null);
+                    txtHelp.setText(local);
+                    ComboItem elemCmb = new ComboItem(peca, peca.getTipo().descricao());
+                    cmbPeca.setSelectedItem(elemCmb);
+                }
 
-        } else {
-            if (peca == null) {
-                txtMovimento.setText(local);
-                lbMensagem.setText(null);
             } else {
-                lbMensagem.setText("Seleção inválida");
+                if (peca == null) {
+                    txtMovimento.setText(local);
+                    lbMensagem.setText(null);
+                } else {
+                    lbMensagem.setText("Seleção inválida");
+                }
             }
         }
     }

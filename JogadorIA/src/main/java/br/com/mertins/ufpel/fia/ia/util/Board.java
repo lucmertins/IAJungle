@@ -13,6 +13,8 @@ import java.util.List;
  */
 public class Board extends Tabuleiro {
 
+    public static final int WORSTDISTANCE = 9;
+
     public Board() {
     }
 
@@ -20,7 +22,7 @@ public class Board extends Tabuleiro {
         super(tabuleiroState);
     }
 
-    public Move[] findCandidates(Jogador jogador,boolean ia) {
+    public Move[] findCandidates(Jogador jogador, boolean ia) {
         List<Move> possiveis = new ArrayList();
         List<Peca> pecasNoTabuleiro = this.pecasNoTabuleiro(jogador);
         for (Peca peca : pecasNoTabuleiro) {
@@ -28,7 +30,7 @@ public class Board extends Tabuleiro {
             Posicao[] posicoesPossiveis = posicoesPossiveis(peca);
             for (Posicao posicaoNova : posicoesPossiveis) {
                 if (this.movimentoValido(peca, posicaoAtual, posicaoNova) != Movimento.INVALIDO) {
-                    Move candMove = new Move(jogador,ia);
+                    Move candMove = new Move(jogador, ia);
                     candMove.setPeca(peca);
                     candMove.setPosicaoAtual(posicaoAtual);
                     candMove.setPosicaoNova(posicaoNova);
