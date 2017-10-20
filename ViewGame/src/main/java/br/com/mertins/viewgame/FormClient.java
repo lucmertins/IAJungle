@@ -16,6 +16,7 @@ import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
@@ -25,7 +26,7 @@ import javax.swing.JOptionPane;
  *
  * @author mertins
  */
-public class FormClient extends javax.swing.JFrame implements TabuleiroEvent{
+public class FormClient extends javax.swing.JFrame implements TabuleiroEvent {
 
     /**
      * Creates new form FormClient
@@ -53,6 +54,9 @@ public class FormClient extends javax.swing.JFrame implements TabuleiroEvent{
         txtMovimento = new javax.swing.JTextField();
         cmbPeca = new javax.swing.JComboBox<>();
         txtHelp = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -100,6 +104,15 @@ public class FormClient extends javax.swing.JFrame implements TabuleiroEvent{
 
         txtHelp.setEditable(false);
 
+        jLabel3.setText("para");
+
+        jTextArea1.setEditable(false);
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jTextArea1.setText("Utilize o botão 1 para selecionar a peça\nE o botão 2 para indicar o destino.");
+        jTextArea1.setFocusable(false);
+        jScrollPane1.setViewportView(jTextArea1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -110,18 +123,20 @@ public class FormClient extends javax.swing.JFrame implements TabuleiroEvent{
                     .addComponent(lbMensagem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lbJogador, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(cmbPeca, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtHelp))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(btMovimento, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(txtHelp, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cmbPeca, javax.swing.GroupLayout.Alignment.LEADING, 0, 134, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtMovimento, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btConectar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btMovimento, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtMovimento, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(jLabel2))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jtabuleiro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -129,7 +144,7 @@ public class FormClient extends javax.swing.JFrame implements TabuleiroEvent{
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(17, 17, 17)
                         .addComponent(btConectar)
@@ -138,19 +153,22 @@ public class FormClient extends javax.swing.JFrame implements TabuleiroEvent{
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lbJogador, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cmbPeca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtHelp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cmbPeca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btMovimento)
-                            .addComponent(txtMovimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtMovimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtHelp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lbMensagem, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btMovimento)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbMensagem, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jtabuleiro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(85, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         pack();
@@ -220,7 +238,7 @@ public class FormClient extends javax.swing.JFrame implements TabuleiroEvent{
     private void cmbPecaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbPecaActionPerformed
         Peca peca = (Peca) ((ComboItem) this.cmbPeca.getModel().getSelectedItem()).value;
         Posicao posicao = conexao.getTabuleiro().posicao(this.conexao.getJogador(), peca);
-        txtHelp.setText(String.format("Esta na %s", posicao));
+        txtHelp.setText(String.format("%s", posicao));
     }//GEN-LAST:event_cmbPecaActionPerformed
 
     private boolean valida() {
@@ -259,8 +277,8 @@ public class FormClient extends javax.swing.JFrame implements TabuleiroEvent{
                     conexao.setJogador(receber.getJogador());
                     conexao.setTabuleiro(tabuleiro);
                     lbJogador.setText(conexao.getJogador().toString());
-                    lbJogador.setBackground(conexao.getJogador() == Jogador.Jogador1 ? Color.yellow : Color.green);
                     lbJogador.setOpaque(true);
+                    lbJogador.setBackground(conexao.getJogador() == Jogador.Jogador1 ? Color.yellow : Color.green);
                     jtabuleiro.setTabuleiroState(receber.getTabuleiroState());
                     this.txtMovimento.setText(null);
                     if (conexao.getJogador() == Jogador.Jogador1) {
@@ -319,7 +337,26 @@ public class FormClient extends javax.swing.JFrame implements TabuleiroEvent{
 
     @Override
     public void eventClick(Botao bota, String local) {
-        txtMovimento.setText(local);
+        Tabuleiro tabuleiro = this.conexao.getTabuleiro();
+        Peca peca = tabuleiro.peca(this.conexao.getJogador(), Posicao.valueOf(local.toUpperCase()));
+        if (bota == Botao.BUTTON1) {
+            if (peca == null) {
+                lbMensagem.setText("Seleção inválida");
+            } else {
+                lbMensagem.setText(null);
+                txtHelp.setText(local);
+                ComboItem elemCmb = new ComboItem(peca, peca.getTipo().descricao());
+                cmbPeca.setSelectedItem(elemCmb);
+            }
+
+        } else {
+            if (peca == null) {
+                txtMovimento.setText(local);
+                lbMensagem.setText(null);
+            } else {
+                lbMensagem.setText("Seleção inválida");
+            }
+        }
     }
 
     private class ComboItem {
@@ -335,6 +372,31 @@ public class FormClient extends javax.swing.JFrame implements TabuleiroEvent{
         @Override
         public String toString() {
             return label;
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 23 * hash + Objects.hashCode(this.value);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final ComboItem other = (ComboItem) obj;
+            if (!Objects.equals(this.value, other.value)) {
+                return false;
+            }
+            return true;
         }
 
     }
@@ -381,6 +443,9 @@ public class FormClient extends javax.swing.JFrame implements TabuleiroEvent{
     private javax.swing.JButton btMovimento;
     private javax.swing.JComboBox<String> cmbPeca;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
     private br.com.mertins.viewgame.JTabuleiro jtabuleiro;
     private javax.swing.JLabel lbJogador;
     private javax.swing.JLabel lbMensagem;
