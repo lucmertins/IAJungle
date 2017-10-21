@@ -46,21 +46,50 @@ public class MiniMax {
     private Move minimax(Move move, TabuleiroState tabuleiroState, int depth, int alpha, int beta, boolean maximizingPlayer) {
         final Board tempBoard = new Board(tabuleiroState);
         Tabuleiro.Situacao situacao = Board.gameOver(move, tabuleiroState);
+        Move bestValue = null;
 //        boolean primeiro = true;
         if (depth == 0 || situacao != Tabuleiro.Situacao.UNDEFINED) {
             if (situacao != Tabuleiro.Situacao.UNDEFINED) {
-                System.out.printf("Jogador [%s] situacao [%s] depth [%d]   \n", move.getJogador(), situacao.toString(), depth,move.getPeca().getTipo(),move.getPosicaoAtual(),move.getPosicaoNova());
+                System.out.printf("Jogador [%s] situacao [%s] depth [%d]   \n", move.getJogador(), situacao.toString(), depth, move.getPeca().getTipo(), move.getPosicaoAtual(), move.getPosicaoNova());
             }
             Move temp = this.heuristica.process(tabuleiroState, move, new WeightTunning());
             return temp;
         } else if (maximizingPlayer) {
-            Move bestValue = null;
-            for (Move moveChild : tempBoard.findCandidates(this.jogador, true)) {
+            for (Move moveChild : tempBoard.findCandidates(this.jogador, maximizingPlayer)) {
+                move.addChild(moveChild);
                 Board boardChild = new Board(tabuleiroState);
                 boardChild.move(moveChild.getPeca(), moveChild.getPosicaoAtual(), moveChild.getPosicaoNova());
-                Move temp = minimax(moveChild, boardChild.getTabuleiroState(), depth - 1, alpha, beta, false);
-                move.addChild(moveChild);
+//                boardChild.print(jogador);
+//                System.out.println("************* " + (depth - 1));
+                Move temp = minimax(moveChild, boardChild.getTabuleiroState(), depth - 1, alpha, beta, !maximizingPlayer);
+//                System.out.println(temp.getValue() + "************* " + (depth - 1));
                 bestValue = bestValue == null ? temp : bestValue.max(temp);
+                if (bestValue != null) {
+                    move.setValue(bestValue.getValue());
+                }
+            }
+        } else {
+            for (Move moveChild : tempBoard.findCandidates(Jogador.adversario(this.jogador), maximizingPlayer)) {
+                move.addChild(moveChild);
+                Board boardChild = new Board(tabuleiroState);
+                boardChild.move(moveChild.getPeca(), moveChild.getPosicaoAtual(), moveChild.getPosicaoNova());
+//                boardChild.print(Jogador.adversario(this.jogador));
+//                System.out.println(temp.getValue());
+                Move temp = minimax(moveChild, boardChild.getTabuleiroState(), depth - 1, alpha, beta, !maximizingPlayer);
+//                System.out.println("*************  " + (depth - 1));
+                bestValue = bestValue == null ? temp : bestValue.min(temp);
+                if (bestValue != null) {
+                    move.setValue(bestValue.getValue());
+                }
+            }
+        }
+//        if (depth == 4) {
+//            System.out.println("");
+//        }
+        return bestValue;
+
+    }
+}
 
 //                if (primeiro) {
 //                    bestValue = temp;
@@ -73,18 +102,7 @@ public class MiniMax {
 //                    move.addChild(moveChild);
 //                    bestValue = bestValue == null ? temp : bestValue.max(temp);
 //                }
-            }
-            return bestValue;
-        } else {
-            Move bestValue = null;
-            for (Move moveChild : tempBoard.findCandidates(Jogador.adversario(this.jogador), false)) {
-                Board boardChild = new Board(tabuleiroState);
-                boardChild.move(moveChild.getPeca(), moveChild.getPosicaoAtual(), moveChild.getPosicaoNova());
-                Move temp = minimax(moveChild, boardChild.getTabuleiroState(), depth - 1, alpha, beta, true);
-                move.addChild(moveChild);
-                bestValue = bestValue == null ? temp : bestValue.min(temp);
-
-//                if (primeiro) {
+//    if (primeiro) {
 //                    bestValue = temp;
 //                    primeiro = false;
 //                }
@@ -95,8 +113,3 @@ public class MiniMax {
 //                    move.addChild(moveChild);
 //                    bestValue = bestValue == null ? temp : bestValue.min(temp);
 //                }
-            }
-            return bestValue;
-        }
-    }
-}

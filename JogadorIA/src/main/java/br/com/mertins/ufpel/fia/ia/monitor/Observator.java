@@ -103,7 +103,7 @@ public class Observator {
         Duration duration = Duration.between(begin.getInstant(), Instant.now());
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
         String format = fmt.format(duration.addTo(LocalDateTime.of(0, 1, 1, 0, 0)));
-        System.out.printf("Execução [%s] MemFree [%dM]  vitorias [%d] empates [%d] derrotas [%d]\n", format, Runtime.getRuntime().freeMemory() / 1048576, vitorias, empates, derrotas);
+//        System.out.printf("Execução [%s] MemFree [%dM]  vitorias [%d] empates [%d] derrotas [%d]\n", format, Runtime.getRuntime().freeMemory() / 1048576, vitorias, empates, derrotas);
         return format;
     }
 }
