@@ -12,7 +12,10 @@ import java.util.List;
  */
 public class Move {
 
-    private int value;
+    public enum ValueAssessment {
+        SMALLER, LARGER, EQUAL, INVALID
+    }
+    private Integer value;
     private final List<Move> children = new ArrayList<>();
     private Move parent = null;
     private final Jogador jogador;
@@ -20,14 +23,15 @@ public class Move {
     private Tabuleiro.Posicao posicaoAtual;
     private Tabuleiro.Posicao posicaoNova;
     boolean ia;
+    private Tabuleiro.Movimento movimento;
 
     public Move(Jogador jogador, boolean ia) {
         this.jogador = jogador;
-        
+
 //        this.value = ia?Integer.MIN_VALUE:Integer.MAX_VALUE;
     }
 
-    public int getValue() {
+    public Integer getValue() {
         return value;
     }
 
@@ -80,14 +84,47 @@ public class Move {
         if (other == null) {
             return this;
         }
-        return this.value >= other.value ? this : other;
+        int val1 = this.value == null ? Integer.MIN_VALUE : this.value;
+        int val2 = other.value == null ? Integer.MIN_VALUE : other.value;
+        return val1 >= val2 ? this : other;
     }
 
     public Move min(Move other) {
         if (other == null) {
             return this;
         }
-        return this.value < other.value ? this : other;
+        int val1 = this.value == null ? Integer.MAX_VALUE : this.value;
+        int val2 = other.value == null ? Integer.MAX_VALUE : other.value;
+        return val1 < val2 ? this : other;
+    }
+
+    public ValueAssessment compareValueMax(Integer value) {
+        if (this.value == null && value == null) {
+            return ValueAssessment.INVALID;
+        } else if (this.value == null) {
+            return ValueAssessment.SMALLER;
+        } else if (value == null) {
+            return ValueAssessment.LARGER;
+        } else if (this.value == value) {
+            return ValueAssessment.EQUAL;
+        } else {
+            return this.value > value ? ValueAssessment.LARGER : ValueAssessment.SMALLER;
+        }
+    }
+
+    public ValueAssessment compareValueMin(Integer value) {
+        if (this.value == null && value == null) {
+            return ValueAssessment.INVALID;
+        } else if (this.value == null) {
+            return ValueAssessment.LARGER;
+        } else if (value == null) {
+            return ValueAssessment.SMALLER;
+        } else if (this.value == value) {
+            return ValueAssessment.EQUAL;
+        } else {
+            return this.value < value ? ValueAssessment.SMALLER : ValueAssessment.LARGER;
+        }
+
     }
 
     public void addChild(Move node) {
@@ -97,6 +134,14 @@ public class Move {
 
     public Move getParent() {
         return parent;
+    }
+
+    public Tabuleiro.Movimento getMovimento() {
+        return movimento;
+    }
+
+    public void setMovimento(Tabuleiro.Movimento movimento) {
+        this.movimento = movimento;
     }
 
 }

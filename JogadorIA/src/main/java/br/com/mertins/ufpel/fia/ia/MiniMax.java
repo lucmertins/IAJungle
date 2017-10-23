@@ -45,26 +45,24 @@ public class MiniMax {
 
     private Move minimax(Move move, TabuleiroState tabuleiroState, int depth, int alpha, int beta, boolean maximizingPlayer) {
         final Board tempBoard = new Board(tabuleiroState);
-        Tabuleiro.Situacao situacao = Board.gameOver(move, tabuleiroState);
+//        move.setMovimento(tempBoard.move(move));
+//        if (move.getMovimento() != Tabuleiro.Movimento.INVALIDO) {
+        Tabuleiro.Situacao situacao = tempBoard.gameOver(move);
         Move bestValue = null;
-//        boolean primeiro = true;
         if (depth == 0 || situacao != Tabuleiro.Situacao.UNDEFINED) {
             if (situacao != Tabuleiro.Situacao.UNDEFINED) {
                 System.out.printf("Jogador [%s] situacao [%s] depth [%d]   \n", move.getJogador(), situacao.toString(), depth, move.getPeca().getTipo(), move.getPosicaoAtual(), move.getPosicaoNova());
             }
-            Move temp = this.heuristica.process(tabuleiroState, move, new WeightTunning());
-            return temp;
+            move.setValue(this.heuristica.process(tabuleiroState, move, new WeightTunning()));
+            bestValue = move;
         } else if (maximizingPlayer) {
             for (Move moveChild : tempBoard.findCandidates(this.jogador, maximizingPlayer)) {
                 move.addChild(moveChild);
                 Board boardChild = new Board(tabuleiroState);
-                boardChild.move(moveChild.getPeca(), moveChild.getPosicaoAtual(), moveChild.getPosicaoNova());
-//                boardChild.print(jogador);
-//                System.out.println("************* " + (depth - 1));
+                boardChild.move(moveChild);
                 Move temp = minimax(moveChild, boardChild.getTabuleiroState(), depth - 1, alpha, beta, !maximizingPlayer);
-//                System.out.println(temp.getValue() + "************* " + (depth - 1));
                 bestValue = bestValue == null ? temp : bestValue.max(temp);
-                if (bestValue != null) {
+                if (bestValue != null && bestValue.compareValueMax(move.getValue()) == Move.ValueAssessment.LARGER) {
                     move.setValue(bestValue.getValue());
                 }
             }
@@ -72,24 +70,24 @@ public class MiniMax {
             for (Move moveChild : tempBoard.findCandidates(Jogador.adversario(this.jogador), maximizingPlayer)) {
                 move.addChild(moveChild);
                 Board boardChild = new Board(tabuleiroState);
-                boardChild.move(moveChild.getPeca(), moveChild.getPosicaoAtual(), moveChild.getPosicaoNova());
-//                boardChild.print(Jogador.adversario(this.jogador));
-//                System.out.println(temp.getValue());
+                moveChild.setMovimento(boardChild.move(moveChild));
                 Move temp = minimax(moveChild, boardChild.getTabuleiroState(), depth - 1, alpha, beta, !maximizingPlayer);
-//                System.out.println("*************  " + (depth - 1));
                 bestValue = bestValue == null ? temp : bestValue.min(temp);
-                if (bestValue != null) {
+                if (bestValue != null && bestValue.compareValueMax(move.getValue()) == Move.ValueAssessment.SMALLER) {
                     move.setValue(bestValue.getValue());
                 }
             }
         }
-//        if (depth == 4) {
-//            System.out.println("");
-//        }
         return bestValue;
-
+//        } else {
+//            System.out.println("Movimento inválido!!!!!");
+//            return null;
+//        }
     }
 }
+//                boardChild.print(jogador);
+//                System.out.println("************* " + (depth - 1));
+//                System.out.println(temp.getValue() + "************* " + (depth - 1));
 
 //                if (primeiro) {
 //                    bestValue = temp;

@@ -59,27 +59,30 @@ public class Tabuleiro {
         tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.D1)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.D1)] = peca;
         peca = new Peca(Jogador.Jogador1, Peca.Tipo.Rat);
         tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.F1)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.F1)] = peca;
-        peca = new Peca(Jogador.Jogador1, Peca.Tipo.Elefant);
-        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.B1)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.B1)] = peca;
-        peca = new Peca(Jogador.Jogador1, Peca.Tipo.Tiger);
-        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.E2)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.E2)] = peca;
-        peca = new Peca(Jogador.Jogador1, Peca.Tipo.Dog);
-        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.C2)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.C2)] = peca;
+//        peca = new Peca(Jogador.Jogador1, Peca.Tipo.Elefant);
+//        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.B1)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.B1)] = peca;
+//        peca = new Peca(Jogador.Jogador1, Peca.Tipo.Tiger);
+//        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.E2)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.E2)] = peca;
+//        peca = new Peca(Jogador.Jogador1, Peca.Tipo.Dog);
+//        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.C2)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.C2)] = peca;
 
         peca = new Peca(Jogador.Jogador2, Peca.Tipo.Toca);
         tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.D7)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.D7)] = peca;
         peca = new Peca(Jogador.Jogador2, Peca.Tipo.Rat);
         tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.B7)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.B1)] = peca;
-        peca = new Peca(Jogador.Jogador2, Peca.Tipo.Elefant);
-        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.F7)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.F1)] = peca;
-        peca = new Peca(Jogador.Jogador2, Peca.Tipo.Tiger);
-        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.C6)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.C6)] = peca;
-        peca = new Peca(Jogador.Jogador2, Peca.Tipo.Dog);
-        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.E6)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.E6)] = peca;
+//        peca = new Peca(Jogador.Jogador2, Peca.Tipo.Elefant);
+//        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.F7)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.F1)] = peca;
+//        peca = new Peca(Jogador.Jogador2, Peca.Tipo.Tiger);
+//        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.C6)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.C6)] = peca;
+//        peca = new Peca(Jogador.Jogador2, Peca.Tipo.Dog);
+//        tabuleiro[Tabuleiro.Posicao.posY(Tabuleiro.Posicao.E6)][Tabuleiro.Posicao.posX(Tabuleiro.Posicao.E6)] = peca;
         this.situacao = Situacao.UNDEFINED;
     }
 
     public Movimento move(Peca peca, Posicao posIni, Posicao posFim) {
+        if (posIni == Posicao.D6) {
+            System.out.println("Agora");
+        }
         Movimento mov = movimentoValido(peca, posIni, posFim);
         Peca[][] tabuleiro = this.tabuleiroState.getTabuleiro();
         switch (mov) {
@@ -87,6 +90,9 @@ public class Tabuleiro {
                 tabuleiro[Posicao.posY(posIni)][Posicao.posX(posIni)] = null;
                 tabuleiro[Posicao.posY(posFim)][Posicao.posX(posFim)] = peca;
                 Jogador adversario = Jogador.adversario(peca.getJogador());
+                if (tabuleiro[0][3] == null) {
+                    System.out.println("problemas!!!!");
+                }
                 if (tabuleiro[0][3].getJogador() == Jogador.Jogador1) {
                     this.situacao = Situacao.WINJOG1;
                     return Movimento.WINTOCA;
@@ -159,6 +165,9 @@ public class Tabuleiro {
     }
 
     protected Movimento movimentoValido(Peca peca, Posicao posIni, Posicao posFim) {
+        if (posIni == Posicao.D7 || posIni == Posicao.D1) {
+            return Movimento.INVALIDO;
+        }
         if (this.situacao == Situacao.UNDEFINED && peca.getTipo().movel() && alcancavel(posIni, posFim)) {        // jogo em aberto e peça é movivel?
             Peca newPos = this.tabuleiroState.getTabuleiro()[Posicao.posY(posFim)][Posicao.posX(posFim)];
             if (newPos == null) {                                                   // local futuro esta vazio?

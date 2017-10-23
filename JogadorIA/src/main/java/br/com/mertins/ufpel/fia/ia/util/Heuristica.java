@@ -12,20 +12,17 @@ import java.util.List;
  */
 public class Heuristica {
 
-    public Move process(TabuleiroState state, Move move, WeightTunning conf) {
+    public int process(TabuleiroState state, Move move, WeightTunning conf) {
         Board board = new Board(state);
-        Tabuleiro.Movimento movimento = board.move(move.getPeca(), move.getPosicaoAtual(), move.getPosicaoNova());
-//        board.print(move.getJogador());
         int value = 0;
 
         // **** muito valor por chegar na toca
-        if (movimento == Tabuleiro.Movimento.WINTOCA) {
+        if (move.getMovimento() == Tabuleiro.Movimento.WINTOCA) {
             value = conf.getWinTocaWeight();
             // **** muito valor por comer todas as peças
-        } else if (movimento == Tabuleiro.Movimento.WINALLPECAS) {
+        } else if (move.getMovimento() == Tabuleiro.Movimento.WINALLPECAS) {
             value = conf.getWinAllPecasWeight();
         } else {
-            board.getTabuleiroState();
             List<Peca> pecasJogador = board.pecasNoTabuleiro(move.getJogador());
             // **** valoriza as peças
             value += conf.getPecaWeight(move.getPeca().getTipo());
@@ -58,9 +55,8 @@ public class Heuristica {
             }
 
         }
-        move.setValue(value);
 //        board.print(move.getJogador(), move, false);
 //        System.out.printf("Jogador [%s] Heuristica peça[%s] novaposicao[%s] value[%d]\n", move.getJogador(), move.getPeca(), move.getPosicaoNova(), value);
-        return move;
+        return value;
     }
 }
