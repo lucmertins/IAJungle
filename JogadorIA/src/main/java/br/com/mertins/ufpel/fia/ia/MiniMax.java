@@ -73,7 +73,7 @@ public class MiniMax {
                 moveChild.setMovimento(boardChild.move(moveChild));
                 Move temp = minimax(moveChild, boardChild.getTabuleiroState(), depth - 1, alpha, beta, !maximizingPlayer);
                 bestValue = bestValue == null ? temp : bestValue.min(temp);
-                if (bestValue != null && bestValue.compareValueMax(move.getValue()) == Move.ValueAssessment.SMALLER) {
+                if (bestValue != null && bestValue.compareValueMin(move.getValue()) == Move.ValueAssessment.SMALLER) {
                     move.setValue(bestValue.getValue());
                 }
             }
