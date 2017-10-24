@@ -10,8 +10,8 @@ import java.util.Map;
  */
 public class WeightTunning {
 
-    private int winTocaWeight = Integer.MAX_VALUE;
-    private int winAllPecasWeight = Integer.MAX_VALUE;
+    private int winTocaWeight = 1000;
+    private int winAllPecasWeight = 1000;
     private int nearTocaManhattanWeight = 5;
     private int nearTocaYWeight = 3;
     private Map<Peca.Tipo, Integer> pecasWeight = new HashMap<>();
