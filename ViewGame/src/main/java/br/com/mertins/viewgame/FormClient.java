@@ -4,6 +4,8 @@ import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
 import br.com.mertins.ufpel.fia.gameengine.elements.Peca;
 import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
 import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro.Posicao;
+import br.com.mertins.ufpel.fia.ia.JogadorIA;
+import br.com.mertins.ufpel.fia.ia.util.WeightTunning;
 import br.com.mertins.ufpel.fia.network.Conexao;
 import br.com.mertins.ufpel.fia.network.Mensagem;
 import static br.com.mertins.ufpel.fia.network.Mensagem.TipoMsg.CHEGOUTOCA;
@@ -57,11 +59,12 @@ public class FormClient extends javax.swing.JFrame implements TabuleiroEvent {
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        btIAplay = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        btConectar.setText("Conectar");
+        btConectar.setText("Human Play");
         btConectar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btConectarActionPerformed(evt);
@@ -113,6 +116,13 @@ public class FormClient extends javax.swing.JFrame implements TabuleiroEvent {
         jTextArea1.setFocusable(false);
         jScrollPane1.setViewportView(jTextArea1);
 
+        btIAplay.setText("IA Play");
+        btIAplay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btIAplayActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -131,12 +141,15 @@ public class FormClient extends javax.swing.JFrame implements TabuleiroEvent {
                         .addComponent(jLabel3)
                         .addGap(18, 18, 18)
                         .addComponent(txtMovimento, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btConectar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE))
+                            .addComponent(jLabel2)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btConectar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btIAplay, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jtabuleiro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -147,7 +160,9 @@ public class FormClient extends javax.swing.JFrame implements TabuleiroEvent {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(17, 17, 17)
-                        .addComponent(btConectar)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btConectar)
+                            .addComponent(btIAplay))
                         .addGap(37, 37, 37)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -178,6 +193,7 @@ public class FormClient extends javax.swing.JFrame implements TabuleiroEvent {
     private void btConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btConectarActionPerformed
         if (conexao == null) {
             btConectar.setEnabled(false);
+            btIAplay.setEnabled(false);
             conexao = new Conexao();
             try {
                 conexao.conectarServidor("localhost");
@@ -196,6 +212,7 @@ public class FormClient extends javax.swing.JFrame implements TabuleiroEvent {
                                 conexao = null;
                             }
                             btConectar.setEnabled(true);
+                            btIAplay.setEnabled(true);
                         }
                     }
                 }.start();
@@ -203,6 +220,7 @@ public class FormClient extends javax.swing.JFrame implements TabuleiroEvent {
                 conexao.close();
                 conexao = null;
                 btConectar.setEnabled(true);
+                btIAplay.setEnabled(true);
                 Logger.getLogger(FormClient.class.getName()).log(Level.SEVERE, "Falha ao conectar", ex);
                 JOptionPane.showMessageDialog(this, "Servidor não responde a conexão");
             }
@@ -240,6 +258,29 @@ public class FormClient extends javax.swing.JFrame implements TabuleiroEvent {
         Posicao posicao = conexao.getTabuleiro().posicao(this.conexao.getJogador(), peca);
         txtHelp.setText(String.format("%s", posicao));
     }//GEN-LAST:event_cmbPecaActionPerformed
+
+    private void btIAplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btIAplayActionPerformed
+        btConectar.setEnabled(false);
+        btIAplay.setEnabled(false);
+        final WeightTunning weightTunning = new WeightTunning();
+        weightTunning.setWinTocaWeight(1000);
+        weightTunning.setWinAllPecasWeight(1000);
+        weightTunning.setNearTocaManhattanWeight(5);
+        weightTunning.setNearTocaYWeight(3);
+
+        weightTunning.addWeightTunning(Peca.Tipo.Elefant, 1);
+        weightTunning.addWeightTunning(Peca.Tipo.Tiger, 1);
+        weightTunning.addWeightTunning(Peca.Tipo.Dog, 1);
+        weightTunning.addWeightTunning(Peca.Tipo.Rat, 1);
+        new Thread() {
+            @Override
+            public void run() {
+                JogadorIA jogador = new JogadorIA(weightTunning);
+                jogador.run();
+            }
+
+        }.start();
+    }//GEN-LAST:event_btIAplayActionPerformed
 
     private boolean valida() {
         if (txtMovimento.getText().trim().length() == 0) {
@@ -307,7 +348,6 @@ public class FormClient extends javax.swing.JFrame implements TabuleiroEvent {
                     break;
                 case CHEGOUTOCA:
                 case COMEUTODASPECAS:
-                    tab = new Tabuleiro(receber.getTabuleiroState());
                     jtabuleiro.setTabuleiroState(receber.getTabuleiroState());
                     if (receber.getJogador() == conexao.getJogador()) {
                         enableCompontes(false);
@@ -444,6 +484,7 @@ public class FormClient extends javax.swing.JFrame implements TabuleiroEvent {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btConectar;
+    private javax.swing.JButton btIAplay;
     private javax.swing.JButton btMovimento;
     private javax.swing.JComboBox<String> cmbPeca;
     private javax.swing.JLabel jLabel2;

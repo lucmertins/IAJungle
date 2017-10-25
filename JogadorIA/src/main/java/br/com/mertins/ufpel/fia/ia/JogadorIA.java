@@ -2,6 +2,10 @@ package br.com.mertins.ufpel.fia.ia;
 
 import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
 import br.com.mertins.ufpel.fia.gameengine.elements.Peca;
+import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
+import br.com.mertins.ufpel.fia.gameengine.elements.TabuleiroState;
+import br.com.mertins.ufpel.fia.ia.listener.MovimentoEvent;
+import br.com.mertins.ufpel.fia.ia.listener.MovimentoListener;
 import br.com.mertins.ufpel.fia.network.Conexao;
 import br.com.mertins.ufpel.fia.ia.monitor.Observator;
 import br.com.mertins.ufpel.fia.ia.util.Board;
@@ -19,11 +23,16 @@ import java.util.logging.Logger;
 public class JogadorIA {
 
     private final MiniMax minimax;
-    private WeightTunning weightTunning;
+    private MovimentoListener listener;
 
     public JogadorIA(WeightTunning weightTunning) {
         Observator observator = new Observator(Observator.ALGORITHMS.MINIMAX);
         minimax = new MiniMax(observator, 5, weightTunning);
+    }
+
+    public JogadorIA(WeightTunning weightTunning, MovimentoListener listener) {
+        this(weightTunning);
+        this.listener = listener;
     }
 
     public void run() {
@@ -47,9 +56,34 @@ public class JogadorIA {
                     case JOGADA:
                         if (receber.getJogador() == conexao.getJogador()) {
                             if (receber.getPosicaoNova() != null) {  // se não for a primeira jogada
-                                System.out.printf("%s moveu %s para %s\n",
-                                        conexao.getJogador() == Jogador.Jogador1 ? Jogador.Jogador2 : Jogador.Jogador1,
-                                        receber.getTipoPeca().descricao(), receber.getPosicaoNova());
+                                if (listener != null) {
+                                    listener.action(new MovimentoEvent() {
+                                        @Override
+                                        public Jogador getJogador() {
+                                            return receber.getJogador();
+                                        }
+
+                                        @Override
+                                        public Tabuleiro.Posicao getPosicaoAtual() {
+                                            return receber.getPosicaoAtual();
+                                        }
+
+                                        @Override
+                                        public Tabuleiro.Posicao getPosicaoNova() {
+                                            return receber.getPosicaoNova();
+                                        }
+
+                                        @Override
+                                        public Peca.Tipo getTipoPeca() {
+                                            return receber.getTipoPeca();
+                                        }
+
+                                        @Override
+                                        public TabuleiroState getTabuleiroState() {
+                                            return receber.getTabuleiroState();
+                                        }
+                                    });
+                                }
                             }
                             jogar(conexao, receber);
                         }
@@ -87,18 +121,21 @@ public class JogadorIA {
     }
 
     public static void main(String[] args) {
-        WeightTunning weightTunning=new WeightTunning();
+        WeightTunning weightTunning = new WeightTunning();
         weightTunning.setWinTocaWeight(1000);
         weightTunning.setWinAllPecasWeight(1000);
         weightTunning.setNearTocaManhattanWeight(5);
         weightTunning.setNearTocaYWeight(3);
-        
+
         weightTunning.addWeightTunning(Peca.Tipo.Elefant, 1);
         weightTunning.addWeightTunning(Peca.Tipo.Tiger, 1);
         weightTunning.addWeightTunning(Peca.Tipo.Dog, 1);
         weightTunning.addWeightTunning(Peca.Tipo.Rat, 1);
-                
-        JogadorIA jogador = new JogadorIA(weightTunning);
+
+        JogadorIA jogador = new JogadorIA(weightTunning, (MovimentoEvent evt) -> {
+            System.out.printf("%s moveu %s para %s\n",
+                    evt.getJogador() == Jogador.Jogador1 ? Jogador.Jogador2 : Jogador.Jogador1, evt.getTipoPeca().descricao(), evt.getPosicaoNova());
+        });
         jogador.run();
     }
 }
