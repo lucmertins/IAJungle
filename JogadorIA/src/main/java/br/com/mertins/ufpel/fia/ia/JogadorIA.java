@@ -1,10 +1,12 @@
 package br.com.mertins.ufpel.fia.ia;
 
 import br.com.mertins.ufpel.fia.gameengine.elements.Jogador;
+import br.com.mertins.ufpel.fia.gameengine.elements.Peca;
 import br.com.mertins.ufpel.fia.network.Conexao;
 import br.com.mertins.ufpel.fia.ia.monitor.Observator;
 import br.com.mertins.ufpel.fia.ia.util.Board;
 import br.com.mertins.ufpel.fia.ia.util.Move;
+import br.com.mertins.ufpel.fia.ia.util.WeightTunning;
 import br.com.mertins.ufpel.fia.network.Mensagem;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -17,10 +19,11 @@ import java.util.logging.Logger;
 public class JogadorIA {
 
     private final MiniMax minimax;
+    private WeightTunning weightTunning;
 
-    public JogadorIA() {
+    public JogadorIA(WeightTunning weightTunning) {
         Observator observator = new Observator(Observator.ALGORITHMS.MINIMAX);
-        minimax = new MiniMax(observator, 5);
+        minimax = new MiniMax(observator, 5, weightTunning);
     }
 
     public void run() {
@@ -84,7 +87,18 @@ public class JogadorIA {
     }
 
     public static void main(String[] args) {
-        JogadorIA jogador = new JogadorIA();
+        WeightTunning weightTunning=new WeightTunning();
+        weightTunning.setWinTocaWeight(1000);
+        weightTunning.setWinAllPecasWeight(1000);
+        weightTunning.setNearTocaManhattanWeight(5);
+        weightTunning.setNearTocaYWeight(3);
+        
+        weightTunning.addWeightTunning(Peca.Tipo.Elefant, 1);
+        weightTunning.addWeightTunning(Peca.Tipo.Tiger, 1);
+        weightTunning.addWeightTunning(Peca.Tipo.Dog, 1);
+        weightTunning.addWeightTunning(Peca.Tipo.Rat, 1);
+                
+        JogadorIA jogador = new JogadorIA(weightTunning);
         jogador.run();
     }
 }

@@ -12,16 +12,16 @@ import java.util.List;
  * @author mertins
  */
 public class Board extends Tabuleiro {
-    
+
     public static final int WORSTDISTANCE = 9;
-    
+
     public Board() {
     }
-    
+
     public Board(TabuleiroState tabuleiroState) {
         super(tabuleiroState);
     }
-    
+
     public Move[] findCandidates(Jogador jogador, boolean ia) {
         List<Move> possiveis = new ArrayList();
         List<Peca> pecasNoTabuleiro = this.pecasNoTabuleiro(jogador);
@@ -40,44 +40,37 @@ public class Board extends Tabuleiro {
         }
         return possiveis.toArray(new Move[possiveis.size()]);
     }
-    
+
     public Situacao gameOver(Move move) {
         if (move.getPeca() == null) {
             return Situacao.UNDEFINED;
         }
-//        Board boardTemp = new Board(tabuleiroState);
-//        if (tabuleiroState.getTabuleiro()[0][3].getJogador() == Jogador.Jogador1) {
-//            return Situacao.WINJOG1;
-//        }
-//        if (tabuleiroState.getTabuleiro()[6][3].getJogador() == Jogador.Jogador2) {
-//            return Situacao.WINJOG2;
-//        }
         Movimento movimento = move.getMovimento();
         if (movimento == Movimento.WINALLPECAS || movimento == Movimento.WINTOCA) {
             return move.getJogador() == Jogador.Jogador1 ? Situacao.WINJOG1 : Situacao.WINJOG2;
         }
         return Situacao.UNDEFINED;
     }
-    
+
     public int distanciaToca(Jogador jogador, Posicao ini) {
         return distanciaXToca(jogador, ini) + distanciaYToca(jogador, ini);
     }
-    
+
     public int distanciaXToca(Jogador jogador, Posicao ini) {
-        
+
         if (jogador == Jogador.Jogador1) {
             return Math.abs(Posicao.posX(ini) - Posicao.posX(Posicao.D7));
         }
         return Math.abs(Posicao.posX(ini) - Posicao.posX(Posicao.D1));
     }
-    
+
     public int distanciaYToca(Jogador jogador, Posicao ini) {
         if (jogador == Jogador.Jogador1) {
             return Math.abs(Posicao.posY(ini) - Posicao.posY(Posicao.D7));
         }
         return Math.abs(Posicao.posY(ini) - Posicao.posY(Posicao.D1));
     }
-    
+
     public Movimento move(Move move) {
         if (move.getPeca() != null) {
             move.setMovimento(this.move(move.getPeca(), move.getPosicaoAtual(), move.getPosicaoNova()));
@@ -86,9 +79,9 @@ public class Board extends Tabuleiro {
             move.setMovimento(Movimento.INVALIDO);
             return Movimento.INVALIDO;
         }
-        
+
     }
-    
+
     private Posicao[] posicoesPossiveis(Peca peca) {
         List<Posicao> lista = new ArrayList<>();
         Posicao posicaoAtual = this.posicao(peca);
@@ -128,7 +121,7 @@ public class Board extends Tabuleiro {
         Posicao[] posicoes = listaFinal.toArray(new Posicao[listaFinal.size()]);
         return posicoes;
     }
-    
+
     public void print(Jogador jogador) {
         Peca[][] tabuleiro = this.getTabuleiroState().getTabuleiro();
         System.out.printf("\n\n****Jogador da vez [%s] ****\n\n", jogador);
@@ -145,7 +138,7 @@ public class Board extends Tabuleiro {
         }
         System.out.println("\n\n");
     }
-    
+
     public void print(Jogador jogador, Move move, boolean adversario) {
         System.out.printf("\n%s %s avaliando mover %s de %s para %s   valor [%d] \n", adversario ? "Adversario" : "IA", jogador, move.getPeca().getTipo().descricao(), move.getPosicaoAtual(), move.getPosicaoNova(), move.getValue());
     }

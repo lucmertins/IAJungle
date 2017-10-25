@@ -10,17 +10,21 @@ import java.util.Map;
  */
 public class WeightTunning {
 
-    private int winTocaWeight = 1000;
-    private int winAllPecasWeight = 1000;
-    private int nearTocaManhattanWeight = 5;
-    private int nearTocaYWeight = 3;
-    private Map<Peca.Tipo, Integer> pecasWeight = new HashMap<>();
+    private int winTocaWeight;
+    private int winAllPecasWeight;
+    private int nearTocaManhattanWeight;
+    private int nearTocaYWeight;
+    private final Map<Peca.Tipo, Integer> pecasWeight = new HashMap<>();
 
     public WeightTunning() {
         pecasWeight.put(Peca.Tipo.Elefant, 1);
         pecasWeight.put(Peca.Tipo.Tiger, 1);
         pecasWeight.put(Peca.Tipo.Dog, 1);
         pecasWeight.put(Peca.Tipo.Rat, 1);
+    }
+
+    public void addWeightTunning(Peca.Tipo tipo, int weight) {
+        pecasWeight.put(tipo, weight);
     }
 
     public int getWinTocaWeight() {
@@ -41,6 +45,22 @@ public class WeightTunning {
 
     public int getPecaWeight(Peca.Tipo tipo) {
         return pecasWeight.get(tipo);
+    }
+
+    public void setWinTocaWeight(int winTocaWeight) {
+        this.winTocaWeight = winTocaWeight;
+    }
+
+    public void setWinAllPecasWeight(int winAllPecasWeight) {
+        this.winAllPecasWeight = winAllPecasWeight;
+    }
+
+    public void setNearTocaManhattanWeight(int nearTocaManhattanWeight) {
+        this.nearTocaManhattanWeight = nearTocaManhattanWeight;
+    }
+
+    public void setNearTocaYWeight(int nearTocaYWeight) {
+        this.nearTocaYWeight = nearTocaYWeight;
     }
 
 }
