@@ -46,9 +46,6 @@ public class MiniMax {
         this.jogadasWinner.forEach(jogada -> {
             System.out.printf("Jogador [%s] vai ganhar o jogo após [%d] jogadas   \n", jogada.jogador, this.depth - jogada.depth);
         });
-        Board board = new Board(tabuleiroState);
-        System.out.printf("\n\n\n Jogada escolhida\n\n\n");
-        board.print(jogador, temp, false);
         this.observator.difference();
         return temp;
     }

@@ -138,8 +138,4 @@ public class Board extends Tabuleiro {
         }
         System.out.println("\n\n");
     }
-
-    public void print(Jogador jogador, Move move, boolean adversario) {
-        System.out.printf("\n%s %s avaliando mover %s de %s para %s   valor [%d] \n", adversario ? "Adversario" : "IA", jogador, move.getPeca().getTipo().descricao(), move.getPosicaoAtual(), move.getPosicaoNova(), move.getValue());
-    }
 }

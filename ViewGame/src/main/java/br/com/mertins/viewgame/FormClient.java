@@ -5,6 +5,7 @@ import br.com.mertins.ufpel.fia.gameengine.elements.Peca;
 import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro;
 import br.com.mertins.ufpel.fia.gameengine.elements.Tabuleiro.Posicao;
 import br.com.mertins.ufpel.fia.ia.JogadorIA;
+import br.com.mertins.ufpel.fia.ia.listener.MovimentoEvent;
 import br.com.mertins.ufpel.fia.ia.util.WeightTunning;
 import br.com.mertins.ufpel.fia.network.Conexao;
 import br.com.mertins.ufpel.fia.network.Mensagem;
@@ -64,7 +65,7 @@ public class FormClient extends javax.swing.JFrame implements TabuleiroEvent {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        btConectar.setText("Human Play");
+        btConectar.setText("Human x IA Play");
         btConectar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btConectarActionPerformed(evt);
@@ -116,7 +117,7 @@ public class FormClient extends javax.swing.JFrame implements TabuleiroEvent {
         jTextArea1.setFocusable(false);
         jScrollPane1.setViewportView(jTextArea1);
 
-        btIAplay.setText("IA Play");
+        btIAplay.setText("IA x IA Play");
         btIAplay.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btIAplayActionPerformed(evt);
@@ -275,7 +276,20 @@ public class FormClient extends javax.swing.JFrame implements TabuleiroEvent {
         new Thread() {
             @Override
             public void run() {
-                JogadorIA jogador = new JogadorIA(weightTunning);
+                JogadorIA jogador = new JogadorIA(weightTunning, (MovimentoEvent evt) -> {
+                    jtabuleiro.setTabuleiroState(evt.getTabuleiroState());
+                    if (evt.getStatus() != MovimentoEvent.Status.BEGIN) {
+                        System.out.printf("%s %s moveu %s de %s para %s\n",
+                                evt.getTipo(),
+                                evt.getJogador() == Jogador.Jogador1 ? Jogador.Jogador2 : Jogador.Jogador1,
+                                evt.getTipoPeca().descricao(), evt.getPosicaoAtual(), evt.getPosicaoNova());
+                    } else {
+                        lbJogador.setText(evt.getJogador().toString());
+                        lbJogador.setOpaque(true);
+                        lbJogador.setBackground(evt.getJogador() == Jogador.Jogador1 ? Color.yellow : Color.green);
+                        System.out.printf("Jogo iniciando com jogador %s - %s\n", evt.getJogador(), evt.getTipo());
+                    }
+                });
                 jogador.run();
             }
 

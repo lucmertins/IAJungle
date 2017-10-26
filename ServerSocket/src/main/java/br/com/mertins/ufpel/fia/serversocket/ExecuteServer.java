@@ -20,9 +20,9 @@ import java.util.logging.Logger;
  * @author mertins
  */
 public class ExecuteServer {
-
+    
     private final Queue<Conexao> clientesConectados = new LinkedList<>();
-
+    
     private void run() {
         new Thread() {
             @Override
@@ -40,7 +40,7 @@ public class ExecuteServer {
                 }
             }
         }.start();
-
+        
         new Thread() {
             @Override
             public void run() {
@@ -78,10 +78,10 @@ public class ExecuteServer {
                     Logger.getLogger(ExecuteServer.class.getName()).log(Level.SEVERE, "Falha esperando 1 segundo para avaliar fila", ex);
                 }
             }
-
+            
         }.start();
     }
-
+    
     private void duplas(Conexao jog1, Conexao jog2) {
         new Thread() {
             @Override
@@ -99,7 +99,7 @@ public class ExecuteServer {
                 enviaMsg(jog1, msg);
                 msg.setJogador(Jogador.Jogador2);
                 enviaMsg(jog2, msg);
-
+                
                 jog1.setAdversario(jog2);
                 jog2.setAdversario(jog1);
                 jog1.vezDoJogo();
@@ -126,9 +126,10 @@ public class ExecuteServer {
                                 case VALIDO:
                                     msg.setJogador(receber.getJogador() == Jogador.Jogador1 ? Jogador.Jogador2 : Jogador.Jogador1);
                                     msg.setTipo(Mensagem.TipoMsg.JOGADA);
+                                    msg.setPosicaoAtual(receber.getPosicaoAtual());
                                     msg.setPosicaoNova(receber.getPosicaoNova());
                                     msg.setTipoPeca(receber.getTipoPeca());
-                                    arquivo.write(String.format("[MOV][%s][%s][%s]\n", receber.getJogador(), peca.getTipo().descricao(), receber.getPosicaoNova()));
+                                    arquivo.write(String.format("[MOV][%s][%s][%s][%s]\n", receber.getJogador(), peca.getTipo().descricao(), receber.getPosicaoAtual(), receber.getPosicaoNova()));
                                     arquivo.flush();
                                     if (jog1.isVezdajogada()) {
                                         jog2.vezDoJogo();
@@ -143,7 +144,7 @@ public class ExecuteServer {
                                     msg.setTipo(Mensagem.TipoMsg.COMEUTODASPECAS);
                                     msg.setPosicaoNova(receber.getPosicaoNova());
                                     msg.setTipoPeca(receber.getTipoPeca());
-                                    arquivo.write(String.format("[ALL][%s][%s][%s]\n", receber.getJogador(), peca.getTipo().descricao(), receber.getPosicaoNova()));
+                                    arquivo.write(String.format("[ALL][%s][%s][%s][%s]\n", receber.getJogador(), peca.getTipo().descricao(), receber.getPosicaoAtual(), receber.getPosicaoNova()));
                                     arquivo.flush();
                                     jogando = false;
                                     break;
@@ -152,7 +153,7 @@ public class ExecuteServer {
                                     msg.setTipo(Mensagem.TipoMsg.CHEGOUTOCA);
                                     msg.setPosicaoNova(receber.getPosicaoNova());
                                     msg.setTipoPeca(receber.getTipoPeca());
-                                    arquivo.write(String.format("[TOC][%s][%s][%s]\n", receber.getJogador(), peca.getTipo().descricao(), receber.getPosicaoNova()));
+                                    arquivo.write(String.format("[TOC][%s][%s][%s][%s]\n", receber.getJogador(), peca.getTipo().descricao(), receber.getPosicaoAtual(), receber.getPosicaoNova()));
                                     arquivo.flush();
                                     jogando = false;
                                     break;
@@ -172,7 +173,7 @@ public class ExecuteServer {
                             jog2.enviar(msg);
                         } catch (Exception ex2) {
                         }
-
+                        
                         Logger.getLogger(ExecuteServer.class.getName()).log(Level.SEVERE, "Falha em receber conexao", ex);
                     } finally {
                         if (!jogando) {
@@ -184,13 +185,13 @@ public class ExecuteServer {
                             }
                         }
                     }
-
+                    
                 }
-
+                
             }
         }.start();
     }
-
+    
     private boolean enviaMsg(Conexao conexao, Mensagem msg) {
         try {
             Logger.getLogger(ExecuteServer.class.getName()).log(Level.INFO, String.format("Enviando msg [%s]", conexao.getJogador()));
@@ -201,7 +202,7 @@ public class ExecuteServer {
             return false;
         }
     }
-
+    
     private FileWriter arquivo(Conexao jog1, Conexao jog2) {
         String property = System.getProperty("user.home");
         File folder = new File(String.format("%s%sIAJungleWork", property, File.separator));
@@ -217,9 +218,9 @@ public class ExecuteServer {
             return null;
         }
     }
-
+    
     public static void main(String[] args) {
         new ExecuteServer().run();
-
+        
     }
 }

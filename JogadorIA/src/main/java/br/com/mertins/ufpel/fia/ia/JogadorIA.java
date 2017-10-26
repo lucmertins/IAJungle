@@ -42,58 +42,36 @@ public class JogadorIA {
             boolean conectado = true;
             while (conectado) {
                 Mensagem receber = conexao.receber();
-                System.out.printf(String.format("%s %s\n", receber.getTipo().toString(), receber.getJogador() == null ? "" : receber.getJogador()));
                 switch (receber.getTipo()) {
                     case JOGOESTABELECIDO:
                         conexao.setJogador(receber.getJogador());
                         Board board = new Board(receber.getTabuleiroState());
                         conexao.setTabuleiro(board);
+                        if (listener != null) {
+                            listener.action(new EvtMov(receber, receber.getJogador() == conexao.getJogador() ? "IA" : "ADVERSÁRIO", MovimentoEvent.Status.BEGIN));
+                        }
                         if (conexao.getJogador() == Jogador.Jogador1) {
                             jogar(conexao, receber);
                         }
                         break;
                     case JOGADAINVALIDA:
                     case JOGADA:
+                        if (listener != null) {
+                            listener.action(new EvtMov(receber, receber.getJogador() == conexao.getJogador() ? "ADVERSÁRIO" : "IA", MovimentoEvent.Status.MOV));
+                        }
                         if (receber.getJogador() == conexao.getJogador()) {
-                            if (receber.getPosicaoNova() != null) {  // se não for a primeira jogada
-                                if (listener != null) {
-                                    listener.action(new MovimentoEvent() {
-                                        @Override
-                                        public Jogador getJogador() {
-                                            return receber.getJogador();
-                                        }
-
-                                        @Override
-                                        public Tabuleiro.Posicao getPosicaoAtual() {
-                                            return receber.getPosicaoAtual();
-                                        }
-
-                                        @Override
-                                        public Tabuleiro.Posicao getPosicaoNova() {
-                                            return receber.getPosicaoNova();
-                                        }
-
-                                        @Override
-                                        public Peca.Tipo getTipoPeca() {
-                                            return receber.getTipoPeca();
-                                        }
-
-                                        @Override
-                                        public TabuleiroState getTabuleiroState() {
-                                            return receber.getTabuleiroState();
-                                        }
-                                    });
-                                }
-                            }
                             jogar(conexao, receber);
                         }
                         break;
                     case CHEGOUTOCA:
                     case COMEUTODASPECAS:
                         if (receber.getJogador() == conexao.getJogador()) {
-                            System.out.printf("IA ganhou!\n");
+                            System.out.printf("%s IA ganhou!\n", receber.getJogador());
                         } else {
-                            System.out.printf("IA perdeu!\n");
+                            System.out.printf("%s IA perdeu!\n", receber.getJogador());
+                        }
+                        if (listener != null) {
+                            listener.action(new EvtMov(receber, receber.getJogador() == conexao.getJogador() ? "IA" : "ADVERSÁRIO", MovimentoEvent.Status.END));
                         }
                     case CONEXAOENCERRADA:
                         conectado = false;
@@ -120,6 +98,54 @@ public class JogadorIA {
         conexao.enviar(msg);
     }
 
+    private class EvtMov implements MovimentoEvent {
+
+        private final Mensagem msg;
+        private final String tipo;
+        private final Status status;
+
+        public EvtMov(Mensagem msg, String tipo, Status status) {
+            this.msg = msg;
+            this.tipo = tipo;
+            this.status = status;
+        }
+
+        @Override
+        public Jogador getJogador() {
+            return msg.getJogador();
+        }
+
+        @Override
+        public Tabuleiro.Posicao getPosicaoAtual() {
+            return msg.getPosicaoAtual();
+        }
+
+        @Override
+        public Tabuleiro.Posicao getPosicaoNova() {
+            return msg.getPosicaoNova();
+        }
+
+        @Override
+        public Peca.Tipo getTipoPeca() {
+            return msg.getTipoPeca();
+        }
+
+        @Override
+        public TabuleiroState getTabuleiroState() {
+            return msg.getTabuleiroState();
+        }
+
+        @Override
+        public String getTipo() {
+            return tipo;
+        }
+
+        @Override
+        public Status getStatus() {
+            return this.status;
+        }
+    }
+
     public static void main(String[] args) {
         WeightTunning weightTunning = new WeightTunning();
         weightTunning.setWinTocaWeight(1000);
@@ -133,8 +159,14 @@ public class JogadorIA {
         weightTunning.addWeightTunning(Peca.Tipo.Rat, 1);
 
         JogadorIA jogador = new JogadorIA(weightTunning, (MovimentoEvent evt) -> {
-            System.out.printf("%s moveu %s para %s\n",
-                    evt.getJogador() == Jogador.Jogador1 ? Jogador.Jogador2 : Jogador.Jogador1, evt.getTipoPeca().descricao(), evt.getPosicaoNova());
+            if (evt.getStatus() != MovimentoEvent.Status.BEGIN) {
+                System.out.printf("%s %s moveu %s de %s para %s\n",
+                        evt.getTipo(),
+                        evt.getJogador() == Jogador.Jogador1 ? Jogador.Jogador2 : Jogador.Jogador1,
+                        evt.getTipoPeca().descricao(), evt.getPosicaoAtual(), evt.getPosicaoNova());
+            } else {
+                System.out.printf("Jogo iniciando com jogador %s - %s\n", evt.getJogador(), evt.getTipo());
+            }
         });
         jogador.run();
     }

@@ -101,7 +101,7 @@
   <SubComponents>
     <Component class="javax.swing.JButton" name="btConectar">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Human Play"/>
+        <Property name="text" type="java.lang.String" value="Human x IA Play"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btConectarActionPerformed"/>
@@ -203,7 +203,7 @@
     </Container>
     <Component class="javax.swing.JButton" name="btIAplay">
       <Properties>
-        <Property name="text" type="java.lang.String" value="IA Play"/>
+        <Property name="text" type="java.lang.String" value="IA x IA Play"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btIAplayActionPerformed"/>
